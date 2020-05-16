@@ -1,0 +1,20 @@
+include "utils/start.asm"
+include "utils/constants.asm"
+include "utils/screen_size.asm"
+include "utils/utils.asm"
+
+include "data/rooms.asm"
+include "data/item_list.asm"
+include "data/items_per_room.asm"
+include "data/item_pointers.asm"
+include "data/items.asm"
+
+include "graphics/item_gfx.asm"
+include "graphics/panel_data.asm"
+include "graphics/player_gfx.asm"
+
+include "lines.asm"
+include "draw_room.asm"
+include "draw_items.asm"
+include "panel.asm"
+include "player.asm"
