@@ -147,6 +147,6 @@ background_on
 	ret
 
 background_off
-	ld d, 0x54
+	ld d, hw_black
 	call set_border
 	ret

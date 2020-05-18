@@ -1,6 +1,4 @@
 read_keys
-    di
-
     ld hl, keyboard_state
     ld bc, 0xf782
     out (c), c
@@ -24,11 +22,11 @@ key_loop
     ini
     inc a
     cp c
-    jr c, key_loop
+    jp c, key_loop
     ld bc, 0xf782
     out (c), c
 
     ret
 
 keyboard_state
-    defs 80
+    defs 10

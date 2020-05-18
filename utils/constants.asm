@@ -15,3 +15,5 @@ num_rooms           equ (RoomTypes - RoomInfo) / 2
 player_horiz_speed  equ 1
 player_vert_speed   equ 2
 
+; colours
+hw_black            equ 0x54

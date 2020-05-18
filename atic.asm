@@ -6,7 +6,7 @@ start
 
     call set_pens_off
 
-    ld d, 0x54
+    ld d, hw_black
     call set_border                ; border to black
 
     call set_screen_size
@@ -19,7 +19,7 @@ start
     call wait_vsync
     call set_pens       
 
-    jp $
+    jp $                            ; spin here
 
 setup_data
     xor a

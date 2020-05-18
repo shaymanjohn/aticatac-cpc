@@ -1,6 +1,6 @@
 draw_panel
-    ld hl, 0x1800                   ; x, y of panel
-    ld bc, 0x1018                   ; width, height of panel
+    ld hl, 0x1900                   ; x, y of panel
+    ld bc, 0x0e18                   ; width, height of panel
     ld ix, panel_text
 
 dp2    

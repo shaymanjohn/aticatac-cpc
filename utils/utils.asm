@@ -48,7 +48,7 @@ set_pens_off
     ld hl, pens
     ld e, 16                    ; 16 pens for mode 0
     xor a					    ; initial pen index    
-    ld d, 0x54                  ; hardware black
+    ld d, hw_black              ; hardware black
 
 set_pens_off_loop
     call set_ink
@@ -149,7 +149,7 @@ scr_addr_table
     defs 2
 
 pens               ; hardware values
-    defb 0x54      ; 0 black
+    defb hw_black  ; 0 black
     defb 0x58      ; 1 magenta
     defb 0x4d      ; 2 bright magenta
     defb 0x57      ; 3 sky blue
