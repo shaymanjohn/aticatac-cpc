@@ -15,7 +15,7 @@ draw_room
 
     xor a
     ld (drawn), a
-    
+
     ret
 
 draw_outline
@@ -26,13 +26,10 @@ draw_outline
     ld h, 0
     add hl, hl
     add hl, bc
-    ld b, (hl)            ; b has room colour
+    ld d, (hl)            ; d has room colour
 
     ld a, 0x07
-    ld c, b
-    push hl
-    call scr_set_ink
-    pop hl
+    call set_ink          ; pen 7 is the room colour
 
     inc hl
     ld a, (hl)            ; a has room type
@@ -148,4 +145,3 @@ room_number
 
 old_room_number
     defb 0xff
-

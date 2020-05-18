@@ -1,17 +1,3 @@
-wait_vblank
-    ld b, &f5
-wait_l1    
-    in a, (c)
-    rra
-    jp nc, wait_l1
-    ret
-
-set_border
-    ld bc, &7f10
-    out (c), c
-    out (c), a
-    ret
-
 switch_screens
     ld a, (screen_address)
     xor &80
@@ -44,21 +30,15 @@ save_scr_table_addr
 
 set_pens
     ld hl, pens
-    ld b, 16                    ; 16 pens for mode 0
+    ld e, 16                    ; 16 pens for mode 0
     xor a					    ; initial pen index    
 set_pens_loop
-    push bc
-    push af
-    ld c, (hl)		            ; b, c = inks for pen. If they are the same then no flashing.
-    ld b, c
+    ld d, (hl)		            ; d = ink for pen
     inc hl
-    push hl
-    call scr_set_ink
-    pop hl
-    pop af
-    pop bc
+    call set_ink
     inc a					    ; increment pen index
-    djnz set_pens_loop
+    dec e
+    jr nz, set_pens_loop
     ret
 
 screen_address
@@ -66,18 +46,37 @@ screen_address
 
 set_pens_off
     ld hl, pens
-    ld b, 16                    ; 16 pens for mode 0
+    ld e, 16                    ; 16 pens for mode 0
     xor a					    ; initial pen index    
+    ld d, 0x54                  ; hardware black
+
 set_pens_off_loop
-    push bc
-    push af
-    ld bc, 0
-    call scr_set_ink
-    pop af
-    pop bc
+    call set_ink
     inc a					    ; increment pen index
-    djnz set_pens_off_loop
+    dec e
+    jr nz, set_pens_off_loop
     ret
+
+set_ink                     ; IN: a = pen, d = hardware colour. if pen is 16, then change border colour
+    ld bc, 0x7f00
+    out (c), a              ; pen number
+    out (c), d              ; pen colour
+    ret
+
+set_border
+    ld bc, 0x7f00
+    ld a, 0x10
+    out (c), a
+    out (c), d
+    ret
+
+wait_vsync
+	ld b, &f5
+wait_vsync_loop    
+	in a, (c)
+	rrca
+	jp nc, wait_vsync_loop
+    ret    
 
 ; IN  h = x byte coord, l = y line
 ; OUT hl = screen address
@@ -149,20 +148,20 @@ scr_addr_table_40
 scr_addr_table
     defs 2
 
-pens
-    defb 0      ; 0 black
-    defb 4      ; 1 magenta
-    defb 8      ; 2 bright magenta
-    defb 11     ; 3 sky blue
-    defb 12     ; 4 yellow
-    defb 24     ; 5 bright yellow
-    defb 26     ; 6 bright white
-    defb 3      ; 7 room colour
-    defb 13     ; grey
-    defb 15     ; pumpkin orange
-    defb 18     ; green door
-    defb 6      ; red door
-    defb 25     ; 12
-    defb 23     ; 13
-    defb 25     ; 14 panel border    
-    defb 26     ; 15 white
+pens               ; hardware values
+    defb 0x54      ; 0 black
+    defb 0x58      ; 1 magenta
+    defb 0x4d      ; 2 bright magenta
+    defb 0x57      ; 3 sky blue
+    defb 0x5e      ; 4 yellow
+    defb 0x4a      ; 5 bright yellow
+    defb 0x4b      ; 6 bright white
+    defb 0x5c      ; 7 room colour
+    defb 0x40      ; 8 grey
+    defb 0x4e      ; 9 pumpkin orange
+    defb 0x52      ; 10 green door
+    defb 0x4c      ; 11 red door
+    defb 0x43      ; 12
+    defb 0x5b      ; 13
+    defb 0x43      ; 14 panel border    
+    defb 0x4b      ; 15 white

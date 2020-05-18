@@ -1,9 +1,4 @@
-; firmware functions used
-scr_set_mode		equ &bc0e
-scr_set_ink			equ &bc32
-km_test_key			equ &bb1e
-mc_wait_flyback	    equ &bd19
-scr_set_border	    equ &bc38
+scr_set_mode        equ 0xbc0e
 
 rotation_top        equ 0x00
 rotation_table      equ 0x04

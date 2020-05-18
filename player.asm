@@ -1,12 +1,13 @@
 update_player
     call erase_player
-    call check_keys    
     call draw_player
-
-    call check_doors
     ret
 
 check_doors
+    ld a, (current_list_item)
+    cp 0
+    ret z
+
     ld ix, room_list
     ld a, (current_list_item)
     ld b, a
@@ -251,31 +252,42 @@ eplay2
 
     ret
 
-check_keys
-    ld a, 8					    ; cursor left
-    call km_test_key
+move_player
+    ld a, (keyboard_state + 1)
+    bit 0, a
     ld b, -player_horiz_speed
-    call nz, player_hori
+    call z, player_hori
 
-    ld a, 1					    ; cursor right
-    call km_test_key
+    ld a, (keyboard_state)
+    ld c, a
+
+    bit 1, c
     ld b, player_horiz_speed
-    call nz, player_hori
+    call z, player_hori
 
-    xor a    
-    call km_test_key
+    bit 0, c
     ld b, -player_vert_speed
-    call nz, player_vert
+    call z, player_vert
 
-    ld a, 2
-    call km_test_key
+    bit 2, c
     ld b, player_vert_speed
-    call nz, player_vert
+    call z, player_vert
 
-    ld a, 44                    ; h key
-    call km_test_key
-    ret z
+    ld a, (keyboard_state + 5)
+    bit 4, a
+    jp z, go_home
 
+    ld a, (keyboard_state + 6)
+    bit 7, a
+    ret nz
+
+    ld a, (show_vsync)
+    xor 1
+    ld (show_vsync), a    
+
+    ret
+
+go_home
     xor a
     ld (room_number), a
 
@@ -314,6 +326,9 @@ room_list
 
 drawn
     defb 0
+
+show_vsync
+    defb 1
 
 save_player_address
     defw 0

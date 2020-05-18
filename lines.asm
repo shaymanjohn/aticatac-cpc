@@ -184,7 +184,7 @@ nex3
 
 exith
   ld sp, 0        ; modified in init
-  ei
+  
   
   ret             ; finished OK
 
