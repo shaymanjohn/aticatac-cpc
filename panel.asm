@@ -45,7 +45,7 @@ pc1
     add hl, bc
     pop af
     dec a
-    jp nz, pc1
+    jr nz, pc1
 
     pop hl
     pop bc

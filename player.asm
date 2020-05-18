@@ -1,6 +1,108 @@
-update_player
-    call erase_player
-    call draw_player
+draw_player
+    ld a, (player_y)
+    ld l, a
+    ld h, 0
+    add hl, hl
+    ld de, (scr_addr_table)
+    add hl, de
+
+    ld a, (hl)
+    inc hl
+    ld h, (hl)
+    ld l, a
+
+    ld a, (player_x)
+    srl a
+    ld c, a
+    ld b, 0
+    add hl, bc
+
+    ld (save_player_address), hl        ; save this for erase later
+
+    ld de, player_right_sprite
+
+    ld a, (player_x)
+    and 1
+    jp nz, dplay1
+    ld de, player_left_sprite
+
+dplay1
+    ld ixh, player_height
+    ld bc, save_screen
+
+dplay2
+    push hl
+    
+    ld a, (hl)
+    ld (bc), a
+    ld a, (de)
+    ld (hl), a
+    inc hl
+    inc de
+    inc bc
+    ld a, (hl)
+    ld (bc), a
+    ld a, (de)
+    ld (hl), a
+    inc hl
+    inc de
+    inc bc
+    ld a, (hl)
+    ld (bc), a
+    ld a, (de)
+    ld (hl), a
+    inc hl
+    inc de
+    inc bc
+    ld a, (hl)
+    ld (bc), a
+    ld a, (de)
+    ld (hl), a
+    inc de
+    inc bc
+
+    pop hl
+    call scr_next_line
+
+    dec ixh
+    jp nz, dplay2
+
+    ld a, 1
+    ld (player_drawn), a
+    ret
+
+erase_player
+    ld a, (player_drawn)
+    and a
+    ret z
+
+    ld hl, (save_player_address)
+    ld b, player_height
+    ld de, save_screen
+
+eplay2
+    push hl
+    
+    ld a, (de)
+    ld (hl), a
+    inc hl
+    inc de
+    ld a, (de)
+    ld (hl), a
+    inc hl
+    inc de
+    ld a, (de)
+    ld (hl), a
+    inc hl
+    inc de
+    ld a, (de)
+    ld (hl), a
+    inc de
+
+    pop hl
+    call scr_next_line
+    djnz eplay2
+
     ret
 
 check_doors
@@ -61,6 +163,8 @@ collide1
     inc hl
     ld a, (hl)
     ld (room_number), a
+    ld a, 1
+    ld (room_changed), a
 
     inc hl
     inc hl
@@ -145,112 +249,7 @@ cd2
     jp nz, cd1
     ret
 
-draw_player
-    ld a, (player_y)
-    ld l, a
-    ld h, 0
-    add hl, hl
-    ld de, (scr_addr_table)
-    add hl, de
 
-    ld a, (hl)
-    inc hl
-    ld h, (hl)
-    ld l, a
-
-    ld a, (player_x)
-    srl a
-    ld c, a
-    ld b, 0
-    add hl, bc
-
-    ld (save_player_address), hl
-
-    ld de, player_right_sprite
-
-    ld a, (player_x)
-    and 1
-    jp nz, dplay1
-    ld de, player_left_sprite
-
-dplay1
-    ld ixh, player_height
-    ld bc, save_screen
-
-dplay2
-    push hl
-    
-    ld a, (hl)
-    ld (bc), a
-    ld a, (de)
-    ld (hl), a
-    inc hl
-    inc de
-    inc bc
-    ld a, (hl)
-    ld (bc), a
-    ld a, (de)
-    ld (hl), a
-    inc hl
-    inc de
-    inc bc
-    ld a, (hl)
-    ld (bc), a
-    ld a, (de)
-    ld (hl), a
-    inc hl
-    inc de
-    inc bc
-    ld a, (hl)
-    ld (bc), a
-    ld a, (de)
-    ld (hl), a
-    inc de
-    inc bc
-
-    pop hl
-    call scr_next_line
-
-    dec ixh
-    jp nz, dplay2
-
-    ld a, 1
-    ld (drawn), a
-    ret
-
-erase_player
-    ld a, (drawn)
-    and a
-    ret z
-
-    ld hl, (save_player_address)
-    ld b, player_height
-    ld de, save_screen
-
-eplay2
-    push hl
-    
-    ld a, (de)
-    ld (hl), a
-    inc hl
-    inc de
-    ld a, (de)
-    ld (hl), a
-    inc hl
-    inc de
-    ld a, (de)
-    ld (hl), a
-    inc hl
-    inc de
-    ld a, (de)
-    ld (hl), a
-    inc de
-
-    pop hl
-    call scr_next_line
-    djnz eplay2
-
-    ret
 
 move_player
     ld a, (keyboard_state + 1)
@@ -291,6 +290,9 @@ go_home
     xor a
     ld (room_number), a
 
+    ld a, 1
+    ld (room_changed), a
+
     ld a, 0x2c
     ld (player_x), a
 
@@ -324,7 +326,7 @@ player_y
 room_list
     defs max_items * 8
 
-drawn
+player_drawn
     defb 0
 
 show_vsync

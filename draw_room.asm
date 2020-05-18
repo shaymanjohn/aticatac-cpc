@@ -10,11 +10,9 @@ draw_room
 
     call draw_items
 
-    ld a, (room_number)
-    ld (old_room_number), a
-
     xor a
-    ld (drawn), a
+    ld (player_drawn), a
+    ld (room_changed), a
 
     ret
 
@@ -143,5 +141,5 @@ offset
 room_number
     defb 0
 
-old_room_number
-    defb 0xff
+room_changed
+    defb 0

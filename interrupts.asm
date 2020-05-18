@@ -44,7 +44,7 @@ no_interrupt_reset
 	add a, a
 	ld c, a
 	ld b, 0
-	ld hl, interrupts
+	ld hl, (current_interrupts)
 	add hl, bc
 
 	ld a, (hl)
@@ -72,77 +72,88 @@ interrupt_previous_stack
 	dw 0
 
 interrupt_stack
-	defs 512
+	defs 256
 interrupt_stack_start
 
 interrupt_index
 	db interrupt_notReady
 
-interrupts
-	dw interrupt_0
-	dw interrupt_1
-	dw interrupt_2
-	dw interrupt_3
-	dw interrupt_4
-	dw interrupt_5
+current_interrupts
+	dw game_interrupts
 
-interrupt_0
+game_interrupts
+	dw interrupt_empty
+	dw interrupt_empty
+	dw interrupt_keyboard
+	dw interrupt_check_doors
+	dw interrupt_move_player
+	dw interrupt_update_game
+
+menu_interrupts
+	dw interrupt_empty
+	dw interrupt_empty
+	dw interrupt_keyboard
+	dw interrupt_empty
+	dw interrupt_empty
+	dw interrupt_empty
+
+interrupt_empty
 	ret
 
-interrupt_1
-	ret
-
-interrupt_2
-	ret
-
-interrupt_3
-	ld a, 0x45
-	call background_on
-	call check_doors
-	call background_off
-	ret	 		
-
-interrupt_4
-	ld a, 0x56
+interrupt_keyboard
+	ld d, 0x56
 	call background_on
 
 	call read_keys
 
-	ld a, 0x5f
-	call background_on
-
-	call move_player	
 	call background_off
 	ret
 
-interrupt_5
-    ld a, (room_number)
-    ld hl, old_room_number
-    cp (hl)
-    jp z, do_player
+interrupt_check_doors
+	ld d, 0x45
+	call background_on
+
+	call check_doors
+
+    ld a, (room_changed)
+	and a
+    jp z, skip_room_1
 
     call clear_room 
     call draw_room
 
 	ld a, interrupt_notReady
 	ld (interrupt_index), a
+	ret	
 
+skip_room_1
+	call background_off
+	ret	 		
+
+interrupt_move_player
+	ld d, 0x5f
+	call background_on
+
+	call move_player
+
+	call background_off
 	ret
 
-do_player	
-	ld a, 0x55
+interrupt_update_game
+	ld d, 0x55
 	call background_on
-	call update_player
+
+	call erase_player
+    call draw_player
+
 	call background_off
 	ret
 
 background_on
-	ld b, a
 	ld a, (show_vsync)
 	cp 1
 	ret z
 
-	ld d, b
 	call set_border
 	ret
 

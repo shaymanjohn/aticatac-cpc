@@ -10,7 +10,7 @@ start
     call set_border                ; border to black
 
     call set_screen_size
-    call setup_data
+    call setup_game_data
     
     call draw_panel
     
@@ -19,14 +19,14 @@ start
     call wait_vsync
     call set_pens       
 
-    jp $                            ; spin here
+    jp $                            ; spin here, interrupts will handle flow
 
-setup_data
+setup_game_data
     xor a
     ld (room_number), a
 
-    ld a, -1
-    ld (old_room_number), a
+    inc a
+    ld (room_changed), a
 
     ld a, 0x2c
     ld (player_x), a

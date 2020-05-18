@@ -75,7 +75,7 @@ wait_vsync
 wait_vsync_loop    
 	in a, (c)
 	rrca
-	jp nc, wait_vsync_loop
+	jr nc, wait_vsync_loop
     ret    
 
 ; IN  h = x byte coord, l = y line
