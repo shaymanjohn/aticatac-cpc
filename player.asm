@@ -19,14 +19,32 @@ draw_player
 
     ld (save_player_address), hl        ; save this for erase later
 
-    ld de, player_right_sprite
+    push hl
 
+    ld b, 0
     ld a, (player_x)
     and 1
     jp nz, dplay1
-    ld de, player_left_sprite
+    ld b, num_player_frames
 
 dplay1
+    ld a, (player_frame)
+    add b
+
+    ld b, a
+    ld a, (player_orientation)
+    add b
+
+    ld l, a
+    ld h, 0
+    add hl, hl
+    ld de, anim_table    
+    add hl, de
+    ld e, (hl)
+    inc hl
+    ld d, (hl)
+
+    pop hl
     ld ixh, player_height
     ld bc, save_screen
 
@@ -249,20 +267,10 @@ cd2
     jp nz, cd1
     ret
 
-
-
 move_player
-    ld a, (keyboard_state + 1)
-    bit 0, a
-    ld b, -player_horiz_speed
-    call z, player_hori
-
     ld a, (keyboard_state)
     ld c, a
-
-    bit 1, c
-    ld b, player_horiz_speed
-    call z, player_hori
+    ld d, 0
 
     bit 0, c
     ld b, -player_vert_speed
@@ -270,38 +278,42 @@ move_player
 
     bit 2, c
     ld b, player_vert_speed
-    call z, player_vert
+    call z, player_vert    
 
-    ld a, (keyboard_state + 5)
-    bit 4, a
-    jp z, go_home
+    ld a, (keyboard_state + 1)
+    bit 0, a
+    ld b, -player_horiz_speed
+    call z, player_hori
 
-    ld a, (keyboard_state + 6)
-    bit 7, a
-    ret nz
+    bit 1, c
+    ld b, player_horiz_speed
+    call z, player_hori
 
-    ld a, (show_vsync)
-    xor 1
-    ld (show_vsync), a    
-
+    ld a, d
+    and a
+    jp nz, inc_frame
+    xor a
+    ld (player_frame), a
     ret
 
-go_home
-    xor a
-    ld (room_number), a
-
-    ld a, 1
-    ld (room_changed), a
-
-    ld a, 0x2c
-    ld (player_x), a
-
-    ld a, 0x57
-    ld (player_y), a    
+inc_frame
+    ld a, (player_frame)
+    inc a
+    and 0x0f
+    ld (player_frame), a    
 
     ret
 
 player_hori
+    ld d, 1
+    ld a, player_is_going_right
+    bit 7, b
+    jp z, ph2
+    ld a, player_is_going_left
+
+ph2    
+    ld (player_orientation), a
+
     ld a, (player_x)
     add b
     cp 88
@@ -310,6 +322,14 @@ player_hori
     ret
 
 player_vert
+    ld d, 1
+    ld a, player_is_going_down
+    bit 7, b
+    jp z, pv2
+    ld a, player_is_going_up
+pv2    
+    ld (player_orientation), a
+
     ld a, (player_y)
     add b
     cp 174
@@ -321,6 +341,12 @@ player_x
     defb 0
 
 player_y
+    defb 0
+
+player_orientation
+    defb 0
+
+player_frame
     defb 0
 
 room_list
@@ -337,3 +363,142 @@ save_player_address
     
 save_screen
     defs player_height * 4
+
+anim_table
+    defw player_k1_p0
+    defw player_k1_p0
+    defw player_k1_p0
+    defw player_k1_p0
+    defw player_k2_p0
+    defw player_k2_p0
+    defw player_k2_p0
+    defw player_k2_p0
+    defw player_k1_p0 
+    defw player_k1_p0
+    defw player_k1_p0
+    defw player_k1_p0
+    defw player_k3_p0
+    defw player_k3_p0
+    defw player_k3_p0
+    defw player_k3_p0    
+
+    defw player_k1_p1
+    defw player_k1_p1    
+    defw player_k1_p1        
+    defw player_k1_p1            
+    defw player_k2_p1
+    defw player_k2_p1
+    defw player_k2_p1    
+    defw player_k2_p1        
+    defw player_k1_p1
+    defw player_k1_p1        
+    defw player_k1_p1            
+    defw player_k1_p1                
+    defw player_k3_p1    
+    defw player_k3_p1
+    defw player_k3_p1
+    defw player_k3_p1    
+
+    defw player_k1_pu0
+    defw player_k1_pu0
+    defw player_k1_pu0
+    defw player_k1_pu0
+    defw player_k2_pu0
+    defw player_k2_pu0
+    defw player_k2_pu0
+    defw player_k2_pu0
+    defw player_k1_pu0 
+    defw player_k1_pu0
+    defw player_k1_pu0
+    defw player_k1_pu0
+    defw player_k3_pu0
+    defw player_k3_pu0
+    defw player_k3_pu0
+    defw player_k3_pu0    
+
+    defw player_k1_pu1
+    defw player_k1_pu1    
+    defw player_k1_pu1        
+    defw player_k1_pu1            
+    defw player_k2_pu1
+    defw player_k2_pu1
+    defw player_k2_pu1    
+    defw player_k2_pu1        
+    defw player_k1_pu1
+    defw player_k1_pu1        
+    defw player_k1_pu1            
+    defw player_k1_pu1                
+    defw player_k3_pu1    
+    defw player_k3_pu1
+    defw player_k3_pu1
+    defw player_k3_pu1        
+
+    defw player_k1_l0
+    defw player_k1_l0
+    defw player_k1_l0
+    defw player_k1_l0
+    defw player_k2_l0
+    defw player_k2_l0
+    defw player_k2_l0
+    defw player_k2_l0
+    defw player_k1_l0 
+    defw player_k1_l0
+    defw player_k1_l0
+    defw player_k1_l0
+    defw player_k3_l0
+    defw player_k3_l0
+    defw player_k3_l0
+    defw player_k3_l0    
+
+    defw player_k1_l1
+    defw player_k1_l1    
+    defw player_k1_l1        
+    defw player_k1_l1            
+    defw player_k2_l1
+    defw player_k2_l1
+    defw player_k2_l1    
+    defw player_k2_l1        
+    defw player_k1_l1
+    defw player_k1_l1        
+    defw player_k1_l1            
+    defw player_k1_l1                
+    defw player_k3_l1    
+    defw player_k3_l1
+    defw player_k3_l1
+    defw player_k3_l1
+
+    defw player_k1_r0
+    defw player_k1_r0
+    defw player_k1_r0
+    defw player_k1_r0
+    defw player_k2_r0
+    defw player_k2_r0
+    defw player_k2_r0
+    defw player_k2_r0
+    defw player_k1_r0 
+    defw player_k1_r0
+    defw player_k1_r0
+    defw player_k1_r0
+    defw player_k3_r0
+    defw player_k3_r0
+    defw player_k3_r0
+    defw player_k3_r0    
+
+    defw player_k1_r1
+    defw player_k1_r1    
+    defw player_k1_r1        
+    defw player_k1_r1            
+    defw player_k2_r1
+    defw player_k2_r1
+    defw player_k2_r1    
+    defw player_k2_r1        
+    defw player_k1_r1
+    defw player_k1_r1        
+    defw player_k1_r1            
+    defw player_k1_r1                
+    defw player_k3_r1    
+    defw player_k3_r1
+    defw player_k3_r1
+    defw player_k3_r1
+
+

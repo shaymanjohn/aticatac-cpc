@@ -139,6 +139,32 @@ scr_next_line   ; hl = current screen address
     ld h, a
     ret
 
+rotate_gfx          ; IN: IX = source, de = destination, b = width in bytes, c = height in rows.
+    ld h, 0
+    push bc
+
+rotate1
+    ld a, (ix + 0)
+    ld l, a
+    and 0xaa    
+    srl a
+    or h
+    ld (de), a
+
+    ld a, l
+    and 0x55
+    sla a
+    ld h, a
+    
+    inc ix
+    inc de
+    djnz rotate1
+
+    pop bc
+    dec c
+    jr nz, rotate_gfx
+    ret
+
 scr_addr_table_c0              ; table/array for screen addresses for each scan line
     defs 200 * 2
 
@@ -161,7 +187,7 @@ pens               ; hardware values
     defb 0x4e      ; 9 pumpkin orange
     defb 0x52      ; 10 green door
     defb 0x4c      ; 11 red door
-    defb 0x43      ; 12
+    defb 0x47      ; 12 skin
     defb 0x5b      ; 13
     defb 0x43      ; 14 panel border    
     defb 0x4b      ; 15 white

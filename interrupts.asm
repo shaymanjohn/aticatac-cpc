@@ -79,7 +79,7 @@ interrupt_index
 	db interrupt_notReady
 
 current_interrupts
-	dw game_interrupts
+	dw 0
 
 game_interrupts
 	dw interrupt_empty
@@ -105,6 +105,7 @@ interrupt_keyboard
 	call background_on
 
 	call read_keys
+	call poll_master_keys
 
 	call background_off
 	ret
@@ -112,6 +113,9 @@ interrupt_keyboard
 interrupt_check_doors
 	ld d, 0x45
 	call background_on
+
+	; ld bc, 0x7f00 + 128 + 4 + 8 + 1
+	; out (c), c	
 
 	call check_doors
 
@@ -161,3 +165,34 @@ background_off
 	ld d, hw_black
 	call set_border
 	ret
+
+poll_master_keys
+    ld a, (keyboard_state + 4)          ; m for menu
+    bit 6, a
+    jr z, show_menu
+
+    ld a, (keyboard_state + 6)			; g for game
+    bit 4, a
+    jr z, show_game
+
+    ld a, (keyboard_state + 6)          ; v for timing bars
+    bit 7, a
+    jr z, toggle_sync_bars
+
+    ret
+
+toggle_sync_bars
+    ld a, (show_vsync)
+    xor 1
+    ld (show_vsync), a
+	ret
+
+show_menu
+    ld a, mode_menu
+    call switch_mode
+    ret
+
+show_game
+    ld a, mode_game
+    call switch_mode
+    ret
