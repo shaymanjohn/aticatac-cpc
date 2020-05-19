@@ -105,7 +105,10 @@ select_game
     ld (player_x), a
 
     ld a, 0x57
-    ld (player_y), a    
+    ld (player_y), a
+
+    ld a, player_is_going_right
+    ld (player_orientation), a
 
     call draw_panel
     call set_pens

@@ -46,7 +46,7 @@ dplay1
 
     pop hl
     ld ixh, player_height
-    ld bc, save_screen
+    ld bc, save_screen_data
 
 dplay2
     push hl
@@ -96,7 +96,7 @@ erase_player
 
     ld hl, (save_player_address)
     ld b, player_height
-    ld de, save_screen
+    ld de, save_screen_data
 
 eplay2
     push hl
@@ -361,8 +361,8 @@ show_vsync
 save_player_address
     defw 0
     
-save_screen
-    defs player_height * 4
+save_screen_data
+    defs player_height * player_width
 
 anim_table
     defw player_k1_p0
@@ -500,5 +500,3 @@ anim_table
     defw player_k3_r1
     defw player_k3_r1
     defw player_k3_r1
-
-
