@@ -271,6 +271,7 @@ move_player
     ld a, (keyboard_state)
     ld c, a
     ld d, 0
+    ld e, 0
 
     bit 0, c
     ld b, -player_vert_speed
@@ -290,6 +291,7 @@ move_player
     call z, player_hori
 
     ld a, d
+    or e
     and a
     jp nz, inc_frame
     xor a
@@ -305,7 +307,9 @@ inc_frame
     ret
 
 player_hori
-    ld d, 1
+    ld a, d
+    xor 1
+    ld d, a
     ld a, player_is_going_right
     bit 7, b
     jp z, ph2
@@ -322,7 +326,9 @@ ph2
     ret
 
 player_vert
-    ld d, 1
+    ld a, e
+    xor 1
+    ld e, a
     ld a, player_is_going_down
     bit 7, b
     jp z, pv2
