@@ -7,9 +7,9 @@ And then in the emulator:
 
 call &1000
 
-Cursor keys to move, H to return to first screen
+Cursor keys to move, G to return to first screen
 
-V to toggle interrupt timings
+V to toggle interrupt timings in border
 
 Thanks to this site for the info on the data formats:
 
