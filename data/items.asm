@@ -117,7 +117,7 @@ antlers
 trophy
     defb 4, 16                              ; width (bytes), height (portrait size)
     defw 4 * 16
-    defw trophy_shield
+    defw trophy_portrait
     defw trophy_landscape
 
 bookcase

@@ -27,9 +27,12 @@ setup_game_data
 
     ld ix, player_kd_0_0
     ld de, player_kd_0_1
-    ld bc, 0x04d8                   ; 4 bytes wide, 18 x 3 high
-    call rotate_gfx
+    ld bc, 0x04d8                   ; 4 bytes wide, 18 x 3 high 
+    call rotate_gfx                 ; (& ignore mask)
 
+    ld hl, player_kd_0_1
+    ld bc, 0x04d8
+    call gen_mask
     ret
 
 switch_mode

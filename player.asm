@@ -19,8 +19,6 @@ draw_player
 
     ld (save_player_address), hl        ; save this for erase later
 
-    push hl
-
     ld b, 0
     ld a, (player_x)
     and 1
@@ -44,40 +42,55 @@ dplay1
     inc hl
     ld d, (hl)
 
-    pop hl
+    ld hl, (save_player_address)
     ld ixh, player_height
     ld bc, save_screen_data
 
 dplay2
     push hl
+
+    ex de, hl
     
-    ld a, (hl)
-    ld (bc), a
-    ld a, (de)
-    ld (hl), a
+    ld a, (de)              ; hl is screen
+    ld (bc), a              ; bc is save space
+    and (hl)
     inc hl
-    inc de
-    inc bc
-    ld a, (hl)
-    ld (bc), a
-    ld a, (de)
-    ld (hl), a
+    or (hl)
     inc hl
+    ld (de), a
     inc de
     inc bc
-    ld a, (hl)
-    ld (bc), a
-    ld a, (de)
-    ld (hl), a
+
+    ld a, (de)              ; hl is screen
+    ld (bc), a              ; bc is save space
+    and (hl)
     inc hl
+    or (hl)
+    inc hl
+    ld (de), a
     inc de
     inc bc
-    ld a, (hl)
-    ld (bc), a
+
+    ld a, (de)              ; hl is screen
+    ld (bc), a              ; bc is save space
+    and (hl)
+    inc hl
+    or (hl)
+    inc hl
+    ld (de), a
+    inc de
+    inc bc
+
     ld a, (de)
-    ld (hl), a
-    inc de
+    ld (bc), a 
+    and (hl)
+    inc hl
+    or (hl)
+    inc hl
+    ld (de), a
     inc bc
+
+    ex de, hl
 
     pop hl
     call scr_next_line

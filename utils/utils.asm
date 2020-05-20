@@ -140,6 +140,10 @@ scr_next_line   ; hl = current screen address
     ret
 
 rotate_gfx          ; IN: IX = source, de = destination, b = width in bytes, c = height in rows.
+    inc ix
+    inc de
+
+rotate2    
     ld h, 0
     push bc
 
@@ -157,12 +161,75 @@ rotate1
     ld h, a
     
     inc ix
+    inc ix
+    inc de
     inc de
     djnz rotate1
 
     pop bc
     dec c
-    jr nz, rotate_gfx
+    jr nz, rotate2
+    ret
+
+; generate mask for rotated sprites
+gen_mask
+    ld d, h
+    ld e, l
+    inc de    
+    ld c, 0xd8
+    ld ixh, b
+    
+fix_mask
+    ld b, ixh
+
+fix_mask2
+    ld a, (de)
+
+    call mask_gen
+
+    ld (hl), a    
+    inc hl
+    inc hl
+    inc de
+    inc de
+    djnz fix_mask2
+
+    dec c
+    jr nz, fix_mask
+
+    ret
+
+mask_gen
+    push bc
+    push de
+
+    ld b, a
+    and 0xaa
+    ld d, a
+    ld a, b
+    and 0x55
+    ld e, a             ; de now has
+
+    ld b, 0x00
+    ld a, d
+    cp 0
+    jr nz, do_right_pixel
+    ld b, 0xaa
+
+do_right_pixel
+    ld c, 0x00
+    ld a, e
+    cp 0
+    jr nz, done_both
+    ld c, 0x55
+
+done_both
+    ld a, b
+    or c
+
+    pop de
+    pop bc
+
     ret
 
 flip_gfx
@@ -218,6 +285,6 @@ pens               ; hardware values
     defb 0x52      ; 10 green door
     defb 0x4c      ; 11 red door
     defb 0x47      ; 12 skin
-    defb 0x5b      ; 13
+    defb hw_black  ; 13 mask black
     defb 0x43      ; 14 panel border    
     defb 0x4b      ; 15 white
