@@ -153,6 +153,10 @@ interrupt_update_game
 	call background_off
 	ret
 
+interrupt_erase_player
+	call erase_player
+	ret	
+
 background_on
 	ld a, (show_vsync)
 	cp 1

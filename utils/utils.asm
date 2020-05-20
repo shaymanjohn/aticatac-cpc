@@ -178,7 +178,7 @@ gen_mask
     inc de    
     ld c, 0xd8
     ld ixh, b
-    
+
 fix_mask
     ld b, ixh
 
@@ -208,18 +208,18 @@ mask_gen
     ld d, a
     ld a, b
     and 0x55
-    ld e, a             ; de now has
+    ld e, a             ; de now has left pixel / right pixel
 
     ld b, 0x00
     ld a, d
-    cp 0
+    and a
     jr nz, do_right_pixel
     ld b, 0xaa
 
 do_right_pixel
     ld c, 0x00
     ld a, e
-    cp 0
+    and a
     jr nz, done_both
     ld c, 0x55
 

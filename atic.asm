@@ -25,14 +25,17 @@ setup_game_data
     ld a, mode_game
     call switch_mode
 
+; rotate mode 0 sprites a pixel to the left
     ld ix, player_kd_0_0
     ld de, player_kd_0_1
     ld bc, 0x04d8                   ; 4 bytes wide, 18 x 3 high 
     call rotate_gfx                 ; (& ignore mask)
 
+; and then generate a new mask for them.
     ld hl, player_kd_0_1
     ld bc, 0x04d8
     call gen_mask
+
     ret
 
 switch_mode

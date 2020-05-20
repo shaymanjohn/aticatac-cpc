@@ -138,7 +138,7 @@ eplay2
 
 check_doors
     ld a, (current_list_item)
-    cp 0
+    and a
     ret z
 
     ld ix, room_list

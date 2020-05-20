@@ -62,19 +62,19 @@ redcave
 
 greencave
     defb 8, 24                              ; width (bytes), height (portrait size)
-    defw block_landscape - block_portrait
+    defw 8 * 24
     defw block_portrait
     defw block_landscape
 
 bluecave
     defb 8, 24                              ; width (bytes), height (portrait size)
-    defw block_landscape - block_portrait
+    defw 8 * 24
     defw block_portrait
     defw block_landscape
 
 yellowcave
     defb 8, 24                              ; width (bytes), height (portrait size)
-    defw block_landscape - block_portrait
+    defw 8 * 24
     defw block_portrait
     defw block_landscape
 
@@ -98,13 +98,13 @@ table
 
 chicken
     defb 12, 30                              ; width (bytes), height (portrait size)
-    defw block_landscape - block_portrait
+    defw 12 * 30
     defw block_portrait
     defw block_landscape
 
 carcass
     defb 12, 30                              ; width (bytes), height (portrait size)
-    defw block_landscape - block_portrait
+    defw 12 * 30
     defw block_portrait
     defw block_landscape
 
@@ -140,7 +140,7 @@ trapdoor2
 
 barrel
     defb 8, 32                              ; width (bytes), height (portrait size)
-    defw block_landscape - block_portrait
+    defw 8 * 32
     defw block_portrait
     defw block_landscape
 
@@ -164,31 +164,31 @@ shield
 
 knight
     defb 4, 32                              ; width (bytes), height (portrait size)
-    defw knight_landscape - knight_portrait
+    defw 4 * 32
     defw knight_portrait
     defw knight_landscape
 
 shutdoor
     defb 8, 24                              ; width (bytes), height (portrait size)
-    defw block_landscape - block_portrait
+    defw 8 * 24
     defw block_portrait
     defw block_landscape
 
 opendoor
     defb 8, 24                              ; width (bytes), height (portrait size)
-    defw block_landscape - block_portrait
+    defw 8 * 24
     defw block_portrait
     defw block_landscape
 
 shutcave
     defb 8, 24                              ; width (bytes), height (portrait size)
-    defw block_landscape - block_portrait
+    defw 8 * 24
     defw block_portrait
     defw block_landscape
 
 opencave
     defb 8, 24                              ; width (bytes), height (portrait size)
-    defw block_landscape - block_portrait
+    defw 8 * 24
     defw block_portrait
     defw block_landscape
 
@@ -206,12 +206,12 @@ picture2
 
 skeleton
     defb 10, 40                              ; width (bytes), height (portrait size)
-    defw block_landscape - block_portrait
+    defw 10 * 40
     defw block_portrait
     defw block_landscape
 
 barrels
     defb 10, 27                              ; width (bytes), height (portrait size)
-    defw block_landscape - block_portrait
+    defw 10 * 27
     defw block_portrait
     defw block_landscape
