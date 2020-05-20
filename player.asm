@@ -24,7 +24,7 @@ draw_player
     ld b, 0
     ld a, (player_x)
     and 1
-    jp nz, dplay1
+    jp z, dplay1
     ld b, num_player_frames
 
 dplay1
@@ -38,7 +38,7 @@ dplay1
     ld l, a
     ld h, 0
     add hl, hl
-    ld de, anim_table    
+    ld de, (anim_frames_table)
     add hl, de
     ld e, (hl)
     inc hl
@@ -292,8 +292,8 @@ move_player
 
     ld a, d
     or e
-    and a
     jp nz, inc_frame
+
     xor a
     ld (player_frame), a
     ret
@@ -310,20 +310,30 @@ player_hori
     ld a, d
     xor 1
     ld d, a
-    ld a, player_is_going_right
     bit 7, b
     jp z, ph2
     ld a, player_is_going_left
-
-ph2    
     ld (player_orientation), a
-
+    ld a, (min_x)
+    ld h, a    
     ld a, (player_x)
     add b
-    cp 88
-    ret nc
+    cp h
+    ret c
     ld (player_x), a
     ret
+ph2
+    ld a, player_is_going_right
+    ld (player_orientation), a
+
+    ld a, (max_x)
+    ld h, a
+    ld a, (player_x)
+    add b
+    cp h
+    ret nc
+    ld (player_x), a
+    ret    
 
 player_vert
     ld a, e
@@ -370,139 +380,5 @@ save_player_address
 save_screen_data
     defs player_height * player_width
 
-anim_table
-    defw player_k1_p0
-    defw player_k1_p0
-    defw player_k1_p0
-    defw player_k1_p0
-    defw player_k2_p0
-    defw player_k2_p0
-    defw player_k2_p0
-    defw player_k2_p0
-    defw player_k1_p0 
-    defw player_k1_p0
-    defw player_k1_p0
-    defw player_k1_p0
-    defw player_k3_p0
-    defw player_k3_p0
-    defw player_k3_p0
-    defw player_k3_p0    
-
-    defw player_k1_p1
-    defw player_k1_p1    
-    defw player_k1_p1        
-    defw player_k1_p1            
-    defw player_k2_p1
-    defw player_k2_p1
-    defw player_k2_p1    
-    defw player_k2_p1        
-    defw player_k1_p1
-    defw player_k1_p1        
-    defw player_k1_p1            
-    defw player_k1_p1                
-    defw player_k3_p1    
-    defw player_k3_p1
-    defw player_k3_p1
-    defw player_k3_p1    
-
-    defw player_k1_pu0
-    defw player_k1_pu0
-    defw player_k1_pu0
-    defw player_k1_pu0
-    defw player_k2_pu0
-    defw player_k2_pu0
-    defw player_k2_pu0
-    defw player_k2_pu0
-    defw player_k1_pu0 
-    defw player_k1_pu0
-    defw player_k1_pu0
-    defw player_k1_pu0
-    defw player_k3_pu0
-    defw player_k3_pu0
-    defw player_k3_pu0
-    defw player_k3_pu0    
-
-    defw player_k1_pu1
-    defw player_k1_pu1    
-    defw player_k1_pu1        
-    defw player_k1_pu1            
-    defw player_k2_pu1
-    defw player_k2_pu1
-    defw player_k2_pu1    
-    defw player_k2_pu1        
-    defw player_k1_pu1
-    defw player_k1_pu1        
-    defw player_k1_pu1            
-    defw player_k1_pu1                
-    defw player_k3_pu1    
-    defw player_k3_pu1
-    defw player_k3_pu1
-    defw player_k3_pu1        
-
-    defw player_k1_l0
-    defw player_k1_l0
-    defw player_k1_l0
-    defw player_k1_l0
-    defw player_k2_l0
-    defw player_k2_l0
-    defw player_k2_l0
-    defw player_k2_l0
-    defw player_k1_l0 
-    defw player_k1_l0
-    defw player_k1_l0
-    defw player_k1_l0
-    defw player_k3_l0
-    defw player_k3_l0
-    defw player_k3_l0
-    defw player_k3_l0    
-
-    defw player_k1_l1
-    defw player_k1_l1    
-    defw player_k1_l1        
-    defw player_k1_l1            
-    defw player_k2_l1
-    defw player_k2_l1
-    defw player_k2_l1    
-    defw player_k2_l1        
-    defw player_k1_l1
-    defw player_k1_l1        
-    defw player_k1_l1            
-    defw player_k1_l1                
-    defw player_k3_l1    
-    defw player_k3_l1
-    defw player_k3_l1
-    defw player_k3_l1
-
-    defw player_k1_r0
-    defw player_k1_r0
-    defw player_k1_r0
-    defw player_k1_r0
-    defw player_k2_r0
-    defw player_k2_r0
-    defw player_k2_r0
-    defw player_k2_r0
-    defw player_k1_r0 
-    defw player_k1_r0
-    defw player_k1_r0
-    defw player_k1_r0
-    defw player_k3_r0
-    defw player_k3_r0
-    defw player_k3_r0
-    defw player_k3_r0    
-
-    defw player_k1_r1
-    defw player_k1_r1    
-    defw player_k1_r1        
-    defw player_k1_r1            
-    defw player_k2_r1
-    defw player_k2_r1
-    defw player_k2_r1    
-    defw player_k2_r1        
-    defw player_k1_r1
-    defw player_k1_r1        
-    defw player_k1_r1            
-    defw player_k1_r1                
-    defw player_k3_r1    
-    defw player_k3_r1
-    defw player_k3_r1
-    defw player_k3_r1
+anim_frames_table
+    defw knight_frames_table

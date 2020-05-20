@@ -10,6 +10,8 @@ draw_room
 
     call draw_items
 
+    call calc_dimensions
+
     xor a
     ld (player_drawn), a
     ld (room_changed), a
@@ -47,7 +49,7 @@ draw_outline
     ld e, (hl)
     inc hl                ; de now has width / height
     ex de, hl
-    ld (offset), hl         ; save it
+    ld (room_size), hl         ; save it
     ex de, hl
 
     ld e, (hl)
@@ -130,13 +132,44 @@ clear1
     pop bc
     djnz clear1
 
-    ret    
+    ret
+
+calc_dimensions
+    ld hl, (room_size)
+    ld a, l
+    sub 0x27    
+    ld (min_y), a
+
+    ld a, l
+    add 0x27
+    sub 0x16    
+    ld (max_y), a
+
+    ld a, h
+    sub 0x37                ; was 0x27
+    ld a, 0x02
+    ld (min_x), a
+
+    ld a, h
+    add 0x27
+    ; sub 0x16
+    ld (max_x), a
+
+    ret
 
 point_address
     defw 0
 
-offset
+room_size
     defw 0
+min_x
+    defb 0
+max_x
+    defb 0
+min_y
+    defb 0
+max_y
+    defb 0
 
 room_number
     defb 0

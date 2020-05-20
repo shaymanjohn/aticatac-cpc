@@ -11,7 +11,7 @@ include "data/items.asm"
 
 include "graphics/item_gfx.asm"
 include "graphics/panel_data.asm"
-include "graphics/player_gfx.asm"
+include "graphics/player_knight_gfx.asm"
 
 include "lines.asm"
 include "draw_room.asm"

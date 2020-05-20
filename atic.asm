@@ -25,24 +25,9 @@ setup_game_data
     ld a, mode_game
     call switch_mode
 
-    ld ix, player_k1_p0
-    ld de, player_k1_p1
-    ld bc, 0x0436                   ; 4 bytes wide, 18 x 3 high
-    call rotate_gfx
-
-    ld ix, player_k1_pu0
-    ld de, player_k1_pu1
-    ld bc, 0x0436                   ; 4 bytes wide, 18 x 3 high
-    call rotate_gfx
-
-    ld ix, player_k1_l0
-    ld de, player_k1_l1
-    ld bc, 0x0436                   ; 4 bytes wide, 18 x 3 high
-    call rotate_gfx
-
-    ld ix, player_k1_r0
-    ld de, player_k1_r1
-    ld bc, 0x0436                   ; 4 bytes wide, 18 x 3 high
+    ld ix, player_kd_0_0
+    ld de, player_kd_0_1
+    ld bc, 0x04d8                   ; 4 bytes wide, 18 x 3 high
     call rotate_gfx
 
     ret

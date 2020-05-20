@@ -165,6 +165,36 @@ rotate1
     jr nz, rotate_gfx
     ret
 
+flip_gfx
+    push bc
+    push ix
+
+    ld a, c
+    ld c, b
+    ld b, 0
+    add ix, bc
+
+flip1    
+    ld a, (ix + 0)
+    and 0xaa
+    srl a
+    ld c, a
+    ld a, (ix + 0)
+    and 0x55
+    sla a
+    or c
+    ld (de), a
+    dec ix
+    inc de
+    djnz flip1
+
+    pop ix
+    pop bc
+    dec c
+    jr nz, flip_gfx
+
+    ret
+
 scr_addr_table_c0              ; table/array for screen addresses for each scan line
     defs 200 * 2
 
