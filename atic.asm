@@ -88,6 +88,7 @@ select_game
     ld (room_number), a
     ld (player_frame), a
     ld (player_orientation), a
+    ld (game_over), a
 
     inc a
     ld (room_changed), a
@@ -100,6 +101,9 @@ select_game
 
     ld a, player_is_going_right
     ld (player_orientation), a
+
+    ld a, 3
+    ld (num_lives), a
 
     call draw_panel
     call set_pens

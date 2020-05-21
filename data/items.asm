@@ -1,5 +1,5 @@
 items
-	defw unused,   cavedoor,  normaldoor, bigdoor
+	defw unused,  cavedoor,  normaldoor, bigdoor
 	defw unused,   unused,    unused,     unused
 	defw reddoor,  greendoor, bluedoor,   yellowdoor
 	defw redcave,  greencave, bluecave,   yellowcave
@@ -88,7 +88,7 @@ picture1
     defb 8, 24                              ; width (bytes), height (portrait size)
     defw 8 * 24
     defw picture1_portrait
-    defw block_landscape
+    defw picture1_landscape
 
 table
     defb 8, 22                              ; width (bytes), height (portrait size)
@@ -99,8 +99,8 @@ table
 chicken
     defb 12, 30                              ; width (bytes), height (portrait size)
     defw 12 * 30
-    defw block_portrait
-    defw block_landscape
+    defw chicken_full
+    defw chicken_full
 
 carcass
     defb 12, 30                              ; width (bytes), height (portrait size)
@@ -141,8 +141,8 @@ trapdoor2
 barrel
     defb 8, 32                              ; width (bytes), height (portrait size)
     defw 8 * 32
-    defw block_portrait
-    defw block_landscape
+    defw barrel_portrait
+    defw barrel_landscape
 
 rug
     defb 12, 40                              ; width (bytes), height (portrait size)

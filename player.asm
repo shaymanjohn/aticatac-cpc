@@ -43,6 +43,8 @@ dplay1
     ld d, (hl)
 
     ld hl, (save_player_address)
+
+draw_player_entry2                  ; hl as screen address, de as gfx    
     ld ixh, player_height
     ld bc, save_screen_data
 
@@ -51,8 +53,18 @@ dplay2
 
     ex de, hl
     
-    ld a, (de)              ; hl is screen
+    ld a, (de)              ; de is screen
     ld (bc), a              ; bc is save space
+    and (hl)                ; hl is gfx
+    inc hl
+    or (hl)
+    inc hl
+    ld (de), a
+    inc de
+    inc bc
+
+    ld a, (de)
+    ld (bc), a
     and (hl)
     inc hl
     or (hl)
@@ -61,18 +73,8 @@ dplay2
     inc de
     inc bc
 
-    ld a, (de)              ; hl is screen
-    ld (bc), a              ; bc is save space
-    and (hl)
-    inc hl
-    or (hl)
-    inc hl
-    ld (de), a
-    inc de
-    inc bc
-
-    ld a, (de)              ; hl is screen
-    ld (bc), a              ; bc is save space
+    ld a, (de)
+    ld (bc), a
     and (hl)
     inc hl
     or (hl)
@@ -366,6 +368,28 @@ pv2
     ld (player_y), a
     ret
 
+decrease_lives
+    ld a, (num_lives)
+    and a
+    jr nz, still_alive
+
+    ld a, 1
+    ld (game_over), a
+
+    ret        
+
+still_alive
+    dec a
+    ld (num_lives), a
+
+    push hl
+    push ix
+    call show_lives
+    pop ix
+    pop hl
+
+    ret
+
 player_x
     defb 0
 
@@ -376,6 +400,12 @@ player_orientation
     defb 0
 
 player_frame
+    defb 0
+
+num_lives
+    defb 0
+
+game_over
     defb 0
 
 room_list
