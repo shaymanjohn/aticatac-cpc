@@ -183,6 +183,14 @@ poll_master_keys
     bit 7, a
     jr z, toggle_sync_bars
 
+	ld a, (keyboard_state + 5)			; n for next screen
+	bit 6, a
+	jr z, show_next_screen
+
+	ld a, (keyboard_state + 6)
+	bit 6, a
+	jr z, show_previous_screen
+
     ret
 
 toggle_sync_bars
@@ -200,3 +208,19 @@ show_game
     ld a, mode_game
     call switch_mode
     ret
+
+show_next_screen
+	ld hl, room_number
+	inc (hl)
+
+	ld a, 1
+	ld (room_changed), a
+	ret
+
+show_previous_screen
+	ld hl, room_number
+	dec (hl)
+
+	ld a, 1
+	ld (room_changed), a
+	ret	

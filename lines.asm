@@ -184,9 +184,7 @@ nex3
 
 exith
   ld sp, 0        ; modified in init
-  
-  
   ret             ; finished OK
 
 line_pen_number
-  defb 0xff
+  defb 0x00

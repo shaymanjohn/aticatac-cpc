@@ -1,12 +1,12 @@
 items
-	defw unused,  cavedoor,  normaldoor, bigdoor
+	defw unused,   cavedoor,  normaldoor, bigdoor
 	defw unused,   unused,    unused,     unused
 	defw reddoor,  greendoor, bluedoor,   yellowdoor
 	defw redcave,  greencave, bluecave,   yellowcave
 	defw clock,    picture1,  table,      chicken
 	defw carcass,  antlers,   trophy,     bookcase
 	defw trapdoor, trapdoor2, barrel,     rug
-	defw acg,      shield,    knight,     unused
+	defw acgshield,shield,    knight,     unused
 	defw shutdoor, opendoor,  shutcave,   opencave
 	defw acgdoor,  picture2,  skeleton,   barrels
 
@@ -27,32 +27,32 @@ normaldoor  ; 0x02
 bigdoor
     defb 12, 32                              ; width (bytes), height (portrait size)
     defw 12 * 32
-    defw bigdoor_portrait
-    defw bigdoor_landscape
+    defw door_big_portrait
+    defw door_big_landscape
 
 reddoor
     defb 8, 24                              ; width (bytes), height (portrait size)
     defw 8 * 24
-    defw red_door_portrait
-    defw red_door_landscape
+    defw door_red_portrait
+    defw door_red_landscape
 
 greendoor
     defb 8, 24                              ; width (bytes), height (portrait size)
     defw 8 * 24
-    defw green_door_portrait
-    defw green_door_landscape
+    defw door_green_portrait
+    defw door_green_landscape
 
 bluedoor
     defb 8, 24                              ; width (bytes), height (portrait size)
     defw 8 * 24
-    defw blue_door_portrait
-    defw blue_door_landscape
+    defw door_blue_portrait
+    defw door_blue_landscape
 
 yellowdoor
     defb 8, 24                              ; width (bytes), height (portrait size)
     defw 8 * 24
-    defw yellow_door_portrait
-    defw yellow_door_landscape
+    defw door_yellow_portrait
+    defw door_yellow_landscape
 
 redcave
     defb 8, 24                              ; width (bytes), height (portrait size)
@@ -63,20 +63,20 @@ redcave
 greencave
     defb 8, 24                              ; width (bytes), height (portrait size)
     defw 8 * 24
-    defw block_portrait
-    defw block_landscape
+    defw cavedoor_green_portrait
+    defw cavedoor_green_landscape
 
 bluecave
     defb 8, 24                              ; width (bytes), height (portrait size)
     defw 8 * 24
-    defw block_portrait
-    defw block_landscape
+    defw cavedoor_blue_portrait
+    defw cavedoor_blue_landscape
 
 yellowcave
     defb 8, 24                              ; width (bytes), height (portrait size)
     defw 8 * 24
-    defw block_portrait
-    defw block_landscape
+    defw cavedoor_yellow_portrait
+    defw cavedoor_yellow_landscape
 
 clock
     defb 8, 32                              ; width (bytes), height (portrait size)
@@ -84,9 +84,9 @@ clock
     defw clock_portrait
     defw clock_landscape
 
-picture1
-    defb 8, 24                              ; width (bytes), height (portrait size)
-    defw 8 * 24
+picture1    ; was 8, 24
+    defb 8, 20                              ; width (bytes), height (portrait size)
+    defw 8 * 20
     defw picture1_portrait
     defw picture1_landscape
 
@@ -94,7 +94,7 @@ table
     defb 8, 22                              ; width (bytes), height (portrait size)
     defw 8 * 22
     defw table_portrait
-    defw table_landscape
+    defw table_portrait
 
 chicken
     defb 12, 30                              ; width (bytes), height (portrait size)
@@ -130,13 +130,13 @@ trapdoor
     defb 8, 32                              ; width (bytes), height (portrait size)
     defw 8 * 32
     defw trapdoor_open_portrait
-    defw trapdoor_open_landscape
+    defw trapdoor_open_portrait
     
 trapdoor2
     defb 8, 32                              ; width (bytes), height (portrait size)
     defw 8 * 32
     defw trapdoor_closed_portrait
-    defw trapdoor_closed_landscape
+    defw trapdoor_closed_portrait
 
 barrel
     defb 8, 32                              ; width (bytes), height (portrait size)
@@ -148,9 +148,9 @@ rug
     defb 12, 40                              ; width (bytes), height (portrait size)
     defw 12 * 40
     defw rug_portrait
-    defw rug_landscape
+    defw rug_portrait
 
-acg
+acgshield
     defb 4, 16                              ; width (bytes), height (portrait size)
     defw 4 * 16
     defw acg_shield_portrait
@@ -215,3 +215,8 @@ barrels
     defw 10 * 27
     defw block_portrait
     defw block_landscape
+
+block_portrait
+    defs 1024, 0xcc
+block_landscape
+    defs 1024, 0xcc

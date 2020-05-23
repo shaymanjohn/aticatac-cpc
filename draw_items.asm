@@ -38,8 +38,6 @@ draw_item_loop
 
 skip_dil
     push hl
-
-;   explode item details
     call explode_item           ; c has offset in pair
     call draw_item              ; ix points to item in item_list
     pop hl
@@ -211,9 +209,15 @@ pi1
     ret
 
 pi3
-    ld e, (ix + 6)
-    ld d, (ix + 7)              
+    push hl
+    ld l, (ix + 4)
+    ld h, (ix + 5)             
+    ld e, (ix + 2)
+    ld d, (ix + 3)              ; start of portrait + size - 1
+    add hl, de
+    ex de, hl
     dec de                      ; de = end of portrait data
+    pop hl
 
     ld c, (ix + 1)              ; height
 pi4

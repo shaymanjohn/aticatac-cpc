@@ -84,7 +84,10 @@ select_game
 
     call clear_screen
 
-    xor a
+    ; ld a, 0x4c
+    ; ld (room_number), a
+
+    xor a    
     ld (room_number), a
     ld (player_frame), a
     ld (player_orientation), a

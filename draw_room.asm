@@ -1,13 +1,8 @@
 draw_room
-    ld a, %11111100     ; pen 7 / 7
+    ld a, %11111100             ; pen 7 / 7
     ld (line_pen_number), a
     
     call draw_outline
-
-    ld a, %11111100
-    ld a, 0xff    
-    ld (line_pen_number), a
-
     call draw_items
 
     call calc_dimensions
