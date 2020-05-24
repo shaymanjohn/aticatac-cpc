@@ -209,7 +209,9 @@ pi1
     ret
 
 pi3
-    push hl
+    
+    ld b, h
+    ld c, l
     ld l, (ix + 4)
     ld h, (ix + 5)             
     ld e, (ix + 2)
@@ -217,7 +219,8 @@ pi3
     add hl, de
     ex de, hl
     dec de                      ; de = end of portrait data
-    pop hl
+    ld h, b
+    ld l, c
 
     ld c, (ix + 1)              ; height
 pi4

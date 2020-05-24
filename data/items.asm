@@ -105,8 +105,8 @@ chicken
 carcass
     defb 12, 30                              ; width (bytes), height (portrait size)
     defw 12 * 30
-    defw block_portrait
-    defw block_landscape
+    defw chicken_empty
+    defw chicken_empty
 
 antlers
     defb 8, 16                              ; width (bytes), height (portrait size)
@@ -171,26 +171,26 @@ knight
 shutdoor
     defb 8, 24                              ; width (bytes), height (portrait size)
     defw 8 * 24
-    defw block_portrait
-    defw block_landscape
+    defw door_closed_portrait
+    defw door_closed_landscape
 
 opendoor
     defb 8, 24                              ; width (bytes), height (portrait size)
     defw 8 * 24
-    defw block_portrait
-    defw block_landscape
+    defw door_portrait
+    defw door_landscape
 
 shutcave
     defb 8, 24                              ; width (bytes), height (portrait size)
     defw 8 * 24
-    defw block_portrait
-    defw block_landscape
+    defw cavedoor_closed_portrait
+    defw cavedoor_closed_landscape
 
 opencave
     defb 8, 24                              ; width (bytes), height (portrait size)
     defw 8 * 24
-    defw block_portrait
-    defw block_landscape
+    defw cavedoor_portrait
+    defw cavedoor_landscape
 
 acgdoor
     defb 16, 40                              ; width (bytes), height (portrait size)
@@ -207,16 +207,11 @@ picture2
 skeleton
     defb 10, 40                              ; width (bytes), height (portrait size)
     defw 10 * 40
-    defw block_portrait
-    defw block_landscape
+    defw skeleton_portrait
+    defw skeleton_landscape
 
 barrels
-    defb 10, 27                              ; width (bytes), height (portrait size)
-    defw 10 * 27
-    defw block_portrait
-    defw block_landscape
-
-block_portrait
-    defs 1024, 0xcc
-block_landscape
-    defs 1024, 0xcc
+    defb 10, 28                              ; width (bytes), height (portrait size)
+    defw 10 * 28
+    defw barrels_portrait
+    defw barrels_portrait

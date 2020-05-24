@@ -212,15 +212,17 @@ show_game
 show_next_screen
 	ld hl, room_number
 	inc (hl)
-
-	ld a, 1
-	ld (room_changed), a
-	ret
+	jr room_change
 
 show_previous_screen
-	ld hl, room_number
-	dec (hl)
+	ld a, (room_number)
+	and a
+	ret z
 
+	dec a
+	ld (room_number), a
+
+room_change
 	ld a, 1
 	ld (room_changed), a
 	ret	
