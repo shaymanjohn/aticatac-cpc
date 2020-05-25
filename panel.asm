@@ -83,7 +83,8 @@ clear_lives_loop
 lives_loop
     push hl
     push bc
-    ld de, player_kl_1_0    
+    ld de, player_kl_1_0
+    ld bc, save_screen_data_c0
     call draw_player_entry2
     pop bc
     pop hl

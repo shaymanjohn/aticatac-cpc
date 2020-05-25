@@ -23,12 +23,16 @@ draw_player
     cp 0xc0
     jp z, save_address_c0
     ld (save_player_address_80), hl        ; save this for erase later
+    ld bc, save_screen_data_80
     jp saved_address
 
 save_address_c0
     ld (save_player_address_c0), hl
+    ld bc, save_screen_data_c0    
 
 saved_address
+    push bc
+
     ld b, 0
     ld a, (player_x)
     and 1
@@ -52,11 +56,11 @@ dplay1
     inc hl
     ld d, (hl)
 
+    pop bc
     pop hl
 
-draw_player_entry2                  ; hl as screen address, de as gfx    
-    ld ixh, player_height
-    ld bc, save_screen_data
+draw_player_entry2                  
+    ld ixh, player_height           ; hl as screen address, de as gfx
 
 dplay2
     push hl
@@ -118,18 +122,19 @@ erase_player
     jp nz, erase_with_80
 
     ld hl, (save_player_address_c0)
+    ld de, save_screen_data_c0 
     jp erasex
 
 erase_with_80
     ld hl, (save_player_address_80)
+    ld de, save_screen_data_80    
     
 erasex
     ld a, h
     or l
-    ret z
+    ret z                       ; stop here if not yet set
 
     ld b, player_height
-    ld de, save_screen_data
 
 eplay2
     push hl
@@ -441,8 +446,11 @@ save_player_address_c0
 save_player_address_80    
     defw 0
     
-save_screen_data
+save_screen_data_c0
     defs player_height * player_width
+
+save_screen_data_80
+    defs player_height * player_width    
 
 anim_frames_table
     defw knight_frames_table
