@@ -1,12 +1,7 @@
-num_rows equ 192     ; same height as spectrum
-  
-set_screen_size
-  ld hl, crtc_vals
-  call set_crtc
-  ret
-
-set_crtc
+set_screen_properties
+  ld hl, crtc_vals  
   ld bc, &bc00
+
 set_crtc_vals
   out (c), c
   inc b
@@ -16,8 +11,9 @@ set_crtc_vals
   inc hl
   inc c
   ld a, c
-  cp 14
+  cp end_crtc_vals - crtc_vals
   jr nz, set_crtc_vals
+
   ret
 
 crtc_vals
@@ -35,3 +31,4 @@ crtc_vals
   defb 0                ;; R11 - Cursor (not used)
   defb &30              ;; R12 - Screen start (start at &c000)
   defb &00              ;; R13 - Screen start
+end_crtc_vals

@@ -17,8 +17,18 @@ draw_player
     ld b, 0
     add hl, bc
 
-    ld (save_player_address), hl        ; save this for erase later
+    push hl
 
+    ld a, (hidden_screen_base_address)
+    cp 0xc0
+    jp z, save_address_c0
+    ld (save_player_address_80), hl        ; save this for erase later
+    jp saved_address
+
+save_address_c0
+    ld (save_player_address_c0), hl
+
+saved_address
     ld b, 0
     ld a, (player_x)
     and 1
@@ -42,7 +52,7 @@ dplay1
     inc hl
     ld d, (hl)
 
-    ld hl, (save_player_address)
+    pop hl
 
 draw_player_entry2                  ; hl as screen address, de as gfx    
     ld ixh, player_height
@@ -100,16 +110,24 @@ dplay2
     dec ixh
     jp nz, dplay2
 
-    ld a, 1
-    ld (player_drawn), a
     ret
 
 erase_player
-    ld a, (player_drawn)
-    and a
+    ld a, (hidden_screen_base_address)
+    cp 0xc0
+    jp nz, erase_with_80
+
+    ld hl, (save_player_address_c0)
+    jp erasex
+
+erase_with_80
+    ld hl, (save_player_address_80)
+    
+erasex
+    ld a, h
+    or l
     ret z
 
-    ld hl, (save_player_address)
     ld b, player_height
     ld de, save_screen_data
 
@@ -414,13 +432,13 @@ game_over
 room_list
     defs max_items * 8
 
-player_drawn
-    defb 0
-
 show_vsync
     defb 1
 
-save_player_address
+save_player_address_c0
+    defw 0
+
+save_player_address_80    
     defw 0
     
 save_screen_data

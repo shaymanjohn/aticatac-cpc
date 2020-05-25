@@ -1,8 +1,9 @@
 switch_screens
-    ld a, (screen_address)
+    ld a, (visible_screen_base_address)
+    ld (hidden_screen_base_address), a
+    ld e, a       
     xor &40
-    ld (screen_address), a
-    ld e, a
+    ld (visible_screen_base_address), a
 
     sra a
     sra a
@@ -17,16 +18,16 @@ switch_screens
     ld b, &bd		    		; B = I/O address for CRTC register write
     out (c), 0
 
+    ld a, e                     ; e holds base address of hidden screen
+    cp $c0        
+    jp z, backbuffer_is_c0
+
+    ld hl, scr_addr_table_80
+    ld (scr_addr_table), hl
+    ret    
+    
+backbuffer_is_c0
     ld hl, scr_addr_table_c0
-    ld a, e
-    cp $c0
-    jp nz, save_scr_table_addr
-
-    ld hl, scr_addr_table_80
-
-save_scr_table_addr
-    ld hl, scr_addr_table_80
-
     ld (scr_addr_table), hl
     ret
 
@@ -43,8 +44,10 @@ set_pens_loop
     jr nz, set_pens_loop
     ret
 
-screen_address
-    defb &c0    
+visible_screen_base_address
+    defb 0xc0
+hidden_screen_base_address
+    defb 0x80
 
 set_pens_off
     ld hl, pens

@@ -116,7 +116,7 @@ FPLOT
   ld c,a             ;store in C
 
 scr_offset_value
-  ld b, &60        ;B = &C0\2 = Highbyte Screenstart\2  ; this value set prior to drawing room outline
+  ld b, &60         ;B = &C0\2 = Highbyte Screenstart\2  ; this value set prior to drawing room outline
   add hl, hl        ;HL * 2
   add hl, hl        ;HL * 4
   add hl, bc        ;+ BC = Startaddress

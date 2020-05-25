@@ -2,23 +2,18 @@ include "includes.asm"
 
 start
     xor a
-    call scr_set_mode
+    call scr_set_mode    
 
-    ld sp, 0xffff
-
-    call wait_vsync
     call set_pens_off
+    call wait_vsync
+
+    di
+    ld sp, 0x7fff
 
     ld d, hw_black
     call set_border                ; border to black
 
-    call set_screen_size
-
-    call make_scr_table
-    ld hl, scr_addr_table_c0
-    ld (scr_addr_table), hl
-    call switch_screens
-
+    call set_screen_properties
     call setup_game_data
 
     call install_interrupts
@@ -26,8 +21,9 @@ start
     jp $                            ; spin here, interrupts will handle flow
 
 setup_game_data
-    ld a, mode_game
-    call switch_mode
+    call make_scr_table
+    ld hl, scr_addr_table_c0
+    ld (scr_addr_table), hl
 
 ; rotate mode 0 sprites a pixel to the left
     ld ix, player_kd_0_0
@@ -39,6 +35,9 @@ setup_game_data
     ld hl, player_kd_0_1
     ld bc, 0x04d8
     call gen_mask
+
+    ld a, mode_game
+    call switch_mode    
 
     ret
 
@@ -112,9 +111,6 @@ select_game
     ld a, max_energy
     ld (energy), a
 
-    ld hl, carcass_item + 1
-    ld (hl), 30
-
     call draw_panel
     call set_pens
     ret
@@ -123,19 +119,17 @@ select_end
     ret
 
 clear_screen
-    ; di
     ld hl, 0xc000
     ld de, 0xc001
-    ld bc, 0x3f00
+    ld bc, 0x3fff
     ld (hl), 0
     ldir
 
     ld hl, 0x8000
     ld de, 0x8001
-    ld bc, 0x3f00
+    ld bc, 0x3fff
     ld (hl), 0
     ldir
-    ei
 
     ret
 

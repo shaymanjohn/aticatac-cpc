@@ -83,11 +83,11 @@ current_interrupts
 
 game_interrupts
 	dw interrupt_switch_screens
-	dw interrupt_empty
+	dw interrupt_update_game	
 	dw interrupt_keyboard
 	dw interrupt_check_doors
 	dw interrupt_move_player
-	dw interrupt_update_game
+	dw interrupt_empty	
 
 menu_interrupts
 	dw interrupt_empty

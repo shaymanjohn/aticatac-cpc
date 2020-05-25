@@ -15,6 +15,7 @@ num_rooms           equ (RoomTypes - RoomInfo) / 2
 player_horiz_speed  equ 1
 player_vert_speed   equ 2
 max_energy          equ 240
+num_rows            equ 192     ; same height as spectrum
 
 ; colours
 hw_black            equ 0x54

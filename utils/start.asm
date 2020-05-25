@@ -1,3 +1,2 @@
-org &1000
-; org &200
+org 0x400
     jp start
