@@ -82,7 +82,7 @@ current_interrupts
 	dw 0
 
 game_interrupts
-	dw interrupt_empty
+	dw interrupt_switch_screens
 	dw interrupt_empty
 	dw interrupt_keyboard
 	dw interrupt_check_doors
@@ -98,6 +98,33 @@ menu_interrupts
 	dw interrupt_empty
 
 interrupt_empty
+	ret
+
+interrupt_switch_screens
+	call switch_screens
+	ret
+
+interrupt_update_chicken
+	ld a, (energy)
+	and a
+	ret z
+	dec a
+	ld (energy), a
+
+	ld b, a
+	ld a, max_energy
+	sub b
+	sra a
+	sra a
+	sra a
+	sra a
+	and a
+	ret z
+	ld hl, carcass + 1
+	ld (hl), a
+
+    ld ix, carcass_item
+    call draw_item
 	ret
 
 interrupt_keyboard

@@ -1,6 +1,6 @@
 switch_screens
     ld a, (screen_address)
-    xor &80
+    xor &40
     ld (screen_address), a
     ld e, a
 
@@ -22,9 +22,11 @@ switch_screens
     cp $c0
     jp nz, save_scr_table_addr
 
-    ld hl, scr_addr_table_40
+    ld hl, scr_addr_table_80
 
 save_scr_table_addr
+    ld hl, scr_addr_table_80
+
     ld (scr_addr_table), hl
     ret
 
@@ -105,7 +107,7 @@ get_scr_addr
 ; generate table of screen addresses
 make_scr_table
     ld ix, scr_addr_table_c0	; address to store table
-    ld iy, scr_addr_table_40
+    ld iy, scr_addr_table_80
     ld hl, &c000				; start address of first scanline
     ld b, 200					; number of scanlines on screen
 mst1
@@ -114,7 +116,7 @@ mst1
     inc ix
     inc ix
     ld a, h
-    xor &80
+    xor &40
     ld (iy + 0), l
     ld (iy + 1), a
     inc iy
@@ -265,7 +267,7 @@ flip1
 scr_addr_table_c0              ; table/array for screen addresses for each scan line
     defs 200 * 2
 
-scr_addr_table_40
+scr_addr_table_80
     defs 200 * 2
 
 scr_addr_table

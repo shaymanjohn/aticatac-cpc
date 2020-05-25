@@ -14,6 +14,7 @@ player_height       equ 18      ; rows
 num_rooms           equ (RoomTypes - RoomInfo) / 2
 player_horiz_speed  equ 1
 player_vert_speed   equ 2
+max_energy          equ 240
 
 ; colours
 hw_black            equ 0x54

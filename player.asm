@@ -405,6 +405,9 @@ player_frame
 num_lives
     defb 0
 
+energy
+    defb 0
+
 game_over
     defb 0
 

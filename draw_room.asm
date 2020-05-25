@@ -1,11 +1,25 @@
 draw_room
     ld a, %11111100             ; pen 7 / 7
     ld (line_pen_number), a
+
+    ld a, (screen_address)
+    xor 0x40
+    sra a
+    ld (scr_offset_value + 1), a
     
     call draw_outline
     call draw_items
 
     call calc_dimensions
+
+    ld a, (screen_address)
+    ld h, a
+    ld l, 0
+    xor 0x40
+    ld d, a
+    ld e, 0
+    ld bc, 0x3f00
+    ldir
 
     xor a
     ld (player_drawn), a
@@ -110,7 +124,10 @@ get_point           ; IN: A = coord number, out: bc = coord
     ret
 
 clear_room
-    ld hl, &c000
+    ld a, (screen_address)
+    xor 0x40
+    ld h, a
+    ld l, 0
     ld b, num_rows
 
 clear1
