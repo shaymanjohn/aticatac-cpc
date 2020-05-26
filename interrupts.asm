@@ -83,25 +83,26 @@ current_interrupts
 
 game_interrupts
 	dw interrupt_switch_screens
-	dw interrupt_update_game
+	dw interrupt_empty
+	dw interrupt_empty
+	dw interrupt_empty
+	dw interrupt_empty
 	dw interrupt_keyboard
-	dw interrupt_empty	
-	dw interrupt_empty
-	dw interrupt_empty
 
 menu_interrupts
 	dw interrupt_empty
 	dw interrupt_empty
-	dw interrupt_keyboard
 	dw interrupt_empty
 	dw interrupt_empty
 	dw interrupt_empty
+	dw interrupt_keyboard	
 
 interrupt_empty
 	ret
 
 interrupt_switch_screens
 	call switch_screens
+	call interrupt_update_game
 	ret
 
 interrupt_update_chicken

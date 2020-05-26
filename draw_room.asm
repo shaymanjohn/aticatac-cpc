@@ -11,14 +11,25 @@ draw_room
 
     call calc_dimensions
 
+; Copy room to other screen (looks nicer than doing a single ldir)
     ld a, (hidden_screen_base_address)
     ld h, a
     ld l, 0
-    ld a, (visible_screen_base_address)
+    
+    ld ixh, num_rows
+
+copy_loop    
+    push hl
+    ld a, h
+    xor 0x40
     ld d, a
-    ld e, 0
-    ld bc, 0x4000
+    ld e, l
+    ld bc, 80
     ldir
+    pop hl
+    call scr_next_line
+    dec ixh
+    jr nz, copy_loop
 
     xor a
     ld (room_changed), a
