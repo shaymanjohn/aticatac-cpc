@@ -162,3 +162,5 @@ get_char_scr_address
     pop bc
     ret    
 
+panel_drawn
+    defb 0

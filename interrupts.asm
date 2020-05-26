@@ -83,10 +83,13 @@ current_interrupts
 
 game_interrupts
 	dw interrupt_switch_screens
-	dw interrupt_empty
-	dw interrupt_empty
-	dw interrupt_empty
-	dw interrupt_empty
+	dw interrupt_sprites
+	dw interrupt_sprites
+	dw interrupt_sprites
+	dw interrupt_sprites	
+	; dw interrupt_empty
+	; dw interrupt_empty
+	; dw interrupt_empty
 	dw interrupt_keyboard
 
 menu_interrupts
@@ -98,6 +101,49 @@ menu_interrupts
 	dw interrupt_keyboard	
 
 interrupt_empty
+	ret
+
+interrupt_sprites
+	ld d, 0x4e
+	call background_on
+
+sprite_loop1
+	ld a, (hidden_screen_base_address)
+	ld h, a
+	ld l, 0
+	ld de, door_portrait
+
+	ld b, 22
+
+sprite_loop2
+	push hl
+
+	ld a, (de)
+	xor (hl)
+	ld (hl), a
+	inc hl
+	inc de
+	ld a, (de)
+	xor (hl)
+	ld (hl), a
+	inc hl
+	inc de
+	ld a, (de)
+	xor (hl)
+	ld (hl), a
+	inc hl
+	inc de
+	ld a, (de)
+	xor (hl)
+	ld (hl), a
+	inc de
+
+	pop hl
+	call scr_next_line
+
+	djnz sprite_loop2
+
+	call background_off
 	ret
 
 interrupt_switch_screens
@@ -136,7 +182,9 @@ interrupt_keyboard
 	call poll_master_keys
 
 	call interrupt_check_doors
-	call interrupt_move_player	
+	call interrupt_move_player
+
+	; call interrupt_sprites
 
 	call background_off
 	ret

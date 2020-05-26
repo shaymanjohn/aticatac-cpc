@@ -92,6 +92,7 @@ select_game
     ld (player_frame), a
     ld (player_orientation), a
     ld (game_over), a
+    ld (panel_drawn), a
 
     inc a
     ld (room_changed), a
@@ -136,4 +137,3 @@ clear_screen
 mode_table
     defw menu_interrupts
     defw game_interrupts
-

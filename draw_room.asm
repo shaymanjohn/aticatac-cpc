@@ -17,6 +17,13 @@ draw_room
     ld l, 0
     
     ld ixh, num_rows
+    ld ixl, 48
+    ld a, (panel_drawn)
+    and a
+    jr nz, copy_loop
+    ld ixl, 80
+    ld a, 1
+    ld (panel_drawn), a
 
 copy_loop    
     push hl
@@ -24,7 +31,8 @@ copy_loop
     xor 0x40
     ld d, a
     ld e, l
-    ld bc, 80
+    ld b, 0
+    ld c, ixl
     ldir
     pop hl
     call scr_next_line
