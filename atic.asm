@@ -25,6 +25,10 @@ setup_game_data
     ld hl, scr_addr_table_c0
     ld (scr_addr_table), hl
 
+; switch to sprite bank
+	ld bc, 0x7fc4
+	out (c), c    
+
 ; rotate mode 0 sprites a pixel to the left
     ld ix, player_kd_0_0
     ld de, player_kd_0_1
@@ -35,6 +39,10 @@ setup_game_data
     ld hl, player_kd_0_1
     ld bc, 0x04d8
     call gen_mask
+
+; switch back to tile bank
+	ld bc, 0x7fc0
+	out (c), c    
 
     ld a, mode_game
     call switch_mode    
@@ -137,3 +145,28 @@ clear_screen
 mode_table
     defw menu_interrupts
     defw game_interrupts
+
+code_end
+
+; save "gamecode.bin",code_start,code_end-code_start
+
+; BANK 4
+org 0x4000                  ; banked
+start_item_gfx
+include "data/items.asm"
+include "graphics/item_gfx.asm"
+end_item_gfx
+
+start_panel_data
+include "graphics/panel_data.asm"
+end_panel_data
+
+; save "items.bin",start_item_gfx,end_panel_data-start_item_gfx
+
+; BANK 5
+org 0x4000                  ; banked
+start_player_gfx
+include "graphics/player_knight_gfx_masked.asm"
+end_player_gfx
+
+; save "sprites.bin",start_player_gfx,end_player_gfx-start_player_gfx

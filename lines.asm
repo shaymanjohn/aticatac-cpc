@@ -54,9 +54,9 @@ gnp0
   ld de, (y2+1)
   or a
   sbc hl, de           ; hl=y1-y2
-  ld a, &34
+  ld a, 0x34
   jr c, skip1
-  ld a, &35           ; sy= DEC (HL) / if y1 - y2 <0  sy= INC (HL)
+  ld a, 0x35           ; sy= DEC (HL) / if y1 - y2 <0  sy= INC (HL)
 skip1
   ld (sy), a
 
@@ -81,9 +81,9 @@ gnp1
   ld de, (x2+1)
   or a
   sbc hl, de           ;  HL=x1-x2
-  ld a, &34
+  ld a, 0x34
   jr c, skip2
-  ld a, &35            ; sx= DEC (HL) / if x1 - x2 <0  sx= INC (HL)
+  ld a, 0x35            ; sx= DEC (HL) / if x1 - x2 <0  sx= INC (HL)
 skip2
   ld (sx), a
 
@@ -116,7 +116,7 @@ FPLOT
   ld c,a             ;store in C
 
 scr_offset_value
-  ld b, &60         ;B = &C0\2 = Highbyte Screenstart\2  ; this value set prior to drawing room outline
+  ld b, 0x60         ;B = &C0\2 = Highbyte Screenstart\2  ; this value set prior to drawing room outline
   add hl, hl        ;HL * 2
   add hl, hl        ;HL * 4
   add hl, bc        ;+ BC = Startaddress

@@ -2,24 +2,24 @@ switch_screens
     ld a, (visible_screen_base_address)
     ld (hidden_screen_base_address), a
     ld e, a       
-    xor &40
+    xor 0x40
     ld (visible_screen_base_address), a
 
     sra a
     sra a
 
-    ld bc, &bc0c				; select CRTC register 12
+    ld bc, 0xbc0c				; select CRTC register 12
     out (c), c
-    ld b, &bd	    			; B = I/O address for CRTC register write    
+    ld b, 0xbd	    			; B = I/O address for CRTC register write    
     out (c), a
 
-    ld bc, &bc0d				; select CRTC register 13
+    ld bc, 0xbc0d				; select CRTC register 13
     out (c), c
-    ld b, &bd		    		; B = I/O address for CRTC register write
+    ld b, 0xbd		    		; B = I/O address for CRTC register write
     out (c), 0
 
     ld a, e                     ; e holds base address of hidden screen
-    cp $c0        
+    cp 0xc0        
     jp z, backbuffer_is_c0
 
     ld hl, scr_addr_table_80
@@ -76,7 +76,7 @@ set_border
     ret
 
 wait_vsync
-	ld b, &f5
+	ld b, 0xf5
 wait_vsync_loop    
 	in a, (c)
 	rrca
@@ -111,7 +111,7 @@ get_scr_addr
 make_scr_table
     ld ix, scr_addr_table_c0	; address to store table
     ld iy, scr_addr_table_80
-    ld hl, &c000				; start address of first scanline
+    ld hl, 0xc000				; start address of first scanline
     ld b, 200					; number of scanlines on screen
 mst1
     ld (ix + 0), l
@@ -119,7 +119,7 @@ mst1
     inc ix
     inc ix
     ld a, h
-    xor &40
+    xor 0x40
     ld (iy + 0), l
     ld (iy + 1), a
     inc iy
@@ -134,13 +134,13 @@ scr_next_line   ; hl = current screen address
     ld a, h
     add a, 8
     ld h, a
-    and &38
+    and 0x38
     ret nz
     ld a, l
-    add a, &50
+    add a, 0x50
     ld l, a
     ld a, h
-    adc a, &c0
+    adc a, 0xc0
     ld h, a
     ret
 

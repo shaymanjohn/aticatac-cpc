@@ -7,7 +7,7 @@ interrupt_firstValue	equ -1
 install_interrupts
 	di
 	ld hl, interrupt_callback
-	ld (&39), hl
+	ld (0x39), hl
 	ei
 	ret
 
@@ -21,7 +21,7 @@ interrupt_callback
 	push de
 	push ix
 
-	ld b, &f5
+	ld b, 0xf5
 	in a, (c)
 	rrca
 	jr nc, skipInitFirst
@@ -104,6 +104,11 @@ interrupt_empty
 	ret
 
 interrupt_sprites
+	call interrupt_spritex
+	; call interrupt_spritex
+	ret
+
+interrupt_spritex
 	ld d, 0x4e
 	call background_on
 
@@ -184,9 +189,7 @@ interrupt_keyboard
 	call interrupt_check_doors
 	call interrupt_move_player
 
-	; call interrupt_sprites
-
-	call background_off
+	call background_off	
 	ret
 
 interrupt_check_doors
@@ -226,15 +229,19 @@ interrupt_update_game
 	ld d, 0x55
 	call background_on
 
+; switch to sprite bank
+	ld bc, 0x7fc4
+	out (c), c
+
 	call erase_player
     call draw_player
 
+; switch back to tile bank
+	ld bc, 0x7fc0
+	out (c), c	
+
 	call background_off
 	ret
-
-interrupt_erase_player
-	call erase_player
-	ret	
 
 background_on
 	ld a, (show_vsync)

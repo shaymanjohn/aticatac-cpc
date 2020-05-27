@@ -11,6 +11,11 @@ draw_room
 
     call calc_dimensions
 
+    ld a, (room_colour)
+    ld d, a
+    ld a, 0x07
+    call set_ink        ; pen 7 is the room colour    
+
 ; Copy room to other screen (looks nicer than doing a single ldir)
     ld a, (hidden_screen_base_address)
     ld h, a
@@ -56,10 +61,8 @@ draw_outline
     ld h, 0
     add hl, hl
     add hl, bc
-    ld d, (hl)            ; d has room colour
-
-    ld a, 0x07
-    call set_ink          ; pen 7 is the room colour
+    ld a, (hl)            ; room colour
+    ld (room_colour), a
 
     inc hl
     ld a, (hl)            ; a has room type
@@ -153,7 +156,7 @@ clear_room
 clear1
     push bc
     push hl
-    ld bc, &2f
+    ld bc, 0x2f
     ld (hl), 0
     ld d, h
     ld e, l
@@ -207,4 +210,7 @@ room_number
     defb 0
 
 room_changed
+    defb 0
+
+room_colour
     defb 0

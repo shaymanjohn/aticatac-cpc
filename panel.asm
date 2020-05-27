@@ -1,7 +1,16 @@
 draw_panel
     call draw_empty_panel
     call add_chicken
+
+; switch to sprite bank
+	ld bc, 0x7fc4
+	out (c), c	    
+
     call show_lives
+
+; switch back to tile bank
+	ld bc, 0x7fc0
+	out (c), c	        
     ret
 
 draw_empty_panel
@@ -91,7 +100,6 @@ lives_loop
     ld de, player_width + 1
     add hl, de
     djnz lives_loop
-
     ret
 
 chicken_item
