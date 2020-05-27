@@ -5,6 +5,9 @@ draw_room
     ld a, (hidden_screen_base_address)
     sra a
     ld (scr_offset_value + 1), a
+
+    ; ld bc, room_bank
+    ; out (c), c
     
     call draw_outline
     call draw_items

@@ -230,14 +230,14 @@ interrupt_update_game
 	call background_on
 
 ; switch to sprite bank
-	ld bc, 0x7fc4
+	ld bc, sprite_bank
 	out (c), c
 
 	call erase_player
     call draw_player
 
 ; switch back to tile bank
-	ld bc, 0x7fc0
+	ld bc, item_bank
 	out (c), c	
 
 	call background_off

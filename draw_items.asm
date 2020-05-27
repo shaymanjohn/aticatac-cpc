@@ -16,6 +16,9 @@ draw_items
     ex de, hl
 
 draw_item_loop
+    ; ld bc, room_bank
+    ; out (c), c
+
     ld e, (hl)                  ; hl = pointer in items_per_room
     inc hl
     ld d, (hl)
@@ -37,6 +40,7 @@ draw_item_loop
     add ix, bc
 
 skip_dil
+
     push hl
     call explode_item           ; c has offset in pair
     call draw_item              ; ix points to item in item_list
@@ -122,45 +126,19 @@ li2
     ld b, (ix + 1)              ; width
     srl b
     srl b
-    push hl
 
-li1
-    ld a, (de)
-    call flip_pixels
-    ld (hl), a
-    inc hl
-    dec de
-    djnz li1
-
-    pop hl
-    call scr_next_line
-    dec c
-    jr nz, li2
-
-    ret
+    jp draw_item_flip
 
 li3
     ld c, (ix + 0)              ; height
     sla c
     sla c
-li4
+
     ld b, (ix + 1)              ; width
     srl b
     srl b
-    push hl
 
-li5
-    ld a, (de)
-    ld (hl), a
-    inc hl
-    inc de
-    djnz li5
-
-    pop hl
-    call scr_next_line
-    dec c
-    jr nz, li4
-    ret
+    jp draw_item_noflip
 
 portrait_item
     ld a, c                     ; x, y is bottom left of object so
@@ -191,25 +169,11 @@ portrait_item
     ld d, (ix + 5)              ; de = gfx data
 
     ld c, (ix + 1)              ; height
-pi2
     ld b, (ix + 0)              ; width
-    push hl
 
-pi1
-    ld a, (de)
-    ld (hl), a
-    inc hl
-    inc de
-    djnz pi1
+    jp draw_item_noflip
 
-    pop hl
-    call scr_next_line
-    dec c
-    jr nz, pi2
-    ret
-
-pi3
-    
+pi3    
     ld b, h
     ld c, l
     ld l, (ix + 4)
@@ -223,21 +187,41 @@ pi3
     ld l, c
 
     ld c, (ix + 1)              ; height
-pi4
     ld b, (ix + 0)              ; width
+
+draw_item_flip
+    push bc
     push hl
-pi5
+dif1
     ld a, (de)
     call flip_pixels
     ld (hl), a
     inc hl
     dec de
-    djnz pi5
+    djnz dif1
 
     pop hl
     call scr_next_line
+    pop bc
     dec c
-    jr nz, pi4
+    jp nz, draw_item_flip
+    ret
+
+draw_item_noflip
+    push bc
+    push hl
+dinf1
+    ld a, (de)
+    ld (hl), a
+    inc hl
+    inc de
+    djnz dinf1
+
+    pop hl
+    call scr_next_line
+    pop bc
+    dec c
+    jp nz, draw_item_noflip
     ret
 
 flip_pixels           ; swap left and right pixels
@@ -272,9 +256,8 @@ clear_room_items
 ; type, x, y, item pointer (to get paired), actual width, actual height, pair offset 
 explode_item        ; IN: ix = item address
     push ix
-
     ld a, c
-    ld (item_offset), a
+    ld (item_offset), a           ; which of the item pair we've got
 
     ld a, (current_list_item)
     ld l, a
@@ -386,5 +369,4 @@ rotation
 
 item_offset
     defb 0
-
 

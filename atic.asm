@@ -26,7 +26,7 @@ setup_game_data
     ld (scr_addr_table), hl
 
 ; switch to sprite bank
-	ld bc, 0x7fc4
+	ld bc, sprite_bank
 	out (c), c    
 
 ; rotate mode 0 sprites a pixel to the left
@@ -41,7 +41,7 @@ setup_game_data
     call gen_mask
 
 ; switch back to tile bank
-	ld bc, 0x7fc0
+	ld bc, item_bank
 	out (c), c    
 
     ld a, mode_game
@@ -170,3 +170,11 @@ include "graphics/player_knight_gfx_masked.asm"
 end_player_gfx
 
 ; save "sprites.bin",start_player_gfx,end_player_gfx-start_player_gfx
+
+; org 0x4000
+; start_room_data
+; include "data/rooms.asm"
+; include "data/item_list.asm"
+; include "data/items_per_room.asm"
+; include "data/item_pointers.asm"
+; end_room_data

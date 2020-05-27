@@ -3,13 +3,13 @@ draw_panel
     call add_chicken
 
 ; switch to sprite bank
-	ld bc, 0x7fc4
+	ld bc, sprite_bank
 	out (c), c	    
 
     call show_lives
 
 ; switch back to tile bank
-	ld bc, 0x7fc0
+	ld bc, item_bank
 	out (c), c	        
     ret
 
