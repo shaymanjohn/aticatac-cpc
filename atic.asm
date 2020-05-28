@@ -25,14 +25,15 @@ setup_game_data
     ld hl, scr_addr_table_c0
     ld (scr_addr_table), hl
 
+; Create copy of sprites, rotated a pixel to the left
+
 ; switch to sprite bank
 	ld bc, sprite_bank
 	out (c), c    
 
-; rotate mode 0 sprites a pixel to the left
     ld ix, sprite_bank_player_kd_0_0
     ld de, sprite_bank_player_kd_0_1
-    ld bc, 0x04d8                   ; 4 bytes wide, 18 x 3 high 
+    ld bc, 0x04d8                   ; 4 bytes wide, 18 x 3 high
     call rotate_gfx                 ; (& ignore mask)
 
 ; and then generate a new mask for them.
@@ -44,7 +45,7 @@ setup_game_data
 	ld bc, item_bank
 	out (c), c    
 
-    ld a, mode_game
+    ld a, state_game
     call switch_mode    
 
     ret
@@ -55,7 +56,7 @@ switch_mode
     ld l, a
     ld h, 0
     add hl, hl
-    ld de, mode_table
+    ld de, state_table
     add hl, de
     
     ld a, (hl)
@@ -69,13 +70,13 @@ switch_mode
 	ld (interrupt_index), a
 
     ld a, b
-    cp mode_menu
+    cp state_menu
     jp z, select_menu
 
-    cp mode_game
+    cp state_game
     jp z, select_game
 
-    cp mode_end
+    cp state_end
     jp z, select_end
 
     ret
@@ -142,7 +143,7 @@ clear_screen
 
     ret
 
-mode_table
+state_table
     defw menu_interrupts
     defw game_interrupts
 

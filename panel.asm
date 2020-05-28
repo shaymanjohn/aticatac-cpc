@@ -8,7 +8,7 @@ draw_panel
 
     call show_lives
 
-; switch back to tile bank
+; switch to tile bank
 	ld bc, item_bank
 	out (c), c	        
     ret

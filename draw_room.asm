@@ -6,9 +6,6 @@ draw_room
     sra a
     ld (scr_offset_value + 1), a
 
-    ; ld bc, room_bank
-    ; out (c), c
-    
     call draw_outline
     call draw_items
 
@@ -59,7 +56,7 @@ copy_loop
 draw_outline
     ld a, (room_number)
 
-    ld bc, RoomInfo
+    ld bc, room_bank_RoomInfo
     ld l, a
     ld h, 0
     add hl, hl
@@ -70,7 +67,7 @@ draw_outline
     inc hl
     ld a, (hl)            ; a has room type
 
-    ld bc, RoomTypes
+    ld bc, room_bank_RoomTypes
     ld l, a
     ld h, 0
     add hl, hl

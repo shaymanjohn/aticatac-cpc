@@ -196,7 +196,7 @@ interrupt_check_doors
 	ld d, 0x45
 	call background_on
 
-	; ld bc, 0x7f00 + 128 + 4 + 8 + 1
+	; ld bc, 0x7f00 + 128 + 4 + 8 + 1		; change screen mode
 	; out (c), c	
 
 	call check_doors
@@ -286,12 +286,12 @@ toggle_sync_bars
 	ret
 
 show_menu
-    ld a, mode_menu
+    ld a, state_menu
     call switch_mode
     ret
 
 show_game
-    ld a, mode_game
+    ld a, state_game
     call switch_mode
     ret
 

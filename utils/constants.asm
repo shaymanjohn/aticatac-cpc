@@ -8,10 +8,9 @@ rotation_right      equ 0x60
 rotation_right2     equ 0x40
 rotation_left       equ 0xe0
 
-max_items           equ 30
+max_items           equ 30      ; per room
 player_width        equ 4       ; bytes
 player_height       equ 18      ; rows
-num_rooms           equ (RoomTypes - RoomInfo) / 2
 player_horiz_speed  equ 1
 player_vert_speed   equ 2
 max_energy          equ 240
@@ -21,9 +20,9 @@ num_rows            equ 192     ; same height as spectrum
 hw_black            equ 0x54
 
 ; modes
-mode_menu           equ 0x00
-mode_game           equ 0x01
-mode_end            equ 0x02
+state_menu           equ 0x00
+state_game           equ 0x01
+state_end            equ 0x02
 
 ; memory banks
 sprite_bank         equ 0x7fc4

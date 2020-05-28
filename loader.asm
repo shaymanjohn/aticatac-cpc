@@ -30,12 +30,12 @@ drive
 	ld de, 0x4000
 	call load_block	
 
-	ld c, 0xc5					; set bank for rooms (0, 5, 2, 3)
-	call set_bank
-	ld hl, file_room
-	ld b, file_room_end - file_room
-	ld de, 0x4000
-	call load_block	
+	; ld c, 0xc5					; set bank for rooms (0, 5, 2, 3)
+	; call set_bank
+	; ld hl, file_room
+	; ld b, file_room_end - file_room
+	; ld de, 0x4000
+	; call load_block	
 
 	ld c, 0xc0					; set bank for items (0, 1, 2, 3)
 	call set_bank

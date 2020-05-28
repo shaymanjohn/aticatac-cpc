@@ -6,7 +6,7 @@ draw_items
     ld h, 0
     ld l, a
     add hl, hl
-    ld de, items_per_room
+    ld de, room_bank_items_per_room
     add hl, de
 
     ld e, (hl)
