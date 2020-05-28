@@ -1,7 +1,7 @@
 
 Insert the aticatac.hfe disk into the emulator (supported on RetroVirtualMachine2, not sure about other emulators)
 
-And then in the emulator:
+And then in the emulator (needs to be a 6128):
 run"atic
 
 Cursor keys to move, G to return to first screen
