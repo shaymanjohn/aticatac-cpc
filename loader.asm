@@ -37,10 +37,10 @@ drive
 	ld de, 0x4000
 	call load_block	
 
-	ld c, 0xc0					; set bank for tiles (0, 1, 2, 3)
+	ld c, 0xc0					; set bank for items (0, 1, 2, 3)
 	call set_bank
-	ld hl, file_tiles
-	ld b, file_tiles_end - file_tiles
+	ld hl, file_items
+	ld b, file_items_end - file_items
 	ld de, 0x4000
 	call load_block	
 
@@ -90,17 +90,17 @@ file_sprites
 	defb "SPRITES.BIN"
 file_sprites_end
 
-file_tiles
+file_room
+	defb "ROOMS.BIN"
+file_room_end
+
+file_items
 	defb "ITEMS.BIN"
-file_tiles_end
+file_items_end
 
 file_code
 	defb "GAMECODE.BIN"
 file_code_end
-
-file_room
-	defb "ROOMS.BIN"
-file_room_end
 
 end_of_code
 

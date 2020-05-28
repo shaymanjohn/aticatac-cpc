@@ -1,4 +1,4 @@
-items
+item_bank_items
 	defw unused,   cavedoor,  normaldoor, bigdoor
 	defw unused,   unused,    unused,     unused
 	defw reddoor,  greendoor, bluedoor,   yellowdoor

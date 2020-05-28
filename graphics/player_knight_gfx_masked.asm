@@ -1,4 +1,4 @@
-player_kd_0_0
+sprite_bank_player_kd_0_0
     defb 0xff, 0x00, 0x00, 0x03, 0x55, 0x02, 0xff, 0x00
     defb 0xaa, 0x01, 0x00, 0x03, 0x00, 0x03, 0xff, 0x00
     defb 0xaa, 0x01, 0x00, 0x03, 0x00, 0x03, 0xff, 0x00
@@ -17,7 +17,7 @@ player_kd_0_0
     defb 0xaa, 0x01, 0x55, 0x02, 0x00, 0x03, 0xff, 0x00
     defb 0x00, 0x03, 0x55, 0x02, 0x00, 0x03, 0x55, 0x02
     defb 0x00, 0x03, 0x55, 0x02, 0x00, 0x03, 0x55, 0x02
-player_kd_1_0
+sprite_bank_player_kd_1_0
     defb 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00
     defb 0xff, 0x00, 0x00, 0x03, 0x55, 0x02, 0xff, 0x00
     defb 0xaa, 0x01, 0x00, 0x03, 0x00, 0x03, 0xff, 0x00
@@ -36,7 +36,7 @@ player_kd_1_0
     defb 0xaa, 0x01, 0x55, 0x02, 0x00, 0x03, 0x55, 0x02
     defb 0x00, 0x03, 0x55, 0x02, 0xff, 0x00, 0xff, 0x00
     defb 0x00, 0x03, 0x55, 0x02, 0xff, 0x00, 0xff, 0x00
-player_kd_2_0
+sprite_bank_player_kd_2_0
     defb 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00
     defb 0xff, 0x00, 0x00, 0x03, 0x55, 0x02, 0xff, 0x00
     defb 0xaa, 0x01, 0x00, 0x03, 0x00, 0x03, 0xff, 0x00
@@ -55,7 +55,7 @@ player_kd_2_0
     defb 0x00, 0x03, 0x55, 0x02, 0x00, 0x03, 0xff, 0x00
     defb 0xff, 0x00, 0xff, 0x00, 0x00, 0x03, 0x55, 0x02
     defb 0xff, 0x00, 0xff, 0x00, 0x00, 0x03, 0x55, 0x02
-player_kl_0_0
+sprite_bank_player_kl_0_0
     defb 0xff, 0x00, 0x00, 0x03, 0x55, 0x02, 0xff, 0x00
     defb 0xaa, 0x01, 0x00, 0x03, 0x00, 0x03, 0xff, 0x00
     defb 0xaa, 0x01, 0x00, 0x03, 0x00, 0x03, 0xff, 0x00
@@ -74,7 +74,7 @@ player_kl_0_0
     defb 0xff, 0x00, 0x00, 0x03, 0x55, 0x02, 0xff, 0x00
     defb 0xaa, 0x01, 0x00, 0x03, 0x55, 0x02, 0xff, 0x00
     defb 0xaa, 0x01, 0x00, 0x03, 0x55, 0x02, 0xff, 0x00
-player_kl_1_0
+sprite_bank_player_kl_1_0
     defb 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00
     defb 0xff, 0x00, 0x00, 0x03, 0x55, 0x02, 0xff, 0x00
     defb 0xaa, 0x01, 0x00, 0x03, 0x00, 0x03, 0xff, 0x00
@@ -93,7 +93,7 @@ player_kl_1_0
     defb 0x00, 0x03, 0xaa, 0x01, 0x00, 0x03, 0xff, 0x00
     defb 0x00, 0x03, 0x55, 0x02, 0x00, 0x03, 0xff, 0x00
     defb 0xff, 0x00, 0xaa, 0x01, 0x55, 0x02, 0xff, 0x00
-player_kl_2_0
+sprite_bank_player_kl_2_0
     defb 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00
     defb 0xff, 0x00, 0x00, 0x03, 0x55, 0x02, 0xff, 0x00
     defb 0xaa, 0x01, 0x00, 0x03, 0x00, 0x03, 0xff, 0x00
@@ -112,7 +112,7 @@ player_kl_2_0
     defb 0x00, 0x03, 0x55, 0x02, 0x00, 0x03, 0xff, 0x00
     defb 0x00, 0x03, 0xaa, 0x01, 0x00, 0x03, 0xff, 0x00
     defb 0xff, 0x00, 0xaa, 0x01, 0x55, 0x02, 0xff, 0x00
-player_kr_0_0
+sprite_bank_player_kr_0_0
     defb 0xff, 0x00, 0x00, 0x03, 0x55, 0x02, 0xff, 0x00
     defb 0xaa, 0x01, 0x00, 0x03, 0x00, 0x03, 0xff, 0x00
     defb 0xaa, 0x01, 0x00, 0x03, 0x00, 0x03, 0xff, 0x00
@@ -131,7 +131,7 @@ player_kr_0_0
     defb 0xff, 0x00, 0x00, 0x03, 0x55, 0x02, 0xff, 0x00
     defb 0xff, 0x00, 0x00, 0x03, 0x00, 0x03, 0xff, 0x00
     defb 0xff, 0x00, 0x00, 0x03, 0x00, 0x03, 0xff, 0x00
-player_kr_1_0
+sprite_bank_player_kr_1_0
     defb 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00
     defb 0xff, 0x00, 0x00, 0x03, 0x55, 0x02, 0xff, 0x00
     defb 0xaa, 0x01, 0x00, 0x03, 0x00, 0x03, 0xff, 0x00
@@ -150,7 +150,7 @@ player_kr_1_0
     defb 0xaa, 0x01, 0x00, 0x03, 0xaa, 0x01, 0x55, 0x02
     defb 0xaa, 0x01, 0x55, 0x02, 0x00, 0x03, 0x55, 0x02
     defb 0xff, 0x00, 0x00, 0x03, 0xff, 0x00, 0xff, 0x00
-player_kr_2_0
+sprite_bank_player_kr_2_0
     defb 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00
     defb 0xff, 0x00, 0x00, 0x03, 0x55, 0x02, 0xff, 0x00
     defb 0xaa, 0x01, 0x00, 0x03, 0x00, 0x03, 0xff, 0x00
@@ -169,7 +169,7 @@ player_kr_2_0
     defb 0xaa, 0x01, 0x55, 0x02, 0x00, 0x03, 0x55, 0x02
     defb 0xaa, 0x01, 0x00, 0x03, 0xaa, 0x01, 0x55, 0x02
     defb 0xff, 0x00, 0x00, 0x03, 0xff, 0x00, 0xff, 0x00
-player_ku_0_0
+sprite_bank_player_ku_0_0
     defb 0xff, 0x00, 0x00, 0x03, 0x55, 0x02, 0xff, 0x00
     defb 0xaa, 0x01, 0x00, 0x03, 0x00, 0x03, 0xff, 0x00
     defb 0xaa, 0x01, 0x00, 0x03, 0x00, 0x03, 0xff, 0x00
@@ -188,7 +188,7 @@ player_ku_0_0
     defb 0xaa, 0x01, 0x55, 0x02, 0x00, 0x03, 0xff, 0x00
     defb 0x00, 0x03, 0x55, 0x02, 0x00, 0x03, 0x55, 0x02
     defb 0x00, 0x03, 0x55, 0x02, 0x00, 0x03, 0x55, 0x02
-player_ku_1_0
+sprite_bank_player_ku_1_0
     defb 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00
     defb 0xff, 0x00, 0x00, 0x03, 0x55, 0x02, 0xff, 0x00
     defb 0xaa, 0x01, 0x00, 0x03, 0x00, 0x03, 0xff, 0x00
@@ -207,7 +207,7 @@ player_ku_1_0
     defb 0xaa, 0x01, 0x55, 0x02, 0x00, 0x03, 0x55, 0x02
     defb 0x00, 0x03, 0x55, 0x02, 0xff, 0x00, 0xff, 0x00
     defb 0x00, 0x03, 0x55, 0x02, 0xff, 0x00, 0xff, 0x00
-player_ku_2_0
+sprite_bank_player_ku_2_0
     defb 0xff, 0x00, 0xff, 0x00, 0xff, 0x00, 0xff, 0x00
     defb 0xff, 0x00, 0x00, 0x03, 0x55, 0x02, 0xff, 0x00
     defb 0xaa, 0x01, 0x00, 0x03, 0x00, 0x03, 0xff, 0x00
@@ -227,164 +227,164 @@ player_ku_2_0
     defb 0xff, 0x00, 0xff, 0x00, 0x00, 0x03, 0x55, 0x02
     defb 0xff, 0x00, 0xff, 0x00, 0x00, 0x03, 0x55, 0x02
 
-player_kd_0_1
+sprite_bank_player_kd_0_1
     defs player_width * player_height * 2
-player_kd_1_1
+sprite_bank_player_kd_1_1
     defs player_width * player_height * 2
-player_kd_2_1
+sprite_bank_player_kd_2_1
     defs player_width * player_height * 2
-player_kl_0_1
+sprite_bank_player_kl_0_1
     defs player_width * player_height * 2
-player_kl_1_1
+sprite_bank_player_kl_1_1
     defs player_width * player_height * 2
-player_kl_2_1
+sprite_bank_player_kl_2_1
     defs player_width * player_height * 2
-player_kr_0_1
+sprite_bank_player_kr_0_1
     defs player_width * player_height * 2
-player_kr_1_1
+sprite_bank_player_kr_1_1
     defs player_width * player_height * 2
-player_kr_2_1
+sprite_bank_player_kr_2_1
     defs player_width * player_height * 2
-player_ku_0_1
+sprite_bank_player_ku_0_1
     defs player_width * player_height * 2
-player_ku_1_1
+sprite_bank_player_ku_1_1
     defs player_width * player_height * 2
-player_ku_2_1
+sprite_bank_player_ku_2_1
     defs player_width * player_height * 2
 
 knight_frames_table
-    defw player_kd_0_0
-    defw player_kd_0_0
-    defw player_kd_0_0
-    defw player_kd_0_0
-    defw player_kd_1_0
-    defw player_kd_1_0
-    defw player_kd_1_0
-    defw player_kd_1_0
-    defw player_kd_0_0
-    defw player_kd_0_0
-    defw player_kd_0_0
-    defw player_kd_0_0
-    defw player_kd_2_0
-    defw player_kd_2_0
-    defw player_kd_2_0
-    defw player_kd_2_0
+    defw sprite_bank_player_kd_0_0
+    defw sprite_bank_player_kd_0_0
+    defw sprite_bank_player_kd_0_0
+    defw sprite_bank_player_kd_0_0
+    defw sprite_bank_player_kd_1_0
+    defw sprite_bank_player_kd_1_0
+    defw sprite_bank_player_kd_1_0
+    defw sprite_bank_player_kd_1_0
+    defw sprite_bank_player_kd_0_0
+    defw sprite_bank_player_kd_0_0
+    defw sprite_bank_player_kd_0_0
+    defw sprite_bank_player_kd_0_0
+    defw sprite_bank_player_kd_2_0
+    defw sprite_bank_player_kd_2_0
+    defw sprite_bank_player_kd_2_0
+    defw sprite_bank_player_kd_2_0
 
-    defw player_kd_0_1
-    defw player_kd_0_1
-    defw player_kd_0_1
-    defw player_kd_0_1
-    defw player_kd_1_1
-    defw player_kd_1_1
-    defw player_kd_1_1
-    defw player_kd_1_1
-    defw player_kd_0_1
-    defw player_kd_0_1
-    defw player_kd_0_1
-    defw player_kd_0_1
-    defw player_kd_2_1
-    defw player_kd_2_1
-    defw player_kd_2_1
-    defw player_kd_2_1
+    defw sprite_bank_player_kd_0_1
+    defw sprite_bank_player_kd_0_1
+    defw sprite_bank_player_kd_0_1
+    defw sprite_bank_player_kd_0_1
+    defw sprite_bank_player_kd_1_1
+    defw sprite_bank_player_kd_1_1
+    defw sprite_bank_player_kd_1_1
+    defw sprite_bank_player_kd_1_1
+    defw sprite_bank_player_kd_0_1
+    defw sprite_bank_player_kd_0_1
+    defw sprite_bank_player_kd_0_1
+    defw sprite_bank_player_kd_0_1
+    defw sprite_bank_player_kd_2_1
+    defw sprite_bank_player_kd_2_1
+    defw sprite_bank_player_kd_2_1
+    defw sprite_bank_player_kd_2_1
 
-    defw player_ku_0_0
-    defw player_ku_0_0
-    defw player_ku_0_0
-    defw player_ku_0_0
-    defw player_ku_1_0
-    defw player_ku_1_0
-    defw player_ku_1_0
-    defw player_ku_1_0
-    defw player_ku_0_0
-    defw player_ku_0_0
-    defw player_ku_0_0
-    defw player_ku_0_0
-    defw player_ku_2_0
-    defw player_ku_2_0
-    defw player_ku_2_0
-    defw player_ku_2_0
+    defw sprite_bank_player_ku_0_0
+    defw sprite_bank_player_ku_0_0
+    defw sprite_bank_player_ku_0_0
+    defw sprite_bank_player_ku_0_0
+    defw sprite_bank_player_ku_1_0
+    defw sprite_bank_player_ku_1_0
+    defw sprite_bank_player_ku_1_0
+    defw sprite_bank_player_ku_1_0
+    defw sprite_bank_player_ku_0_0
+    defw sprite_bank_player_ku_0_0
+    defw sprite_bank_player_ku_0_0
+    defw sprite_bank_player_ku_0_0
+    defw sprite_bank_player_ku_2_0
+    defw sprite_bank_player_ku_2_0
+    defw sprite_bank_player_ku_2_0
+    defw sprite_bank_player_ku_2_0
 
-    defw player_ku_0_1
-    defw player_ku_0_1
-    defw player_ku_0_1
-    defw player_ku_0_1
-    defw player_ku_1_1
-    defw player_ku_1_1
-    defw player_ku_1_1
-    defw player_ku_1_1
-    defw player_ku_0_1
-    defw player_ku_0_1
-    defw player_ku_0_1
-    defw player_ku_0_1
-    defw player_ku_2_1
-    defw player_ku_2_1
-    defw player_ku_2_1
-    defw player_ku_2_1
+    defw sprite_bank_player_ku_0_1
+    defw sprite_bank_player_ku_0_1
+    defw sprite_bank_player_ku_0_1
+    defw sprite_bank_player_ku_0_1
+    defw sprite_bank_player_ku_1_1
+    defw sprite_bank_player_ku_1_1
+    defw sprite_bank_player_ku_1_1
+    defw sprite_bank_player_ku_1_1
+    defw sprite_bank_player_ku_0_1
+    defw sprite_bank_player_ku_0_1
+    defw sprite_bank_player_ku_0_1
+    defw sprite_bank_player_ku_0_1
+    defw sprite_bank_player_ku_2_1
+    defw sprite_bank_player_ku_2_1
+    defw sprite_bank_player_ku_2_1
+    defw sprite_bank_player_ku_2_1
 
-    defw player_kl_0_0
-    defw player_kl_0_0
-    defw player_kl_0_0
-    defw player_kl_0_0
-    defw player_kl_1_0
-    defw player_kl_1_0
-    defw player_kl_1_0
-    defw player_kl_1_0
-    defw player_kl_0_0
-    defw player_kl_0_0
-    defw player_kl_0_0
-    defw player_kl_0_0
-    defw player_kl_2_0
-    defw player_kl_2_0
-    defw player_kl_2_0
-    defw player_kl_2_0
+    defw sprite_bank_player_kl_0_0
+    defw sprite_bank_player_kl_0_0
+    defw sprite_bank_player_kl_0_0
+    defw sprite_bank_player_kl_0_0
+    defw sprite_bank_player_kl_1_0
+    defw sprite_bank_player_kl_1_0
+    defw sprite_bank_player_kl_1_0
+    defw sprite_bank_player_kl_1_0
+    defw sprite_bank_player_kl_0_0
+    defw sprite_bank_player_kl_0_0
+    defw sprite_bank_player_kl_0_0
+    defw sprite_bank_player_kl_0_0
+    defw sprite_bank_player_kl_2_0
+    defw sprite_bank_player_kl_2_0
+    defw sprite_bank_player_kl_2_0
+    defw sprite_bank_player_kl_2_0
 
-    defw player_kl_0_1
-    defw player_kl_0_1
-    defw player_kl_0_1
-    defw player_kl_0_1
-    defw player_kl_1_1
-    defw player_kl_1_1
-    defw player_kl_1_1
-    defw player_kl_1_1
-    defw player_kl_0_1
-    defw player_kl_0_1
-    defw player_kl_0_1
-    defw player_kl_0_1
-    defw player_kl_2_1
-    defw player_kl_2_1
-    defw player_kl_2_1
-    defw player_kl_2_1
+    defw sprite_bank_player_kl_0_1
+    defw sprite_bank_player_kl_0_1
+    defw sprite_bank_player_kl_0_1
+    defw sprite_bank_player_kl_0_1
+    defw sprite_bank_player_kl_1_1
+    defw sprite_bank_player_kl_1_1
+    defw sprite_bank_player_kl_1_1
+    defw sprite_bank_player_kl_1_1
+    defw sprite_bank_player_kl_0_1
+    defw sprite_bank_player_kl_0_1
+    defw sprite_bank_player_kl_0_1
+    defw sprite_bank_player_kl_0_1
+    defw sprite_bank_player_kl_2_1
+    defw sprite_bank_player_kl_2_1
+    defw sprite_bank_player_kl_2_1
+    defw sprite_bank_player_kl_2_1
 
-    defw player_kr_0_0
-    defw player_kr_0_0
-    defw player_kr_0_0
-    defw player_kr_0_0
-    defw player_kr_1_0
-    defw player_kr_1_0
-    defw player_kr_1_0
-    defw player_kr_1_0
-    defw player_kr_0_0
-    defw player_kr_0_0
-    defw player_kr_0_0
-    defw player_kr_0_0
-    defw player_kr_2_0
-    defw player_kr_2_0
-    defw player_kr_2_0
-    defw player_kr_2_0
+    defw sprite_bank_player_kr_0_0
+    defw sprite_bank_player_kr_0_0
+    defw sprite_bank_player_kr_0_0
+    defw sprite_bank_player_kr_0_0
+    defw sprite_bank_player_kr_1_0
+    defw sprite_bank_player_kr_1_0
+    defw sprite_bank_player_kr_1_0
+    defw sprite_bank_player_kr_1_0
+    defw sprite_bank_player_kr_0_0
+    defw sprite_bank_player_kr_0_0
+    defw sprite_bank_player_kr_0_0
+    defw sprite_bank_player_kr_0_0
+    defw sprite_bank_player_kr_2_0
+    defw sprite_bank_player_kr_2_0
+    defw sprite_bank_player_kr_2_0
+    defw sprite_bank_player_kr_2_0
 
-    defw player_kr_0_1
-    defw player_kr_0_1
-    defw player_kr_0_1
-    defw player_kr_0_1
-    defw player_kr_1_1
-    defw player_kr_1_1
-    defw player_kr_1_1
-    defw player_kr_1_1
-    defw player_kr_0_1
-    defw player_kr_0_1
-    defw player_kr_0_1
-    defw player_kr_0_1
-    defw player_kr_2_1
-    defw player_kr_2_1
-    defw player_kr_2_1
-    defw player_kr_2_1
+    defw sprite_bank_player_kr_0_1
+    defw sprite_bank_player_kr_0_1
+    defw sprite_bank_player_kr_0_1
+    defw sprite_bank_player_kr_0_1
+    defw sprite_bank_player_kr_1_1
+    defw sprite_bank_player_kr_1_1
+    defw sprite_bank_player_kr_1_1
+    defw sprite_bank_player_kr_1_1
+    defw sprite_bank_player_kr_0_1
+    defw sprite_bank_player_kr_0_1
+    defw sprite_bank_player_kr_0_1
+    defw sprite_bank_player_kr_0_1
+    defw sprite_bank_player_kr_2_1
+    defw sprite_bank_player_kr_2_1
+    defw sprite_bank_player_kr_2_1
+    defw sprite_bank_player_kr_2_1

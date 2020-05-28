@@ -30,13 +30,13 @@ setup_game_data
 	out (c), c    
 
 ; rotate mode 0 sprites a pixel to the left
-    ld ix, player_kd_0_0
-    ld de, player_kd_0_1
+    ld ix, sprite_bank_player_kd_0_0
+    ld de, sprite_bank_player_kd_0_1
     ld bc, 0x04d8                   ; 4 bytes wide, 18 x 3 high 
     call rotate_gfx                 ; (& ignore mask)
 
 ; and then generate a new mask for them.
-    ld hl, player_kd_0_1
+    ld hl, sprite_bank_player_kd_0_1
     ld bc, 0x04d8
     call gen_mask
 
@@ -148,33 +148,4 @@ mode_table
 
 code_end
 
-; save "gamecode.bin",code_start,code_end-code_start
-
-; BANK 4
-org 0x4000                  ; banked
-start_item_gfx
-include "data/items.asm"
-include "graphics/item_gfx.asm"
-end_item_gfx
-
-start_panel_data
-include "graphics/panel_data.asm"
-end_panel_data
-
-; save "items.bin",start_item_gfx,end_panel_data-start_item_gfx
-
-; BANK 5
-org 0x4000                  ; banked
-start_player_gfx
-include "graphics/player_knight_gfx_masked.asm"
-end_player_gfx
-
-; save "sprites.bin",start_player_gfx,end_player_gfx-start_player_gfx
-
-; org 0x4000
-; start_room_data
-; include "data/rooms.asm"
-; include "data/item_list.asm"
-; include "data/items_per_room.asm"
-; include "data/item_pointers.asm"
-; end_room_data
+include "bank_includes.asm"

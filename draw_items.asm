@@ -16,9 +16,6 @@ draw_items
     ex de, hl
 
 draw_item_loop
-    ; ld bc, room_bank
-    ; out (c), c
-
     ld e, (hl)                  ; hl = pointer in items_per_room
     inc hl
     ld d, (hl)
@@ -44,6 +41,7 @@ skip_dil
     push hl
     call explode_item           ; c has offset in pair
     call draw_item              ; ix points to item in item_list
+
     pop hl
 
     jr draw_item_loop
@@ -52,7 +50,7 @@ draw_item                       ; ix + 0 = item, 3 = x, 4 = y, 5 = rotation
     ld l, (ix + 0)
     ld h, 0
     add hl, hl
-    ld de, items
+    ld de, item_bank_items
     add hl, de
 
     ld b, (ix + 3)
@@ -194,7 +192,21 @@ draw_item_flip
     push hl
 dif1
     ld a, (de)
-    call flip_pixels
+
+flip_pixels           ; swap left and right pixels
+    push bc
+
+    ld c, a
+    and %10101010
+    ld b, a
+    srl b
+    ld a, c
+    and %01010101
+    sla a
+    or b
+
+    pop bc
+
     ld (hl), a
     inc hl
     dec de
@@ -222,21 +234,6 @@ dinf1
     pop bc
     dec c
     jp nz, draw_item_noflip
-    ret
-
-flip_pixels           ; swap left and right pixels
-    push bc
-
-    ld c, a
-    and %10101010
-    ld b, a
-    srl b
-    ld a, c
-    and %01010101
-    sla a
-    or b
-
-    pop bc
     ret
 
 clear_room_list_data
@@ -293,7 +290,7 @@ explode_item        ; IN: ix = item address
     ld l, d
     ld h, 0
     add hl, hl
-    ld de, items
+    ld de, item_bank_items
     add hl, de
     ld a, (hl)
     inc hl
