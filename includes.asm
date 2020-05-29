@@ -14,10 +14,3 @@ include "panel.asm"
 include "player.asm"
 include "interrupts.asm"
 include "keyboard.asm"
-
-start_room_data
-include "data/rooms.asm"
-include "data/item_list.asm"
-include "data/items_per_room.asm"
-include "data/item_pointers.asm"
-end_room_data
