@@ -10,7 +10,7 @@ draw_room
     out (c), c
 
     call draw_outline
-    ; call draw_items
+    call draw_items
 
     ld bc, item_bank_config
     out (c), c    

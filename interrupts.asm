@@ -86,10 +86,7 @@ game_interrupts
 	dw interrupt_sprites
 	dw interrupt_sprites
 	dw interrupt_sprites
-	dw interrupt_sprites	
-	; dw interrupt_empty
-	; dw interrupt_empty
-	; dw interrupt_empty
+	dw interrupt_sprites
 	dw interrupt_keyboard
 
 menu_interrupts
@@ -105,7 +102,6 @@ interrupt_empty
 
 interrupt_sprites
 	call interrupt_spritex
-	; call interrupt_spritex
 	ret
 
 interrupt_spritex
@@ -199,7 +195,13 @@ interrupt_check_doors
 	; ld bc, 0x7f00 + 128 + 4 + 8 + 1		; change screen mode
 	; out (c), c	
 
+	ld bc, room_bank_config
+	out (c), c
+
 	call check_doors
+
+	ld bc, item_bank_config
+	out (c), c
 
     ld a, (room_changed)
 	and a

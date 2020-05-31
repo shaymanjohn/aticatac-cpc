@@ -40,7 +40,7 @@ skip_dil
 
     push hl
     call explode_item           ; c has offset in pair
-    call draw_item              ; ix points to item in item_list
+    ; call draw_item              ; ix points to item in item_list
 
     pop hl
 
@@ -252,7 +252,7 @@ clear_room_items
 
 ; type, x, y, item pointer (to get paired), actual width, actual height, pair offset 
 explode_item        ; IN: ix = item address
-    push ix
+    ; push ix
     ld a, c
     ld (item_offset), a           ; which of the item pair we've got
 
@@ -292,12 +292,21 @@ explode_item        ; IN: ix = item address
     add hl, hl
     ld de, item_bank_items
     add hl, de
+
+    ld a, (ix + 5)
+    ld iyh, a
+
+    push bc
+    ld bc, item_bank_config
+    out (c), c
+    pop bc
+
     ld a, (hl)
     inc hl
     ld h, (hl)
     ld l, a                 ; hl now at item metadata
 
-    ld a, (ix + 5)
+    ld a, iyh
     and 0xfe
     cp rotation_top
     jr z, expl_portrait
@@ -355,7 +364,11 @@ inc_list
     ld hl, current_list_item
     inc (hl)
 
-    pop ix
+    ; pop ix
+
+    ld bc, room_bank_config
+    out (c), c
+
     ret
 
 current_list_item

@@ -1,14 +1,15 @@
 draw_panel
+	ld bc, item_bank_config
+	out (c), c
+
     call draw_empty_panel
     call add_chicken
 
-; switch to sprite bank
 	ld bc, sprite_bank_config
 	out (c), c	    
 
     call show_lives
 
-; switch to tile bank
 	ld bc, item_bank_config
 	out (c), c	        
     ret

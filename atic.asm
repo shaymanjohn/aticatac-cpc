@@ -27,7 +27,6 @@ setup_game_data
 
 ; Create copy of sprites, rotated a pixel to the left
 
-; switch to sprite bank
 	ld bc, sprite_bank_config
 	out (c), c    
 
@@ -41,7 +40,6 @@ setup_game_data
     ld bc, 0x04d8
     call gen_mask
 
-; switch back to tile bank
 	ld bc, item_bank_config
 	out (c), c    
 
