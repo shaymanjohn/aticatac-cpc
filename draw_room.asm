@@ -6,13 +6,13 @@ draw_room
     sra a
     ld (scr_offset_value + 1), a
 
-    ld bc, room_bank
+    ld bc, room_bank_config
     out (c), c
 
     call draw_outline
     ; call draw_items
 
-    ld bc, item_bank
+    ld bc, item_bank_config
     out (c), c    
 
     call calc_dimensions

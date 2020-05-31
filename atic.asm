@@ -28,7 +28,7 @@ setup_game_data
 ; Create copy of sprites, rotated a pixel to the left
 
 ; switch to sprite bank
-	ld bc, sprite_bank
+	ld bc, sprite_bank_config
 	out (c), c    
 
     ld ix, sprite_bank_player_kd_0_0
@@ -42,7 +42,7 @@ setup_game_data
     call gen_mask
 
 ; switch back to tile bank
-	ld bc, item_bank
+	ld bc, item_bank_config
 	out (c), c    
 
     ld a, state_game

@@ -25,9 +25,9 @@ state_game           equ 0x01
 state_end            equ 0x02
 
 ; memory banks
-sprite_bank         equ 0x7fc4
-item_bank           equ 0x7fc0
-room_bank           equ 0x7fc5
+sprite_bank_config  equ 0x7fc4
+item_bank_config    equ 0x7fc0
+room_bank_config    equ 0x7fc5
 
 ; player anim
 num_player_frames       equ 16
