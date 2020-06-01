@@ -16,6 +16,9 @@ draw_items
     ex de, hl
 
 draw_item_loop
+    ld bc, room_bank_config     ; page room info in
+    out (c), c
+
     ld e, (hl)                  ; hl = pointer in items_per_room
     inc hl
     ld d, (hl)
@@ -23,8 +26,13 @@ draw_item_loop
 
     ld a, d
     or e
-    ret z                       ; de = pointer in BackLocLists
+    jr nz, continue_items       ; de = pointer in BackLocLists
 
+    ld bc, item_bank_config     ; page default bank back in
+    out (c), c 
+    ret   
+
+continue_items
     ld ixh, d
     ld ixl, e
 
@@ -40,7 +48,7 @@ skip_dil
 
     push hl
     call explode_item           ; c has offset in pair
-    ; call draw_item              ; ix points to item in item_list
+    call draw_item              ; ix points to item in item_list
 
     pop hl
 
@@ -61,6 +69,11 @@ draw_item                       ; ix + 0 = item, 3 = x, 4 = y, 5 = rotation
     ld a, (ix + 5)              ; a has rotation value
     and 0xfe
     ld (rotation), a
+
+    push bc
+    ld bc, item_bank_config
+    out (c), c
+    pop bc
 
     ld e, (hl)
     inc hl
@@ -161,7 +174,7 @@ portrait_item
 
     ld a, (rotation)
     cp rotation_bottom
-    jr z, pi3
+    jr z, port_item
 
     ld e, (ix + 4)
     ld d, (ix + 5)              ; de = gfx data
@@ -171,7 +184,7 @@ portrait_item
 
     jp draw_item_noflip
 
-pi3    
+port_item    
     ld b, h
     ld c, l
     ld l, (ix + 4)
@@ -217,6 +230,7 @@ flip_pixels           ; swap left and right pixels
     pop bc
     dec c
     jp nz, draw_item_flip
+
     ret
 
 draw_item_noflip
@@ -234,6 +248,7 @@ dinf1
     pop bc
     dec c
     jp nz, draw_item_noflip
+
     ret
 
 clear_room_list_data
@@ -252,7 +267,6 @@ clear_room_items
 
 ; type, x, y, item pointer (to get paired), actual width, actual height, pair offset 
 explode_item        ; IN: ix = item address
-    ; push ix
     ld a, c
     ld (item_offset), a           ; which of the item pair we've got
 
@@ -363,8 +377,6 @@ inc_list
 
     ld hl, current_list_item
     inc (hl)
-
-    ; pop ix
 
     ld bc, room_bank_config
     out (c), c

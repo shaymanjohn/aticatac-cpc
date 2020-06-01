@@ -12,9 +12,6 @@ draw_room
     call draw_outline
     call draw_items
 
-    ld bc, item_bank_config
-    out (c), c    
-
     call calc_dimensions
 
     ld a, (room_colour)
@@ -22,7 +19,7 @@ draw_room
     ld a, 0x07
     call set_ink        ; pen 7 is the room colour    
 
-; Copy room to other screen (looks nicer than doing a single ldir)
+; Copy room to other screen 
     ld a, (hidden_screen_base_address)
     ld h, a
     ld l, 0
@@ -33,8 +30,6 @@ draw_room
     and a
     jr nz, copy_loop
     ld ixl, 80
-    ld a, 1
-    ld (panel_drawn), a
 
 copy_loop    
     push hl
@@ -52,6 +47,9 @@ copy_loop
 
     xor a
     ld (room_changed), a
+
+    inc a
+    ld (panel_drawn), a    
 
     ld hl, 0
     ld (save_player_address_c0), hl

@@ -27,7 +27,7 @@ setup_game_data
 
 ; Create copy of sprites, rotated a pixel to the left
 
-	ld bc, sprite_bank_config
+	ld bc, sprite_bank_config           ; page in sprite bank
 	out (c), c    
 
     ld ix, sprite_bank_player_kd_0_0
@@ -40,7 +40,7 @@ setup_game_data
     ld bc, 0x04d8
     call gen_mask
 
-	ld bc, item_bank_config
+	ld bc, item_bank_config             ; default page back in
 	out (c), c    
 
     ld a, state_game
@@ -144,7 +144,5 @@ clear_screen
 state_table
     defw menu_interrupts
     defw game_interrupts
-
-code_end
 
 include "bank_includes.asm"
