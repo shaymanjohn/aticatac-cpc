@@ -185,25 +185,30 @@ collision_loop
     cp 16
     jp nc, no_collision     ; only basic doors for now...
     
-    ld a, (ix + 1)          ; get door x + width
+    ld a, (ix + 1)          ; get door x + width * 2
     add (ix + 5)
+    add (ix + 5)
+    sub 4                   ; tolerance
     ld d, a
     ld a, (player_x)
     cp d
     jp nc, no_collision
 
     add player_width
+    sub 2                   ; tolerance
     cp (ix + 1)
     jp c, no_collision
 
     ld a, (ix + 2)          ; now height
     add (ix + 6)
+    sub 8
     ld d, a
     ld a, (player_y)
     cp d
     jp nc, no_collision
 
     add player_height
+    sub 8                   ; tolerance
     cp (ix + 2)
     jp nc, do_collision
 
@@ -273,6 +278,7 @@ landscape_coll_right
 landscape_coll_left
     ld a, (this_item_width)
     add b
+    add b
     ld (player_x), a
 
     ld a, c
@@ -283,6 +289,7 @@ portrait_coll_bot
     ld a, c
     sub player_height
     dec a
+    add 8
     ld (player_y), a
 
     ld a, (this_item_width)
@@ -294,6 +301,7 @@ portrait_coll_bot
 portrait_coll_top
     ld a, (this_item_height)
     add c
+    sub 8    
     ld (player_y), a
 
     ld a, (this_item_width)

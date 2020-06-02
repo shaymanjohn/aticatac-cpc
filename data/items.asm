@@ -85,14 +85,14 @@ clock
     defw clock_landscape
 
 picture1    ; was 8, 24
-    defb 8, 20                              ; width (bytes), height (portrait size)
-    defw 8 * 20
+    defb 7, 20                              ; width (bytes), height (portrait size)
+    defw 7 * 20
     defw picture1_portrait
     defw picture1_landscape
 
 table
-    defb 8, 22                              ; width (bytes), height (portrait size)
-    defw 8 * 22
+    defb 8, 24                              ; width (bytes), height (portrait size)
+    defw 8 * 24
     defw table_portrait
     defw table_portrait
 
