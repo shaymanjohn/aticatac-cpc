@@ -162,12 +162,11 @@ eplay2
     ret
 
 check_doors
-    ld a, (current_list_item)
+    ld a, (this_rooms_item_count)
     and a
     ret z
 
-    ld ix, room_list
-    ld a, (current_list_item)
+    ld ix, this_rooms_item_list
     ld b, a
 
 ;   collision if:
@@ -177,47 +176,57 @@ check_doors
 ;   player.y + player.height > door.y
 ;
 
-cd1
+collision_loop
     ld a, (ix + 0)
     cp 16
-    jp nc, cd2              ; only basic doors for now...
+    jp nc, no_collision     ; only basic doors for now...
     
     ld a, (ix + 1)          ; get door x + width
     add (ix + 5)
     ld d, a
     ld a, (player_x)
     cp d
-    jp nc, cd2
+    jp nc, no_collision
 
     add player_width
     cp (ix + 1)
-    jp c, cd2
+    jp c, no_collision
 
-    ld a, (ix + 2)
+    ld a, (ix + 2)          ; now height
     add (ix + 6)
     ld d, a
     ld a, (player_y)
     cp d
-    jp nc, cd2
+    jp nc, no_collision
 
     add player_height
     cp (ix + 2)
-    jp c, cd2
+    jp nc, do_collision
 
+no_collision
+    ld de, 8
+    add ix, de              ; go to next item
+    djnz collision_loop
+
+    ret    
+
+do_collision
     ld l, (ix + 3)
-    ld h, (ix + 4)
+    ld h, (ix + 4)          ; hl is pointer to item in room_bank_item_list
 
-    ld bc, -8
+    ld bc, -8               ; We want this items twin now to work out new position of player
     ld a, (ix + 7)
-    cp 8
-    jp z, collide1
+    and a
+    jp nz, collide1
     ld bc, 8
 
 collide1
-    add hl, bc              ; hl points to item to move to 1 = room number, 3 = x, 4 = y, 5 = rotation
+    add hl, bc              ; hl now points to item to move to 1 = room number, 3 = x, 4 = y, 5 = rotation, etc
+
+    call get_new_door_dimensions
 
     inc hl
-    ld a, (hl)
+    ld a, (hl)              ; move to room this item is in
     ld (room_number), a
     ld a, 1
     ld (room_changed), a
@@ -225,84 +234,95 @@ collide1
     inc hl
     inc hl
     ld b, (hl)              ; x of new door
-    srl b
+    srl b                   ; divide by 2
     inc hl
-    ld a, (ix + 6)
+    ld a, (this_item_height)
     ld c, a
     ld a, (hl)              ; y of new door (bottom y)
     sub c
     inc a                   
     ld c, a                 ; y of new door (top y)
     inc hl
-    ld a, (hl)              ; rotation
+    ld a, (hl)              ; rotation of new door
 
-; Use width and height from previous algo (ix + 5 and +6)    
-
+; b has new door x, c has new door y, a has new door rotation, hl pointer to new door
     cp rotation_top
-    jp z, por_coll_top
+    jp z, portrait_coll_top
     cp rotation_bottom
-    jp z, por_coll_bot
+    jp z, portrait_coll_bot
     cp rotation_left
-    jp z, lan_coll_left
+    jp z, landscape_coll_left
 
-; b = door x, c = door y, ix+5 = width, ix+6 = height
-
-lan_coll_right
+landscape_coll_right
     ld a, b
-    sub 6
+    sub player_width
     ld (player_x), a
 
     ld a, c
-    ld c, (ix + 5)
-    srl c
-    add c
-    add 4
     ld (player_y), a
     ret    
 
-lan_coll_left
-    ld a, b
-    add 12
+landscape_coll_left
+    ld a, (this_item_width)
+    add b
     ld (player_x), a
 
     ld a, c
-    ld c, (ix + 5)
-    srl c
-    add c
-    add 4
     ld (player_y), a
     ret    
 
-por_coll_bot
+portrait_coll_bot
     ld a, c
-    sub (ix + 6)
-    sub 3
+    sub player_height
     ld (player_y), a
 
-    ld a, b
-    ld c, (ix + 5)
-    srl c
-    add c
+    ld a, (this_item_width)
+    add b
+    sub player_width
     ld (player_x), a
     ret    
 
-por_coll_top
-    ld a, c
-    add (ix + 6)
+portrait_coll_top
+    ld a, (this_item_height)
+    add c
     ld (player_y), a
 
-    ld a, b
-    ld c, (ix + 5)
-    srl c
-    add c
+    ld a, (this_item_width)
+    add b
+    sub player_width
     ld (player_x), a
     ret
 
-cd2
-    ld de, 8
-    add ix, de
-    dec b
-    jp nz, cd1
+get_new_door_dimensions             ; hl is pointer to item in room_bank_item_list
+    push hl
+    push bc
+    
+    ld a, (hl)      ; item type
+    ld l, a
+    ld h, 0
+    add hl, hl
+    ld de, item_bank_items
+    add hl, de
+
+	ld bc, item_bank_config
+	out (c), c
+
+    ld a, (hl)
+    inc hl
+    ld h, (hl)
+    ld l, a         ; hl now has our item
+
+    ld a, (hl)
+    ld (this_item_width), a
+    inc hl
+    ld a, (hl)
+    ld (this_item_height), a
+
+	ld bc, room_bank_config
+	out (c), c        
+
+    pop bc
+    pop hl
     ret
 
 move_player
@@ -434,8 +454,14 @@ energy
 game_over
     defb 0
 
-room_list
+this_rooms_item_list
     defs max_items * 8
+
+this_item_width
+    defb 0
+
+this_item_height
+    defb 0        
 
 show_vsync
     defb 1

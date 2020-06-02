@@ -58,7 +58,7 @@ draw_item                       ; ix + 0 = item, 3 = x, 4 = y, 5 = rotation
     ld l, (ix + 0)
     ld h, 0
     add hl, hl
-    ld de, item_bank_items
+    ld de, item_bank_items      
     add hl, de
 
     ld b, (ix + 3)
@@ -253,7 +253,7 @@ dinf1
 
 clear_room_list_data
     ld b, max_items * 8         ; clear door list for this room: x, y, w, h, dest
-    ld hl, room_list
+    ld hl, this_rooms_item_list
     xor a
 
 clear_room_items
@@ -261,25 +261,36 @@ clear_room_items
     inc hl
     djnz clear_room_items
 
-    ld hl, current_list_item
+    ld hl, this_rooms_item_count
     ld (hl), a
     ret
 
 ; type, x, y, item pointer (to get paired), actual width, actual height, pair offset 
-explode_item        ; IN: ix = item address
+;
+; constructs a temporary list in this_rooms_item_list with this structure:
+; 0 = item type 
+; 1 = x
+; 2 = y
+; 3 = item_pointer_lo in room_bank_item_list
+; 4 = item_pointer_hi in room_bank_item_list
+; 5 = width
+; 6 = height
+; 7 = offset in item pair
+
+explode_item                      ; IN: ix = item address in room_bank_item_list
     ld a, c
     ld (item_offset), a           ; which of the item pair we've got
 
-    ld a, (current_list_item)
+    ld a, (this_rooms_item_count)
     ld l, a
     ld h, 0
     add hl, hl
     add hl, hl
-    add hl, hl
-    ld de, room_list
+    add hl, hl                      ; structure is 8 bytes long, so x8
+    ld de, this_rooms_item_list
     add hl, de
 
-    ld a, (ix + 0)
+    ld a, (ix + 0)                  
     ld d, a
     ld (hl), a                      ; type (0)
     inc hl
@@ -298,7 +309,7 @@ explode_item        ; IN: ix = item address
     inc hl
 
     ld b, h
-    ld c, l
+    ld c, l                         ; bc now item pointer (+ 5)
 
 ; get item metadata for width / height
     ld l, d
@@ -308,7 +319,7 @@ explode_item        ; IN: ix = item address
     add hl, de
 
     ld a, (ix + 5)
-    ld iyh, a
+    ld iyh, a                       ; save rotation value in iyh
 
     push bc
     ld bc, item_bank_config
@@ -318,7 +329,7 @@ explode_item        ; IN: ix = item address
     ld a, (hl)
     inc hl
     ld h, (hl)
-    ld l, a                 ; hl now at item metadata
+    ld l, a                           ; hl now at this items metadata
 
     ld a, iyh
     and 0xfe
@@ -332,24 +343,21 @@ explode_item        ; IN: ix = item address
     jr z, expl_portrait
 
 ; landscape rotation
-    ld a, (hl)
-    sla a
-    sla a
+    ld a, (hl)                  ; width
+    sla a                       
+    sla a                       ; x 4
     ld e, a
 
     inc hl
-    ld a, (hl)
+    ld a, (hl)                  ; height
     srl a
-    srl a
-    ld d, a
-
-    ld a, d
-    ld (bc), a
+    srl a                       ; / 4
+    ld (bc), a                 ; save width
     inc bc
     ld a, e
-    ld (bc), a
+    ld (bc), a                 ; save height
 
-    jr inc_list
+    jr inc_list                 ; e = height
 
 expl_portrait
     ld a, (hl)
@@ -365,7 +373,6 @@ inc_list
     ld a, (item_offset)
     ld (bc), a
     dec bc
-
     dec bc                      ; finally, subtract height from y pos
     dec bc
     dec bc
@@ -375,7 +382,7 @@ inc_list
     inc a
     ld (bc), a  
 
-    ld hl, current_list_item
+    ld hl, this_rooms_item_count
     inc (hl)
 
     ld bc, room_bank_config
@@ -383,7 +390,7 @@ inc_list
 
     ret
 
-current_list_item
+this_rooms_item_count
     defb 0x00
         
 rotation
