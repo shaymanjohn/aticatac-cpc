@@ -162,6 +162,10 @@ eplay2
     ret
 
 check_doors
+    ld a, (screen_transition_in_progress)
+    and a
+    ret nz
+
     ld a, (this_rooms_item_count)
     and a
     ret z
@@ -231,6 +235,9 @@ collide1
     ld a, 1
     ld (room_changed), a
 
+    ld a, 1
+    ld (screen_transition_in_progress), a
+
     inc hl
     inc hl
     ld b, (hl)              ; x of new door
@@ -256,6 +263,7 @@ collide1
 landscape_coll_right
     ld a, b
     sub player_width
+    dec a
     ld (player_x), a
 
     ld a, c
@@ -274,6 +282,7 @@ landscape_coll_left
 portrait_coll_bot
     ld a, c
     sub player_height
+    dec a
     ld (player_y), a
 
     ld a, (this_item_width)
@@ -326,6 +335,15 @@ get_new_door_dimensions             ; hl is pointer to item in room_bank_item_li
     ret
 
 move_player
+    ld a, (screen_transition_in_progress)
+    and a
+    jp z, can_move
+
+    dec a
+    ld (screen_transition_in_progress), a
+    ret
+
+can_move    
     ld a, (keyboard_state)
     ld c, a
     ld d, 0
@@ -465,6 +483,9 @@ this_item_height
 
 show_vsync
     defb 1
+
+screen_transition_in_progress
+    defb 0
 
 save_player_address_c0
     defw 0

@@ -278,7 +278,7 @@ scr_addr_table
 
 pens               ; hardware values
     defb hw_black  ; 0 black
-    defb 0x58      ; 1 magenta
+    defb 0x5c      ; 1 red
     defb 0x4d      ; 2 bright magenta
     defb 0x57      ; 3 sky blue
     defb 0x5e      ; 4 yellow
@@ -290,6 +290,6 @@ pens               ; hardware values
     defb 0x52      ; 10 green door
     defb 0x4c      ; 11 red door
     defb 0x47      ; 12 skin
-    defb hw_black  ; 13 mask black
-    defb 0x43      ; 14 panel border    
-    defb 0x4b      ; 15 white
+    defb 0x55      ; 13 mask black
+    defb 0x44      ; 14 panel border    
+    defb 0x56      ; 15 white

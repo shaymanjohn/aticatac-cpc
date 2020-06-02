@@ -11,4 +11,3 @@ org 0x4000                  ; "items.bin" = item_bank
 include "data/items.asm"
 include "graphics/item_gfx.asm"
 include "graphics/panel_data.asm"
-
