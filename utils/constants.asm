@@ -16,10 +16,7 @@ player_vert_speed   equ 2
 max_energy          equ 240
 num_rows            equ 192     ; same height as spectrum
 
-; colours
-hw_black            equ 0x54
-
-; modes
+; game states
 state_menu           equ 0x00
 state_game           equ 0x01
 state_end            equ 0x02
@@ -31,10 +28,23 @@ room_bank_config    equ 0x7fc5
 
 ; player anim
 num_player_frames       equ 16
-
 player_is_going_down    equ 0
 player_is_going_up      equ num_player_frames * 2
 player_is_going_left    equ num_player_frames * 4
 player_is_going_right   equ num_player_frames * 6
 
-
+; colours
+hw_black        equ 0x54
+hw_blue         equ 0x44
+hw_brightBlue   equ 0x55
+hw_green        equ 0x56
+hw_cyan         equ 0x46
+hw_skyBlue      equ 0x57
+hw_brightGreen  equ 0x52
+hw_red          equ 0x5c
+hw_pastelCyan   equ 0x5b
+hw_brightRed    equ 0x4c
+hw_orange       equ 0x4e
+hw_pink         equ 0x47
+hw_brightYellow equ 0x4a
+hw_brightWhite  equ 0x4b

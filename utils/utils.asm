@@ -276,20 +276,20 @@ scr_addr_table_80
 scr_addr_table
     defs 2
 
-pens               ; hardware values
-    defb hw_black  ; 0 black
-    defb 0x5c      ; 1 red
-    defb 0x4d      ; 2 bright magenta
-    defb 0x57      ; 3 sky blue
-    defb 0x5e      ; 4 yellow
-    defb 0x4a      ; 5 bright yellow
-    defb 0x4b      ; 6 bright white
-    defb 0x5c      ; 7 room colour
-    defb 0x40      ; 8 grey
-    defb 0x4e      ; 9 pumpkin orange
-    defb 0x52      ; 10 green door
-    defb 0x4c      ; 11 red door
-    defb 0x47      ; 12 skin
-    defb 0x55      ; 13 mask black
-    defb 0x44      ; 14 panel border    
-    defb 0x56      ; 15 white
+pens
+    defb hw_black
+    defb hw_blue
+    defb hw_brightBlue
+    defb hw_green
+    defb hw_cyan
+    defb hw_skyBlue
+    defb hw_brightGreen
+    defb hw_red
+    defb hw_pastelCyan
+    defb hw_brightRed
+    defb hw_orange
+    defb hw_pink
+    defb hw_brightYellow
+    defb hw_brightWhite
+    defb 0x44      ; spare
+    defb 0x56      ; room colour
