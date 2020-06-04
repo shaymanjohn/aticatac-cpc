@@ -1,5 +1,5 @@
 draw_room
-    ld a, %11111111             ; pen 7 / 7
+    ld a, 0xff
     ld (line_pen_number), a
 
     ld a, (hidden_screen_base_address)
@@ -17,7 +17,7 @@ draw_room
     ld a, (room_colour)
     ld d, a
     ld a, 0x0f
-    call set_ink        ; pen 15 is the room colour    
+    call set_ink        ; pen 15 is reserved as the room colour    
 
 ; Copy room to other screen 
     ld a, (hidden_screen_base_address)

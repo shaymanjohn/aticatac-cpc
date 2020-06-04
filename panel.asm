@@ -1,9 +1,9 @@
 draw_panel
-	ld bc, item_bank_config
-	out (c), c
+    ld ix, panel_item
+    call draw_item
 
-    call draw_empty_panel
-    call add_chicken
+    ld ix, chicken_item
+    call draw_item
 
 	ld bc, sprite_bank_config
 	out (c), c	    
@@ -14,41 +14,8 @@ draw_panel
 	out (c), c	        
     ret
 
-draw_empty_panel
-    ld hl, 0x1900                   ; x, y of panel
-    ld bc, 0x0e18                   ; width, height of panel
-    ld ix, panel_text
-
-dp2    
-    push bc
-    push hl
-    call get_char_scr_address
-
-dp1
-    ld a, (ix + 0)
-    call print_char
-    inc hl
-    inc hl
-    inc ix
-    djnz dp1
-
-    pop hl
-    pop bc
-
-    inc l    
-    dec c
-    jr nz, dp2
-
-    ret
-
-add_chicken
-    ld ix, chicken_item
-    call draw_item
-
-    ret
-
 show_lives
-    ld hl, 0x00e8               ; row 0xf0
+    ld hl, 0x00fa               ; row 0xf0
     ld de, (scr_addr_table)
     add hl, de
 
@@ -57,7 +24,7 @@ show_lives
     ld h, (hl)
     ld l, a
 
-    ld bc, 0x0039               ; col 0x39
+    ld bc, 0x0035               ; col 0x39
     add hl, bc
 
     push hl                     ; hl is screen address, save it
@@ -72,9 +39,9 @@ clear_lives_loop
     ld d, h
     ld e, l
     inc de
-    ld (hl), 0
+    ; ld (hl), 0
     ld bc, (player_width + 1) * 3
-    ldir
+    ; ldir
     pop hl
     call scr_next_line
     pop bc
@@ -89,87 +56,30 @@ clear_lives_loop
     ret z               ; stop here if 0.
 
     ld b, a
-
+    inc hl
+    inc hl
 lives_loop
     push hl
     push bc
-    ld de, sprite_bank_player_kl_1_0
+    ld de, sprite_bank_player_kl_1_1
     ld bc, save_screen_data_c0
     call draw_player_entry2
     pop bc
     pop hl
-    ld de, player_width + 1
+    ld de, player_width
     add hl, de
     djnz lives_loop
     ret
 
-chicken_item
-    defb 0x13, 0x00, 0x00, 0xe8, 0x70, 0x00
+chicken_item    
+;        item                x     y    rot
+    defb 0x13, 0x00, 0x00, 0xde, 0x7b, 0x00
 
 carcass_item
     defb 0x14, 0x00, 0x00, 0xe8, 0x70, 0x00
 
-print_char                  ; IN: a = char to print
-    push bc
-    push hl
-
-    call get_tile_addr
-
-    ld bc, 0x800 - 1
-    ld a, 8
-pc1 
-    push af
-    ld a, (de)
-    ld (hl), a
-    inc hl
-    inc de
-    ld a, (de)
-    ld (hl), a
-    inc de
-    add hl, bc
-    pop af
-    dec a
-    jr nz, pc1
-
-    pop hl
-    pop bc
-    ret
-
-get_tile_addr               ; IN: a = tile number, OUT: de = tile data
-    push hl
-    ld l, a
-    ld h, 0
-    add hl, hl
-    add hl, hl
-    add hl, hl
-    add hl, hl
-    ld de, panel_gfx
-    add hl, de
-    ex de, hl
-    pop hl
-    ret
-
-get_char_scr_address
-    push bc
-
-    ld a, h
-    ld h, 0
-    add hl, hl
-    add hl, hl
-    add hl, hl
-    add hl, hl
-    ld de, (scr_addr_table)
-    add hl, de
-    ld c, (hl)
-    inc hl
-    ld b, (hl)
-    ld l, a
-    ld h, 0
-    add hl, hl
-    add hl, bc
-
-    pop bc
-    ret    
-
+panel_item
+    defb 0x04, 0x00, 0x00, 0xd4, 192, 0x00      ; y is bottom row of item...
+ 
 panel_drawn
     defb 0

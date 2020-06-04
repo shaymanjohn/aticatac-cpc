@@ -1,6 +1,6 @@
 item_bank_items
 	defw unused,   cavedoor,  normaldoor, bigdoor
-	defw unused,   unused,    unused,     unused
+	defw panel,    unused,    unused,     unused
 	defw reddoor,  greendoor, bluedoor,   yellowdoor
 	defw redcave,  greencave, bluecave,   yellowcave
 	defw clock,    picture1,  table,      chicken
@@ -11,6 +11,12 @@ item_bank_items
 	defw acgdoor,  picture2,  skeleton,   barrels
 
 unused
+
+panel
+    defb 16, 192
+    defw 16 * 192
+    defw panel_0
+    defw panel_0
 
 cavedoor ; 0x01
     defb 8, 24                              ; width (bytes), height (portrait size)
