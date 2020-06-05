@@ -151,8 +151,8 @@ barrel
     defw barrel_landscape
 
 rug
-    defb 12, 40                              ; width (bytes), height (portrait size)
-    defw 12 * 40
+    defb 12, 39                              ; width (bytes), height (portrait size)
+    defw 12 * 39
     defw rug_portrait
     defw rug_portrait
 
@@ -199,8 +199,8 @@ opencave
     defw cavedoor_landscape
 
 acgdoor
-    defb 16, 40                              ; width (bytes), height (portrait size)
-    defw 16 * 40
+    defb 16, 36                              ; width (bytes), height (portrait size)
+    defw 16 * 36
     defw unused
     defw acg_door
 
@@ -217,7 +217,7 @@ skeleton
     defw skeleton_landscape
 
 barrels
-    defb 10, 28                              ; width (bytes), height (portrait size)
-    defw 10 * 28
+    defb 9, 28                              ; width (bytes), height (portrait size)
+    defw 9 * 28
     defw barrels_portrait
     defw barrels_portrait

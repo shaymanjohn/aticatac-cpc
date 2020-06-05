@@ -34,17 +34,19 @@ player_is_going_left    equ num_player_frames * 4
 player_is_going_right   equ num_player_frames * 6
 
 ; colours
-hw_black        equ 0x54
-hw_blue         equ 0x44
-hw_brightBlue   equ 0x55
-hw_green        equ 0x56
-hw_cyan         equ 0x46
-hw_skyBlue      equ 0x57
-hw_brightGreen  equ 0x52
-hw_red          equ 0x5c
-hw_pastelCyan   equ 0x5b
-hw_brightRed    equ 0x4c
-hw_orange       equ 0x4e
-hw_pink         equ 0x47
-hw_brightYellow equ 0x4a
-hw_brightWhite  equ 0x4b
+hw_black            equ 0x54
+hw_blue             equ 0x44
+hw_brightBlue       equ 0x55
+hw_green            equ 0x56
+hw_cyan             equ 0x46
+hw_skyBlue          equ 0x57
+hw_brightGreen      equ 0x52
+hw_red              equ 0x5c
+hw_pastelCyan       equ 0x5b
+hw_brightRed        equ 0x4c
+hw_orange           equ 0x4e
+hw_pink             equ 0x47
+hw_brightYellow     equ 0x4a
+hw_brightWhite      equ 0x4b
+hw_magenta          equ 0x58
+hw_brightMagenta    equ 0x4d

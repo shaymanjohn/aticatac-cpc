@@ -1,7 +1,4 @@
 draw_room
-    ld a, 0xff
-    ld (line_pen_number), a
-
     ld a, (hidden_screen_base_address)
     sra a
     ld (scr_offset_value + 1), a
@@ -13,11 +10,6 @@ draw_room
     call draw_items
 
     call calc_dimensions
-
-    ld a, (room_colour)
-    ld d, a
-    ld a, 0x0f
-    call set_ink        ; pen 15 is reserved as the room colour    
 
 ; Copy room to other screen 
     ld a, (hidden_screen_base_address)
@@ -66,7 +58,18 @@ draw_outline
     add hl, hl
     add hl, bc
     ld a, (hl)            ; room colour
-    ld (room_colour), a
+
+    push hl
+
+    and 0x03
+    ld c, a
+    ld b, 0
+    ld hl, room_colour_palette
+    add hl, bc
+    ld a, (hl)
+    ld (line_pen_number), a
+
+    pop hl
 
     inc hl
     ld a, (hl)            ; a has room type
@@ -216,5 +219,8 @@ room_number
 room_changed
     defb 0
 
-room_colour
-    defb 0
+room_colour_palette
+    defb 0x0c   ; 0x02
+    defb 0xfc   ; 0x07
+    defb 0x3f   ; 0x0e
+    defb 0xcc   ; 0x03

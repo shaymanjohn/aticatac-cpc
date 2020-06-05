@@ -290,5 +290,5 @@ pens
     defb hw_pink
     defb hw_brightYellow
     defb hw_brightWhite
-    defb hw_black           ; black in sprites
-    defb 0x56               ; room colour
+    defb hw_magenta
+    defb hw_brightMagenta
