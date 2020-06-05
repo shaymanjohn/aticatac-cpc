@@ -98,6 +98,16 @@ dplay2
     inc bc
 
     ld a, (de)
+    ld (bc), a
+    and (hl)
+    inc hl
+    or (hl)
+    inc hl
+    ld (de), a
+    inc de
+    inc bc
+
+    ld a, (de)
     ld (bc), a 
     and (hl)
     inc hl
@@ -147,6 +157,10 @@ eplay2
     ld (hl), a
     inc hl
     inc de
+    ld a, (de)
+    ld (hl), a
+    inc hl
+    inc de    
     ld a, (de)
     ld (hl), a
     inc hl

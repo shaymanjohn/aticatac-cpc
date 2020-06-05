@@ -180,8 +180,7 @@ rotate1
 gen_mask
     ld d, h
     ld e, l
-    inc de    
-    ld c, 0xd8
+    inc de
     ld ixh, b
 
 fix_mask
@@ -291,5 +290,5 @@ pens
     defb hw_pink
     defb hw_brightYellow
     defb hw_brightWhite
-    defb 0x44      ; spare
-    defb 0x56      ; room colour
+    defb hw_black           ; black in sprites
+    defb 0x56               ; room colour

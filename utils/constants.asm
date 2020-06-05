@@ -9,8 +9,8 @@ rotation_right2     equ 0x40
 rotation_left       equ 0xe0
 
 max_items           equ 15      ; per room
-player_width        equ 4       ; bytes
-player_height       equ 18      ; rows
+player_width        equ 5       ; bytes
+player_height       equ 20      ; rows
 player_horiz_speed  equ 1
 player_vert_speed   equ 2
 max_energy          equ 240

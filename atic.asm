@@ -32,12 +32,14 @@ setup_game_data
 
     ld ix, sprite_bank_player_kd_0_0
     ld de, sprite_bank_player_kd_0_1
-    ld bc, 0x04d8                   ; 4 bytes wide, 18 x 3 high
+    ld b, player_width
+    ld c, 240
     call rotate_gfx                 ; (& ignore mask)
 
 ; and then generate a new mask for them.
     ld hl, sprite_bank_player_kd_0_1
-    ld bc, 0x04d8
+    ld b, player_width
+    ld c, 240
     call gen_mask
 
 	ld bc, item_bank_config             ; default page back in
