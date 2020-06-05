@@ -41,6 +41,8 @@ saved_address
 
 dplay1
     ld a, (player_frame)
+    srl a
+    srl a
     add b
 
     ld b, a
@@ -392,7 +394,7 @@ can_move
     or e
     jp nz, inc_frame
 
-    xor a
+    ld a, 5
     ld (player_frame), a
     ret
 

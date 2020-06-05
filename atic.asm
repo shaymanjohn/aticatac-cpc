@@ -98,13 +98,15 @@ select_game
 
     xor a    
     ld (room_number), a
-    ld (player_frame), a
     ld (player_orientation), a
     ld (game_over), a
     ld (panel_drawn), a
 
     inc a
     ld (room_changed), a
+
+    ld a, 5                     ; second frame - 5 because each frame is shown 4 times
+    ld (player_frame), a
 
     ld a, 0x2c
     ld (player_x), a

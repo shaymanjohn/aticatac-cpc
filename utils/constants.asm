@@ -27,7 +27,7 @@ item_bank_config    equ 0x7fc0
 room_bank_config    equ 0x7fc5
 
 ; player anim
-num_player_frames       equ 16
+num_player_frames       equ 4
 player_is_going_down    equ 0
 player_is_going_up      equ num_player_frames * 2
 player_is_going_left    equ num_player_frames * 4

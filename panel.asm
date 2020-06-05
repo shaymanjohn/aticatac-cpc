@@ -66,7 +66,7 @@ lives_loop
     call draw_player_entry2
     pop bc
     pop hl
-    ld de, player_width
+    ld de, player_width - 1
     add hl, de
     djnz lives_loop
     ret

@@ -279,137 +279,41 @@ sprite_bank_player_ku_2_1
 
 knight_frames_table
     defw sprite_bank_player_kd_0_0
-    defw sprite_bank_player_kd_0_0
-    defw sprite_bank_player_kd_0_0
-    defw sprite_bank_player_kd_0_0
-    defw sprite_bank_player_kd_1_0
-    defw sprite_bank_player_kd_1_0
-    defw sprite_bank_player_kd_1_0
     defw sprite_bank_player_kd_1_0
     defw sprite_bank_player_kd_2_0
-    defw sprite_bank_player_kd_2_0
-    defw sprite_bank_player_kd_2_0
-    defw sprite_bank_player_kd_2_0
-    defw sprite_bank_player_kd_1_0
-    defw sprite_bank_player_kd_1_0
-    defw sprite_bank_player_kd_1_0
     defw sprite_bank_player_kd_1_0
 
     defw sprite_bank_player_kd_0_1
-    defw sprite_bank_player_kd_0_1
-    defw sprite_bank_player_kd_0_1
-    defw sprite_bank_player_kd_0_1
-    defw sprite_bank_player_kd_1_1
-    defw sprite_bank_player_kd_1_1
-    defw sprite_bank_player_kd_1_1
     defw sprite_bank_player_kd_1_1
     defw sprite_bank_player_kd_2_1
-    defw sprite_bank_player_kd_2_1
-    defw sprite_bank_player_kd_2_1
-    defw sprite_bank_player_kd_2_1
-    defw sprite_bank_player_kd_1_1
-    defw sprite_bank_player_kd_1_1
-    defw sprite_bank_player_kd_1_1
     defw sprite_bank_player_kd_1_1
 
     defw sprite_bank_player_ku_0_0
-    defw sprite_bank_player_ku_0_0
-    defw sprite_bank_player_ku_0_0
-    defw sprite_bank_player_ku_0_0
-    defw sprite_bank_player_ku_1_0
-    defw sprite_bank_player_ku_1_0
-    defw sprite_bank_player_ku_1_0
     defw sprite_bank_player_ku_1_0
     defw sprite_bank_player_ku_2_0
-    defw sprite_bank_player_ku_2_0
-    defw sprite_bank_player_ku_2_0
-    defw sprite_bank_player_ku_2_0
-    defw sprite_bank_player_ku_1_0
-    defw sprite_bank_player_ku_1_0
-    defw sprite_bank_player_ku_1_0
     defw sprite_bank_player_ku_1_0
 
     defw sprite_bank_player_ku_0_1
-    defw sprite_bank_player_ku_0_1
-    defw sprite_bank_player_ku_0_1
-    defw sprite_bank_player_ku_0_1
-    defw sprite_bank_player_ku_1_1
-    defw sprite_bank_player_ku_1_1
-    defw sprite_bank_player_ku_1_1
     defw sprite_bank_player_ku_1_1
     defw sprite_bank_player_ku_2_1
-    defw sprite_bank_player_ku_2_1
-    defw sprite_bank_player_ku_2_1
-    defw sprite_bank_player_ku_2_1
-    defw sprite_bank_player_ku_1_1
-    defw sprite_bank_player_ku_1_1
-    defw sprite_bank_player_ku_1_1
     defw sprite_bank_player_ku_1_1
 
     defw sprite_bank_player_kl_0_0
-    defw sprite_bank_player_kl_0_0
-    defw sprite_bank_player_kl_0_0
-    defw sprite_bank_player_kl_0_0
-    defw sprite_bank_player_kl_1_0
-    defw sprite_bank_player_kl_1_0
-    defw sprite_bank_player_kl_1_0
     defw sprite_bank_player_kl_1_0
     defw sprite_bank_player_kl_2_0
-    defw sprite_bank_player_kl_2_0
-    defw sprite_bank_player_kl_2_0
-    defw sprite_bank_player_kl_2_0
-    defw sprite_bank_player_kl_1_0
-    defw sprite_bank_player_kl_1_0
-    defw sprite_bank_player_kl_1_0
     defw sprite_bank_player_kl_1_0
 
     defw sprite_bank_player_kl_0_1
-    defw sprite_bank_player_kl_0_1
-    defw sprite_bank_player_kl_0_1
-    defw sprite_bank_player_kl_0_1
-    defw sprite_bank_player_kl_1_1
-    defw sprite_bank_player_kl_1_1
-    defw sprite_bank_player_kl_1_1
     defw sprite_bank_player_kl_1_1
     defw sprite_bank_player_kl_2_1
-    defw sprite_bank_player_kl_2_1
-    defw sprite_bank_player_kl_2_1
-    defw sprite_bank_player_kl_2_1
-    defw sprite_bank_player_kl_1_1
-    defw sprite_bank_player_kl_1_1
-    defw sprite_bank_player_kl_1_1
     defw sprite_bank_player_kl_1_1
 
     defw sprite_bank_player_kr_0_0
-    defw sprite_bank_player_kr_0_0
-    defw sprite_bank_player_kr_0_0
-    defw sprite_bank_player_kr_0_0
-    defw sprite_bank_player_kr_1_0
-    defw sprite_bank_player_kr_1_0
-    defw sprite_bank_player_kr_1_0
     defw sprite_bank_player_kr_1_0
     defw sprite_bank_player_kr_2_0
-    defw sprite_bank_player_kr_2_0
-    defw sprite_bank_player_kr_2_0
-    defw sprite_bank_player_kr_2_0
-    defw sprite_bank_player_kr_1_0
-    defw sprite_bank_player_kr_1_0
-    defw sprite_bank_player_kr_1_0
     defw sprite_bank_player_kr_1_0
 
     defw sprite_bank_player_kr_0_1
-    defw sprite_bank_player_kr_0_1
-    defw sprite_bank_player_kr_0_1
-    defw sprite_bank_player_kr_0_1
-    defw sprite_bank_player_kr_1_1
-    defw sprite_bank_player_kr_1_1
-    defw sprite_bank_player_kr_1_1
     defw sprite_bank_player_kr_1_1
     defw sprite_bank_player_kr_2_1
-    defw sprite_bank_player_kr_2_1
-    defw sprite_bank_player_kr_2_1
-    defw sprite_bank_player_kr_2_1
-    defw sprite_bank_player_kr_1_1
-    defw sprite_bank_player_kr_1_1
-    defw sprite_bank_player_kr_1_1
     defw sprite_bank_player_kr_1_1
