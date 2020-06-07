@@ -188,4 +188,4 @@ room_bank_BackLocLists      ; 076A9
 	defw 0x702D - 0x645D + room_bank_item_list, 0x0000, 0x6F2D - 0x645D + room_bank_item_list, 0x6F3D - 0x645D + room_bank_item_list
 	defw 0x0000, 0x6F3D - 0x645D + room_bank_item_list, 0x6F4D - 0x645D + room_bank_item_list, 0x0000
 	defw 0x6F4D - 0x645D + room_bank_item_list, 0x6F5D - 0x645D + room_bank_item_list, 0x0000, 0x0000
-end_backloclists
+	

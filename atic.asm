@@ -45,27 +45,12 @@ setup_game_data
 	ld bc, item_bank_config             ; default page back in
 	out (c), c    
 
-    ld a, state_game
-    call switch_mode    
+    ld b, state_game
+    call switch_game_state    
 
     ret
 
-switch_mode
-    ld b, a
-
-    ld l, a
-    ld h, 0
-    add hl, hl
-    ld de, state_table
-    add hl, de
-    
-    ld a, (hl)
-    inc hl
-    ld h, (hl)
-    ld l, a
-    
-    ld (current_interrupts), hl
-
+switch_game_state
 	ld a, interrupt_notReady
 	ld (interrupt_index), a
 
@@ -76,12 +61,18 @@ switch_mode
     cp state_game
     jp z, select_game
 
+    cp state_falling
+    jp z, select_falling
+
     cp state_end
     jp z, select_end
 
     ret
 
 select_menu
+    ld hl, menu_interrupts
+    ld (current_interrupts), hl
+
     call wait_vsync
     call set_pens_off
 
@@ -91,6 +82,9 @@ select_menu
     ret
 
 select_game
+    ld hl, game_interrupts
+    ld (current_interrupts), hl
+
     call wait_vsync
     call set_pens_off
 
@@ -127,7 +121,32 @@ select_game
     call set_pens
     ret
 
+select_falling
+    ld hl, falling_interrupts
+    ld (current_interrupts), hl
+
+    call clear_room
+
+    ld a, (hidden_screen_base_address)
+    xor 0x40
+    call clear_room2
+
+    xor a
+    ld (save_fall_data), a
+    ld (save_fall_data + 1), a
+
+    ld a, 1
+    ld (still_falling), a
+
+    ld a, -1
+    ld (fall_index), a
+
+    ret
+
 select_end
+    ld hl, end_interrupts
+    ld (current_interrupts), hl
+
     ret
 
 clear_screen
@@ -144,9 +163,5 @@ clear_screen
     ldir
 
     ret
-
-state_table
-    defw menu_interrupts
-    defw game_interrupts
 
 include "bank_includes.asm"

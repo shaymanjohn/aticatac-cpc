@@ -81,16 +81,32 @@ interrupt_index
 current_interrupts
 	dw 0
 
-game_interrupts
+menu_interrupts
 	dw interrupt_switch_screens
-	dw interrupt_sprites
-	dw interrupt_sprites
-	dw interrupt_sprites
-	dw interrupt_sprites
+	dw interrupt_empty
+	dw interrupt_empty
+	dw interrupt_empty
+	dw interrupt_empty
 	dw interrupt_keyboard
 
-menu_interrupts
+game_interrupts
+	dw interrupt_switch_screens_and_update
+	dw interrupt_keyboard	
+	dw interrupt_sprites
+	dw interrupt_sprites
+	dw interrupt_sprites
+	dw interrupt_sprites
+
+falling_interrupts
+	dw interrupt_switch_screens_x
+	dw interrupt_fall
 	dw interrupt_empty
+	dw interrupt_empty
+	dw interrupt_empty
+	dw interrupt_empty
+
+end_interrupts
+	dw interrupt_switch_screens
 	dw interrupt_empty
 	dw interrupt_empty
 	dw interrupt_empty
@@ -100,11 +116,34 @@ menu_interrupts
 interrupt_empty
 	ret
 
-interrupt_sprites
-	call interrupt_spritex
-	ret
+interrupt_fall
+	ld d, 0x4e
+	call background_on
 
-interrupt_spritex
+	call do_tunnels
+
+	call background_off
+
+	ld a, (still_falling)
+	and a
+	ret nz
+
+end_fall
+    call clear_room
+   	ld a, (hidden_screen_base_address)
+    xor 0x40
+    call clear_room2	
+
+    call draw_room
+
+    ld hl, game_interrupts
+    ld (current_interrupts), hl	
+
+	ld a, interrupt_notReady
+	ld (interrupt_index), a
+	ret	
+
+interrupt_sprites
 	ld d, 0x4e
 	call background_on
 
@@ -149,6 +188,15 @@ sprite_loop2
 
 interrupt_switch_screens
 	call switch_screens
+	ret
+
+interrupt_switch_screens_x
+	call switch_screens
+zzz	
+	ret	
+
+interrupt_switch_screens_and_update
+	call switch_screens
 	call interrupt_update_game
 	ret
 
@@ -182,8 +230,8 @@ interrupt_keyboard
 	call read_keys
 	call poll_master_keys
 
-	call interrupt_check_doors
 	call interrupt_move_player
+	call interrupt_check_doors	
 
 	call background_off	
 	ret
@@ -288,13 +336,13 @@ toggle_sync_bars
 	ret
 
 show_menu
-    ld a, state_menu
-    call switch_mode
+    ld b, state_menu
+    call switch_game_state
     ret
 
 show_game
-    ld a, state_game
-    call switch_mode
+    ld b, state_game
+    call switch_game_state
     ret
 
 show_next_screen
@@ -305,12 +353,15 @@ show_next_screen
 show_previous_screen
 	ld a, (room_number)
 	and a
-	ret z
+	jr nz, dec_room
 
+	ld a, num_rooms
+
+dec_room
 	dec a
 	ld (room_number), a
 
 room_change
 	ld a, 1
 	ld (room_changed), a
-	ret	
+	ret

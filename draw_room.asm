@@ -67,7 +67,7 @@ draw_outline
     ld hl, room_colour_palette
     add hl, bc
     ld a, (hl)
-    ld (line_pen_number), a
+    ld (line_pen_number + 1), a
 
     pop hl
 
@@ -117,7 +117,7 @@ draw1
     jr nz, draw3
 
     ld a, (ix + 1)
-    ld (line_pen_number), a
+    ld (line_pen_number + 1), a
     inc ix
     jr draw1
 
@@ -156,6 +156,8 @@ get_point           ; IN: A = coord number, out: bc = coord
 
 clear_room
     ld a, (hidden_screen_base_address)
+
+clear_room2    
     ld h, a
     ld l, 0
     ld b, num_rows
@@ -217,6 +219,9 @@ room_number
     defb 0
 
 room_changed
+    defb 0
+
+next_room_number
     defb 0
 
 room_colour_palette

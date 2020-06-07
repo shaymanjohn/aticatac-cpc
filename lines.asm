@@ -123,13 +123,15 @@ scr_offset_value
   add hl, hl        ;of the raster line
   srl e            ;calculate X\2, because 2 pixel per byte, Carry is X MOD 2
   ld c, %10101010            ;Bitmask for MODE 0
-  jr nc, NSHIFT        ;-> = 0, no shift
+  jp nc, NSHIFT        ;-> = 0, no shift
 
 SHIFT
   ld c, %01010101            ;other bitmask for right pixel
 NSHIFT
   add hl, de        ;+ HL = Screenaddress
-  ld a, (line_pen_number)        ; pen to use
+
+line_pen_number
+  ld a, 0        ; pen to use - modified value (smc)
   xor (hl)        ;XOR screenbyte
   and c            ;AND bitmask
   xor (hl)        ;XOR screenbyte
@@ -140,13 +142,13 @@ x2
   ld de,0
   or a
   sbc hl, de
-  jr nz, nex1         ; CHECK if we reach the end???
+  jp nz, nex1         ; CHECK if we reach the end???
   ld hl, (y1+1)
 y2
   ld de, 0
   or a
   sbc hl, de
-  jr z, exith         ; if x1=x2 and y1=y2 then exit!!
+  jp z, exith         ; if x1=x2 and y1=y2 then exit!!
 
 nex1
 er
@@ -157,7 +159,7 @@ dy
   ld de, 0            ; DE= DY
   add hl, sp          ; SP=DX
   bit 7, h
-  jr nz, nex2         ; IF  E2+DX > 0  THEN ER = ER - DY
+  jp nz, nex2         ; IF  E2+DX > 0  THEN ER = ER - DY
   ld h, b
   ld l, c
   or a
@@ -187,6 +189,3 @@ nex3
 exith
   ld sp, 0        ; modified in init
   ret             ; finished OK
-
-line_pen_number
-  defb 0x00

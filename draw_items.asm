@@ -1,8 +1,8 @@
 draw_items
-    call clear_room_list_data
+    xor a
+    ld (this_rooms_door_count), a
 
-    ld a, (room_number)    
-
+    ld a, (room_number)
     ld h, 0
     ld l, a
     add hl, hl
@@ -81,13 +81,7 @@ draw_item                       ; ix + 0 = item, 3 = x, 4 = y, 5 = rotation
     ld ixh, d
     ld ixl, e                   ; ix now points to specific item for drawing
 
-    cp rotation_top
-    jp z, portrait_item
-    cp rotation_table
-    jr z, portrait_item
-    cp rotation_trapdoor
-    jr z, portrait_item
-    cp rotation_bottom
+    bit 6, a                    ; check rotation flag
     jr z, portrait_item
 
 landscape_item
@@ -115,11 +109,9 @@ landscape_item
 
     ld e, (ix + 6)
     ld d, (ix + 7)              ; de = gfx data
-
+    
     ld a, (rotation)
-    cp rotation_right
-    jr z, li3
-    cp rotation_right2
+    bit 7, a
     jr z, li3
 
     push hl
@@ -251,23 +243,9 @@ dinf1
 
     ret
 
-clear_room_list_data
-    ld b, max_items * 8         ; clear door list for this room: x, y, w, h, dest
-    ld hl, this_rooms_item_list
-    xor a
-
-clear_room_items
-    ld (hl), a
-    inc hl
-    djnz clear_room_items
-
-    ld hl, this_rooms_item_count
-    ld (hl), a
-    ret
-
 ; type, x, y, item pointer (to get paired), actual width, actual height, pair offset 
 ;
-; constructs a temporary list in this_rooms_item_list with this structure:
+; constructs a temporary list in this_rooms_door_list with this structure:
 ; 0 = item type 
 ; 1 = x
 ; 2 = y
@@ -281,14 +259,17 @@ explode_item                      ; IN: ix = item address in room_bank_item_list
     ld a, c
     ld (item_offset), a           ; which of the item pair we've got
 
-    ld a, (this_rooms_item_count)
+    ld a, (this_rooms_door_count)
     ld l, a
     ld h, 0
     add hl, hl
     add hl, hl
     add hl, hl                      ; structure is 8 bytes long, so x8
-    ld de, this_rooms_item_list
+    ld de, this_rooms_door_list
     add hl, de
+
+    ld a, (ix + 7)
+    ld (item_is_door), a
 
     ld a, (ix + 0)                  
     ld d, a
@@ -332,14 +313,7 @@ explode_item                      ; IN: ix = item address in room_bank_item_list
     ld l, a                           ; hl now at this items metadata
 
     ld a, iyh
-    and 0xfe
-    cp rotation_top
-    jr z, expl_portrait
-    cp rotation_bottom
-    jr z, expl_portrait
-    cp rotation_table
-    jr z, expl_portrait
-    cp rotation_trapdoor
+    bit 6, a
     jr z, expl_portrait
 
 ; landscape rotation
@@ -382,20 +356,24 @@ inc_list
     inc a
     ld (bc), a  
 
-    ld hl, this_rooms_item_count
+    ld a, (item_is_door)        ; only save in list if it's a door...
+    and a
+    jr z, skip_save
+
+    ld hl, this_rooms_door_count
     inc (hl)
 
+skip_save
     ld bc, room_bank_config
     out (c), c
-
     ret
-
-this_rooms_item_count
-    defb 0x00
         
 rotation
     defb 0x00
 
 item_offset
+    defb 0
+
+item_is_door
     defb 0
 

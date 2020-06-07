@@ -1,25 +1,25 @@
 scr_set_mode        equ 0xbc0e
 
-rotation_top        equ 0x00
-rotation_table      equ 0x04
-rotation_trapdoor   equ 0x02
-rotation_bottom     equ 0x80
-rotation_right      equ 0x60
-rotation_right2     equ 0x40
-rotation_left       equ 0xe0
+rotation_top        equ 0x00        ; portrait  %00000000
+rotation_bottom     equ 0x80        ; portrait  %10000000
+rotation_right      equ 0x60        ; landscape %01100000
+rotation_left       equ 0xe0        ; landscape %11100000
 
-max_items           equ 15      ; per room
+max_doors           equ 8       ; per room
 player_width        equ 5       ; bytes
 player_height       equ 20      ; rows
 player_horiz_speed  equ 1
 player_vert_speed   equ 2
 max_energy          equ 240
 num_rows            equ 192     ; same height as spectrum
+num_rooms           equ (end_room_bank - room_bank_RoomInfo) / 2
 
 ; game states
-state_menu           equ 0x00
-state_game           equ 0x01
-state_end            equ 0x02
+state_menu          equ 0x00
+state_game          equ 0x01
+state_falling       equ 0x02
+state_end           equ 0x03
+fall_time           equ 75
 
 ; memory banks
 sprite_bank_config  equ 0x7fc4

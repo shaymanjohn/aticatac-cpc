@@ -182,11 +182,11 @@ check_doors
     and a
     ret nz
 
-    ld a, (this_rooms_item_count)
+    ld a, (this_rooms_door_count)
     and a
     ret z
 
-    ld ix, this_rooms_item_list
+    ld ix, this_rooms_door_list
     ld b, a
 
 ;   collision if:
@@ -198,9 +198,9 @@ check_doors
 
 collision_loop
     ld a, (ix + 0)
-    cp 16
-    jp nc, no_collision     ; only basic doors for now...
-    
+    cp 0x12                 ; ignore tables for now
+    jr z, no_collision
+
     ld a, (ix + 1)          ; get door x + width * 2
     add (ix + 5)
     add (ix + 5)
@@ -264,21 +264,22 @@ collide1
     ld b, (hl)              ; x of new door
     srl b                   ; divide by 2
     inc hl
-    ld a, (this_item_height)
-    ld c, a
-    ld a, (hl)              ; y of new door (bottom y)
-    sub c
-    inc a                   
-    ld c, a                 ; y of new door (top y)
+    ld c, (hl)              ; y of new door (bottom y)
     inc hl
-    ld a, (hl)              ; rotation of new door
 
-; b has new door x, c has new door y, a has new door rotation, hl pointer to new door
+    ld a, (ix + 0)          ; stood on a trap-door?
+    cp 0x19
+    jp z, fall_through      
+
+    ld a, (hl)              ; rotation of new door
+    and 0xfe
+
+; b has new door x, c has new door bottom y, a has new door rotation, hl pointer to new door
     cp rotation_top
     jp z, portrait_coll_top
     cp rotation_bottom
     jp z, portrait_coll_bot
-    cp rotation_left
+    cp rotation_left    
     jp z, landscape_coll_left
 
 landscape_coll_right
@@ -287,43 +288,66 @@ landscape_coll_right
     dec a
     ld (player_x), a
 
+    ld a, (this_item_width)
+    sla a
+    ld b, a
     ld a, c
+    sub b
+    sub player_height / 2
     ld (player_y), a
     ret    
 
 landscape_coll_left
-    ld a, (this_item_width)
+    ld a, (this_item_height)
+    srl a
+    srl a
     add b
-    add b
+    add 5
     ld (player_x), a
 
+    ld a, (this_item_width)
+    sla a
+    ld b, a
     ld a, c
+    sub b
+    sub player_height / 2
     ld (player_y), a
     ret    
 
 portrait_coll_bot
+    ld a, (this_item_height)
+    ld d, a
     ld a, c
+    sub d
     sub player_height
-    dec a
-    add 8
+    add 4
     ld (player_y), a
 
     ld a, (this_item_width)
     add b
     sub player_width
+    inc a
     ld (player_x), a
     ret    
 
 portrait_coll_top
-    ld a, (this_item_height)
-    add c
-    sub 8    
+    ld a, c
+    sub 4
     ld (player_y), a
 
     ld a, (this_item_width)
     add b
     sub player_width
+    inc a
     ld (player_x), a
+    ret
+
+fall_through
+    xor a
+    ld (room_changed), a
+    
+    ld b, state_falling
+    call switch_game_state
     ret
 
 get_new_door_dimensions             ; hl is pointer to item in room_bank_item_list
@@ -496,8 +520,11 @@ energy
 game_over
     defb 0
 
-this_rooms_item_list
-    defs max_items * 8
+this_rooms_door_list
+    defs max_doors * 8
+
+this_rooms_door_count
+    defb 0
 
 this_item_width
     defb 0
