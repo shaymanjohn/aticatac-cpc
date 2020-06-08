@@ -34,12 +34,13 @@ draw_new_tunnels
 ; first update tunnel index
     ld a, (fall_index)
     inc a
-    cp end_falling_sequence - falling_sequence
+    cp (end_falling_sequence - falling_sequence) * 2
     jp z, falling_done
 
     ld (fall_index), a
 
     ld l, a
+    srl l
     ld h, 0
     ld de, falling_sequence
     add hl, de
@@ -458,79 +459,58 @@ fast_plot_line
     ret
 end_fast_plot_line
 
-falling_sequence
-    defb %00000001  ; 0x01
-    defb %00000001  ; 0x01    
-    defb %00000010  ; 0x02
-    defb %00000010  ; 0x02    
-    defb %00000100  ; 0x04
-    defb %00000100  ; 0x04
+falling_sequence            ; each bit is a tunnel 
+    defb %00000001
+    defb %00000010
+    defb %00000100
 
-    defb %00001001  ; 0x09
-    defb %00001001  ; 0x09    
-    defb %00010010  ; 0x12
-    defb %00010010  ; 0x12    
-    defb %00100100  ; 0x24
-    defb %00100100  ; 0x24
-    defb %01001001  ; 0x49
-    defb %01001001  ; 0x49
+    defb %00001000
+    defb %00010001
+    defb %00100010
+    defb %01000100
 
-    defb %00010010  ; 0x12
-    defb %00010010  ; 0x12    
-    defb %00100100  ; 0x24
-    defb %00100100  ; 0x24
-    defb %01001001  ; 0x49
-    defb %01001001  ; 0x49
+    defb %00001000
+    defb %00010001
+    defb %00100010
+    defb %01000100
 
-    defb %00010010  ; 0x12
-    defb %00010010  ; 0x12    
-    defb %00100100  ; 0x24
-    defb %00100100  ; 0x24
-    defb %01001001  ; 0x49
-    defb %01001001  ; 0x49
+    defb %00001000
+    defb %00010001
+    defb %00100010
+    defb %01000100
 
-    defb %00010010  ; 0x12
-    defb %00010010  ; 0x12    
-    defb %00100100  ; 0x24
-    defb %00100100  ; 0x24
-    defb %01001001  ; 0x49
-    defb %01001001  ; 0x49
+    defb %00001000
+    defb %00010001
+    defb %00100010
+    defb %01000100
 
-    defb %00010010  ; 0x12
-    defb %00010010  ; 0x12    
-    defb %00100100  ; 0x24
-    defb %00100100  ; 0x24
-    defb %01001001  ; 0x49
-    defb %01001001  ; 0x49
+    defb %00001000
+    defb %00010001
+    defb %00100010
+    defb %01000100
 
-    defb %00010010  ; 0x12
-    defb %00010010  ; 0x12    
-    defb %00100100  ; 0x24
-    defb %00100100  ; 0x24
-    defb %01001001  ; 0x49
-    defb %01001001  ; 0x49                
+    defb %00001000
+    defb %00010001
+    defb %00100010
+    defb %01000100
 
-    defb %00010010
-    defb %00010010    
-    defb %00100100
-    defb %00100100    
-    defb %01001000
-    defb %01001000        
+    defb %00001000
+    defb %00010001
+    defb %00100010
+    defb %01000100                        
 
+    defb %00001000
+    defb %00010001
+    defb %00100010
+    defb %01000100
+
+    defb %00001000
     defb %00010000
-    defb %00010000
-
     defb %00100000
-    defb %00100000    
-
     defb %01000000
-    defb %01000000        
-
     defb %00000000
     defb %00000000
-
-    defb %00000000
-    defb %00000000    
+    
 end_falling_sequence
 
 tunnel_data     ; y and height both have to be multiples of 8

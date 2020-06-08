@@ -165,8 +165,8 @@ portrait_item
     add hl, bc                  ; add x, now hl has correct screen address
 
     ld a, (rotation)
-    cp rotation_bottom
-    jr z, port_item
+    bit 7, a
+    jr nz, port_item
 
     ld e, (ix + 4)
     ld d, (ix + 5)              ; de = gfx data
