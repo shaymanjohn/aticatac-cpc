@@ -56,6 +56,13 @@ character_wizard    equ 0x01
 character_serf      equ 0x02
 
 item_clock          equ 0x10
+item_table          equ 0x12
 item_bookcase       equ 0x17
-item_barrel         equ 0x1a
 item_trapdoor       equ 0x19
+item_barrel         equ 0x1a
+
+
+keypress_up         equ 0
+keypress_down       equ 1
+keypress_left       equ 2
+keypress_right      equ 3

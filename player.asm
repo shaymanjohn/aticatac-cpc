@@ -198,42 +198,81 @@ check_doors
 
 collision_loop
     ld a, (ix + 0)
-    cp 0x12                 ; ignore tables for now
-    jr z, no_collision
+
+    cp item_table           ; ignore tables for now
+    jp z, next_collision_check
+
+    cp item_trapdoor
+    jp nz, standard_collision     ; check middle of trap door with middle of player
+    ;
+    ; check middle collisions...
+    ;
+
+standard_collision              ; take x, y and add an offset depending on which keys are keys_pressed
+    ld hl, keys_pressed
+    ld c, (hl)
+
+    ld a, (player_x)
+
+check_left_key
+    bit keypress_left, c
+    jp z, check_right_key
+    sub 6
+
+check_right_key
+    bit keypress_right, c
+    jp z, check_up_key
+    add 4
+    
+check_up_key
+    ld (player_collision_x), a
+    ld a, (player_y)
+
+    bit keypress_up, c
+    jr z, check_down_key
+    sub 8
+
+check_down_key
+    bit keypress_down, c
+    jr z, end_key_check
+    add 8
+
+end_key_check
+    ld (player_collision_y), a
 
     ld a, (ix + 1)          ; get door x + width * 2
     add (ix + 5)
     add (ix + 5)
     sub 4                   ; tolerance
     ld d, a
-    ld a, (player_x)
+    ld a, (player_collision_x)
     cp d
-    jp nc, no_collision
+    jp nc, next_collision_check
 
     add player_width
     sub 2                   ; tolerance
     cp (ix + 1)
-    jp c, no_collision
+    jp c, next_collision_check
 
     ld a, (ix + 2)          ; now height
     add (ix + 6)
     sub 8
     ld d, a
-    ld a, (player_y)
+    ld a, (player_collision_y)
     cp d
-    jp nc, no_collision
+    jp nc, next_collision_check
 
     add player_height
     sub 8                   ; tolerance
     cp (ix + 2)
     jp nc, do_collision
 
-no_collision
+next_collision_check
     ld de, 8
     add ix, de              ; go to next item
     djnz collision_loop
 
-    ret    
+    ret
 
 do_collision
     ld l, (ix + 3)
@@ -383,6 +422,9 @@ get_new_door_dimensions             ; hl is pointer to item in room_bank_item_li
     ret
 
 move_player
+    xor a
+    ld (keys_pressed), a
+
     ld a, (screen_transition_in_progress)
     and a
     jp z, can_move
@@ -399,20 +441,20 @@ can_move
 
     bit 0, c
     ld b, -player_vert_speed
-    call z, player_vert
+    call z, move_player_up
 
     bit 2, c
     ld b, player_vert_speed
-    call z, player_vert    
+    call z, move_player_down
 
     ld a, (keyboard_state + 1)
     bit 0, a
     ld b, -player_horiz_speed
-    call z, player_hori
+    call z, move_player_left
 
     bit 1, c
     ld b, player_horiz_speed
-    call z, player_hori
+    call z, move_player_right
 
     ld a, d
     or e
@@ -430,12 +472,14 @@ inc_frame
 
     ret
 
-player_hori
+move_player_left
+    ld hl, keys_pressed
+    set keypress_left, (hl)
+
     ld a, d
     xor 1
     ld d, a
-    bit 7, b
-    jp z, ph2
+
     ld a, player_is_going_left
     ld (player_orientation), a
     ld a, (min_x)
@@ -445,8 +489,16 @@ player_hori
     cp h
     ret c
     ld (player_x), a
-    ret
-ph2
+    ret    
+
+move_player_right
+    ld hl, keys_pressed
+    set keypress_right, (hl)
+
+    ld a, d
+    xor 1
+    ld d, a
+    
     ld a, player_is_going_right
     ld (player_orientation), a
 
@@ -457,22 +509,44 @@ ph2
     cp h
     ret nc
     ld (player_x), a
-    ret    
+    ret
 
-player_vert
+move_player_up
+    ld hl, keys_pressed
+    set keypress_up, (hl)
+
+    ld a, e
+    xor 1
+    ld e, a    
+
+    ld a, player_is_going_up
+    ld (player_orientation), a
+
+    ld a, (min_y)
+    ld h, a
+    ld a, (player_y)
+    add b
+    cp h
+    ret c
+    ld (player_y), a
+    ret
+
+move_player_down
+    ld hl, keys_pressed
+    set keypress_down, (hl)
+
     ld a, e
     xor 1
     ld e, a
+
     ld a, player_is_going_down
-    bit 7, b
-    jp z, pv2
-    ld a, player_is_going_up
-pv2    
     ld (player_orientation), a
 
+    ld a, (max_y)
+    ld h, a
     ld a, (player_y)
     add b
-    cp 174
+    cp h
     ret nc
     ld (player_y), a
     ret
@@ -508,6 +582,12 @@ player_x
 player_y
     defb 0
 
+player_collision_x
+    defb 0
+
+player_collision_y
+    defb 0
+
 player_orientation
     defb 0
 
@@ -518,6 +598,9 @@ num_lives
     defb 0
 
 energy
+    defb 0
+
+keys_pressed
     defb 0
 
 game_over
