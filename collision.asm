@@ -8,31 +8,57 @@ check_doors
     ret z
     ld b, a
 
+; work out extended collision space based on key press    
+;
+; if min x and left, extend left
+; if min y and up, extend up
+; if max x and right, extend right
+; if max y and down, extend down
+
     ld hl, keys_pressed
     ld c, (hl)
+
+    ld a, (min_x)
+    ld d, a
+    ld a, (max_x)
+    ld e, a
 
     ld a, (player_x)
 
     bit keypress_left, c
     jp z, check_right_key
+    cp d
+    jp nz, check_right_key
     sub 6
 
 check_right_key
     bit keypress_right, c
     jp z, check_up_key
+    cp e
+    jp nz, check_up_key
     add 4
     
 check_up_key
     ld (player_collision_x), a
+
+    ld a, (min_y)
+    ld d, a
+    ld a, (max_y)
+    ld e, a    
+
     ld a, (player_y)
 
     bit keypress_up, c
     jr z, check_down_key
+    cp d
+    jr nz, check_down_key
     sub 8
 
 check_down_key
     bit keypress_down, c
     jr z, end_key_check
+    cp e
+    jr nz, end_key_check
     add 8
 
 end_key_check
@@ -54,16 +80,13 @@ collision_loop
     jp z, next_collision_check
 
     cp item_trapdoor
-    jp nz, standard_collision     ; check middle of trap door with middle of player
-    ;
-    ; check middle collisions...
-    ;
+    jp z, trapdoor_collision     ; check middle of trap door with middle of player
 
+standard_collision
     ld a, (keys_pressed)
     and a
     jp z, next_collision_check
 
-standard_collision              ; take x, y and add an offset depending on which keys are keys_pressed
     ld a, (ix + 1)          ; get door x + width * 2
     add (ix + 5)
     add (ix + 5)
@@ -95,6 +118,36 @@ next_collision_check
     ld de, 8
     add ix, de              ; go to next item
     djnz collision_loop
+    ret
+
+trapdoor_collision
+    ld a, (player_x)
+    sub (ix + 1)
+    cp 5
+    jp nc, next_collision_check
+
+    ld a, (player_y)
+    sub (ix + 2)
+    cp 5
+    jp nc, next_collision_check
+
+    ld l, (ix + 3)
+    ld h, (ix + 4)
+
+    ld bc, -8               ; We want this items twin now to work out new position of player
+    ld a, (ix + 7)
+    and a
+    jp nz, td1
+    ld bc, 8
+
+td1    
+    add hl, bc              ; hl now points to item to move to 1 = room number, 3 = x, 4 = y, 5 = rotation, etc
+    inc hl
+    ld a, (hl)              ; move to room this item is in
+    ld (room_number), a    
+    
+    ld b, state_falling
+    call switch_game_state
 
     ret
 
@@ -129,10 +182,6 @@ collide1
     inc hl
     ld c, (hl)              ; y of new door (bottom y)
     inc hl
-
-    ld a, (ix + 0)          ; stood on a trap-door?
-    cp item_trapdoor
-    jp z, fall_through      
 
     ld a, (hl)              ; rotation of new door
     and 0xfe                ; ignore smallest bit
@@ -199,18 +248,10 @@ portrait_coll_top
     ld (player_y), a
 
     ld a, (this_item_width)
-    add b
+    add b   
     sub player_width
     inc a
     ld (player_x), a
-    ret
-
-fall_through
-    xor a
-    ld (room_changed), a
-    
-    ld b, state_falling
-    call switch_game_state
     ret
 
 get_new_door_dimensions             ; hl is pointer to item in room_bank_item_list

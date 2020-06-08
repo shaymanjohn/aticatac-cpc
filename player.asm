@@ -243,7 +243,10 @@ move_player_left
     ld a, (player_x)
     add b
     cp h
-    ret c
+    jr nc, minx_ok
+    ld a, h
+
+minx_ok    
     ld (player_x), a
     ret    
 
@@ -263,7 +266,10 @@ move_player_right
     ld a, (player_x)
     add b
     cp h
-    ret nc
+    jr c, maxx_ok
+    ld a, h
+
+maxx_ok    
     ld (player_x), a
     ret
 
@@ -283,7 +289,10 @@ move_player_up
     ld a, (player_y)
     add b
     cp h
-    ret c
+    jr nc, miny_ok
+    ld a, h
+
+miny_ok    
     ld (player_y), a
     ret
 
@@ -303,7 +312,10 @@ move_player_down
     ld a, (player_y)
     add b
     cp h
-    ret nc
+    jr c, maxy_ok
+    ld a, h
+    
+maxy_ok    
     ld (player_y), a
     ret
 
