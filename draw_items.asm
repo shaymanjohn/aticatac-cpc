@@ -273,6 +273,8 @@ explode_item                      ; IN: ix = item address in room_bank_item_list
 
     ld a, (ix + 0)                  
     ld d, a
+    ld iyl, a
+
     ld (hl), a                      ; type (0)
     inc hl
     ld a, (ix + 3)
@@ -354,7 +356,19 @@ inc_list
     ld a, (bc)
     sub e
     inc a
-    ld (bc), a  
+    ld (bc), a
+
+zz
+    ; Some doors depend on which character player is (clock, bookcase, barrel)...
+    ld a, iyl
+    cp item_clock
+    call z, check_clock_is_door
+    
+    cp item_bookcase
+    call z, check_bookcase_is_door
+
+    cp item_barrel    
+    call z, check_barrel_is_door
 
     ld a, (item_is_door)        ; only save in list if it's a door...
     and a
@@ -367,6 +381,39 @@ skip_save
     ld bc, room_bank_config
     out (c), c
     ret
+
+check_clock_is_door
+    ld b, a
+    ld a, (player_character)
+    cp character_knight
+    jr z, player_is_knight
+    xor a
+    ld (item_is_door), a
+player_is_knight
+    ld a, b
+    ret
+
+check_bookcase_is_door
+    ld b, a
+    ld a, (player_character)
+    cp character_wizard
+    jr z, player_is_wizard
+    xor a
+    ld (item_is_door), a
+player_is_wizard
+    ld a, b
+    ret
+
+check_barrel_is_door
+    ld b, a
+    ld a, (player_character)
+    cp character_serf
+    jr z, player_is_serf
+    xor a
+    ld (item_is_door), a
+player_is_serf
+    ld a, b
+    ret    
         
 rotation
     defb 0x00

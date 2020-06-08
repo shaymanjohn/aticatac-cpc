@@ -463,54 +463,56 @@ falling_sequence            ; each bit is a tunnel
     defb %00000001
     defb %00000010
     defb %00000100
+    defb %00001001
 
-    defb %00001000
-    defb %00010001
-    defb %00100010
-    defb %01000100
+    defb %00010010
+    defb %00100100
+    defb %01001001
 
-    defb %00001000
-    defb %00010001
-    defb %00100010
-    defb %01000100
+    defb %00010010
+    defb %00100100
+    defb %01001001
 
-    defb %00001000
-    defb %00010001
-    defb %00100010
-    defb %01000100
+    defb %00010010
+    defb %00100100
+    defb %01001001
 
-    defb %00001000
-    defb %00010001
-    defb %00100010
-    defb %01000100
+    defb %00010010
+    defb %00100100
+    defb %01001001
 
-    defb %00001000
-    defb %00010001
-    defb %00100010
-    defb %01000100
+    defb %00010010
+    defb %00100100
+    defb %01001001
 
-    defb %00001000
-    defb %00010001
-    defb %00100010
-    defb %01000100
+    defb %00010010
+    defb %00100100
+    defb %01001001
 
-    defb %00001000
-    defb %00010001
-    defb %00100010
-    defb %01000100                        
+    defb %00010010
+    defb %00100100
+    defb %01001001
 
-    defb %00001000
-    defb %00010001
-    defb %00100010
-    defb %01000100
+    defb %00010010
+    defb %00100100
+    defb %01001001
 
-    defb %00001000
+    defb %00010010
+    defb %00100100
+    defb %01001001
+
+    defb %00010010
+    defb %00100100
+    defb %01001001
+    
+    defb %00010010
+    defb %00100100
+    defb %01001000
     defb %00010000
     defb %00100000
     defb %01000000
     defb %00000000
     defb %00000000
-    
 end_falling_sequence
 
 tunnel_data     ; y and height both have to be multiples of 8

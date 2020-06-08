@@ -192,7 +192,6 @@ interrupt_switch_screens
 
 interrupt_switch_screens_x
 	call switch_screens
-zzz	
 	ret	
 
 interrupt_switch_screens_and_update

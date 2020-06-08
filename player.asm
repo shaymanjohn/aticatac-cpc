@@ -268,11 +268,11 @@ collide1
     inc hl
 
     ld a, (ix + 0)          ; stood on a trap-door?
-    cp 0x19
+    cp item_trapdoor
     jp z, fall_through      
 
     ld a, (hl)              ; rotation of new door
-    and 0xfe
+    and 0xfe                ; ignore smallest bit
 
 ; b has new door x, c has new door bottom y, a has new door rotation, hl pointer to new door
     cp rotation_top
@@ -498,6 +498,9 @@ still_alive
     pop hl
 
     ret
+
+player_character
+    defb 0
 
 player_x
     defb 0

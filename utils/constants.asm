@@ -50,3 +50,12 @@ hw_brightYellow     equ 0x4a
 hw_brightWhite      equ 0x4b
 hw_magenta          equ 0x58
 hw_brightMagenta    equ 0x4d
+
+character_knight    equ 0x00
+character_wizard    equ 0x01
+character_serf      equ 0x02
+
+item_clock          equ 0x10
+item_bookcase       equ 0x17
+item_barrel         equ 0x1a
+item_trapdoor       equ 0x19
