@@ -18,10 +18,10 @@ draw_room
     
     ld ixh, num_rows
     ld ixl, 48
-    ld a, (panel_drawn)
-    and a
-    jr nz, copy_loop
-    ld ixl, 80
+    ; ld a, (panel_drawn)
+    ; and a
+    ; jr nz, copy_loop
+    ; ld ixl, 80
 
 copy_loop    
     push hl
@@ -188,7 +188,7 @@ calc_dimensions
     ld (min_x), a
     ld a, 0x30
     add h
-    sub 2
+    sub 3
     ld (max_x), a
 
     ld a, 0x60

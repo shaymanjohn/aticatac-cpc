@@ -358,7 +358,6 @@ inc_list
     inc a
     ld (bc), a
 
-zz
     ; Some doors depend on which character player is (clock, bookcase, barrel)...
     ld a, iyl
     cp item_clock

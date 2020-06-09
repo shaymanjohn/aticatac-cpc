@@ -46,6 +46,7 @@ setup_game_data
 	out (c), c    
 
     ld b, state_game
+    ld b, state_menu
     call switch_game_state    
 
     ret
@@ -78,8 +79,39 @@ select_menu
 
     call clear_screen
 
+    ld b, (text_for_menu_end - text_for_menu) / 2
+    ld hl, text_for_menu
+
+menu_text_loop
+    push hl
+    push bc
+
+    ld c, (hl)
+    inc hl
+    ld b, (hl)
+
+    ld ixh, b
+    ld ixl, c
+    call show_text
+
+    pop bc
+    pop hl
+
+    inc hl
+    inc hl
+    djnz menu_text_loop
+
     call set_pens
     ret
+
+text_for_menu
+    defw play_game_text
+    defw cursors_text
+    defw menu_text
+    defw interrupts_text
+    defw next_screen_text
+    defw previous_screen_text
+text_for_menu_end
 
 select_game
     ld hl, game_interrupts
@@ -118,6 +150,16 @@ select_game
     ld (energy), a
 
     call draw_panel
+
+    ld a, (hidden_screen_base_address)
+    ld h, a
+    ld l, 0
+    xor 0x40
+    ld d, a
+    ld e, 0
+    ld bc, 0x3fff
+    ldir
+
     call set_pens
     ret
 

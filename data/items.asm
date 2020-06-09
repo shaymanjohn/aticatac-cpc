@@ -6,7 +6,7 @@ item_bank_items
 	defw clock,    picture1,  table,      chicken
 	defw carcass,  antlers,   trophy,     bookcase
 	defw trapdoor, trapdoor2, barrel,     rug
-	defw acgshield,shield,    knight,     unused
+	defw acgshield,shield,    knight,     tiger
 	defw shutdoor, opendoor,  shutcave,   opencave
 	defw acgdoor,  picture2,  skeleton,   barrels
 
@@ -156,6 +156,12 @@ rug
     defw rug_portrait
     defw rug_portrait
 
+tiger
+    defb 14, 32                              ; width (bytes), height (portrait size)
+    defw 14 * 32
+    defw rug_tiger
+    defw rug_tiger
+
 acgshield
     defb 4, 16                              ; width (bytes), height (portrait size)
     defw 4 * 16
@@ -211,8 +217,8 @@ picture2
     defw picture2_landscape
 
 skeleton
-    defb 10, 40                              ; width (bytes), height (portrait size)
-    defw 10 * 40
+    defb 10, 36                              ; width (bytes), height (portrait size)
+    defw 10 * 36
     defw skeleton_portrait
     defw skeleton_landscape
 
