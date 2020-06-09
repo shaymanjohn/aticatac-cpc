@@ -141,7 +141,7 @@ end_fall
 
 	ld a, interrupt_notReady
 	ld (interrupt_index), a
-	ret	
+	ret
 
 interrupt_sprites
 	ld d, 0x4e
@@ -197,6 +197,7 @@ interrupt_switch_screens_x
 interrupt_switch_screens_and_update
 	call switch_screens
 	call interrupt_update_game
+	call interrupt_check_doors	
 	ret
 
 interrupt_update_chicken
@@ -230,7 +231,6 @@ interrupt_keyboard
 	call poll_master_keys
 
 	call interrupt_move_player
-	call interrupt_check_doors	
 
 	call background_off	
 	ret
@@ -352,9 +352,7 @@ show_next_screen
 show_previous_screen
 	ld a, (room_number)
 	and a
-	jr nz, dec_room
-
-	ld a, num_rooms
+	ret z
 
 dec_room
 	dec a

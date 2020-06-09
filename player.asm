@@ -177,212 +177,10 @@ eplay2
 
     ret
 
-check_doors
-    ld a, (screen_transition_in_progress)
-    and a
-    ret nz
-
-    ld a, (this_rooms_door_count)
-    and a
-    ret z
-
-    ld ix, this_rooms_door_list
-    ld b, a
-
-;   collision if:
-;   player.x < door.x + door.width &&
-;   player.x + player.width > door.x &&
-;   player.y < door.y + door.height &&
-;   player.y + player.height > door.y
-;
-
-collision_loop
-    ld a, (ix + 0)
-    cp 0x12                 ; ignore tables for now
-    jr z, no_collision
-
-    ld a, (ix + 1)          ; get door x + width * 2
-    add (ix + 5)
-    add (ix + 5)
-    sub 4                   ; tolerance
-    ld d, a
-    ld a, (player_x)
-    cp d
-    jp nc, no_collision
-
-    add player_width
-    sub 2                   ; tolerance
-    cp (ix + 1)
-    jp c, no_collision
-
-    ld a, (ix + 2)          ; now height
-    add (ix + 6)
-    sub 8
-    ld d, a
-    ld a, (player_y)
-    cp d
-    jp nc, no_collision
-
-    add player_height
-    sub 8                   ; tolerance
-    cp (ix + 2)
-    jp nc, do_collision
-
-no_collision
-    ld de, 8
-    add ix, de              ; go to next item
-    djnz collision_loop
-
-    ret    
-
-do_collision
-    ld l, (ix + 3)
-    ld h, (ix + 4)          ; hl is pointer to item in room_bank_item_list
-
-    ld bc, -8               ; We want this items twin now to work out new position of player
-    ld a, (ix + 7)
-    and a
-    jp nz, collide1
-    ld bc, 8
-
-collide1
-    add hl, bc              ; hl now points to item to move to 1 = room number, 3 = x, 4 = y, 5 = rotation, etc
-
-    call get_new_door_dimensions
-
-    inc hl
-    ld a, (hl)              ; move to room this item is in
-    ld (room_number), a
-    ld a, 1
-    ld (room_changed), a
-
-    ld a, 1
-    ld (screen_transition_in_progress), a
-
-    inc hl
-    inc hl
-    ld b, (hl)              ; x of new door
-    srl b                   ; divide by 2
-    inc hl
-    ld c, (hl)              ; y of new door (bottom y)
-    inc hl
-
-    ld a, (ix + 0)          ; stood on a trap-door?
-    cp item_trapdoor
-    jp z, fall_through      
-
-    ld a, (hl)              ; rotation of new door
-    and 0xfe                ; ignore smallest bit
-
-; b has new door x, c has new door bottom y, a has new door rotation, hl pointer to new door
-    cp rotation_top
-    jp z, portrait_coll_top
-    cp rotation_bottom
-    jp z, portrait_coll_bot
-    cp rotation_left    
-    jp z, landscape_coll_left
-
-landscape_coll_right
-    ld a, b
-    sub player_width
-    dec a
-    ld (player_x), a
-
-    ld a, (this_item_width)
-    sla a
-    ld b, a
-    ld a, c
-    sub b
-    sub player_height / 2
-    ld (player_y), a
-    ret    
-
-landscape_coll_left
-    ld a, (this_item_height)
-    srl a
-    srl a
-    add b
-    add 5
-    ld (player_x), a
-
-    ld a, (this_item_width)
-    sla a
-    ld b, a
-    ld a, c
-    sub b
-    sub player_height / 2
-    ld (player_y), a
-    ret    
-
-portrait_coll_bot
-    ld a, (this_item_height)
-    ld d, a
-    ld a, c
-    sub d
-    sub player_height
-    add 4
-    ld (player_y), a
-
-    ld a, (this_item_width)
-    add b
-    sub player_width
-    inc a
-    ld (player_x), a
-    ret    
-
-portrait_coll_top
-    ld a, c
-    sub 4
-    ld (player_y), a
-
-    ld a, (this_item_width)
-    add b
-    sub player_width
-    inc a
-    ld (player_x), a
-    ret
-
-fall_through
-    xor a
-    ld (room_changed), a
-    
-    ld b, state_falling
-    call switch_game_state
-    ret
-
-get_new_door_dimensions             ; hl is pointer to item in room_bank_item_list
-    push hl
-    push bc
-    
-    ld a, (hl)      ; item type
-    ld l, a
-    ld h, 0
-    add hl, hl
-    ld de, item_bank_items
-    add hl, de
-
-	ld bc, item_bank_config
-	out (c), c
-
-    ld a, (hl)
-    inc hl
-    ld h, (hl)
-    ld l, a         ; hl now has our item
-
-    ld a, (hl)
-    ld (this_item_width), a
-    inc hl
-    ld a, (hl)
-    ld (this_item_height), a
-
-	ld bc, room_bank_config
-	out (c), c        
-
-    pop bc
-    pop hl
-    ret
-
 move_player
+    xor a
+    ld (keys_pressed), a
+
     ld a, (screen_transition_in_progress)
     and a
     jp z, can_move
@@ -399,20 +197,20 @@ can_move
 
     bit 0, c
     ld b, -player_vert_speed
-    call z, player_vert
+    call z, move_player_up
 
     bit 2, c
     ld b, player_vert_speed
-    call z, player_vert    
+    call z, move_player_down
 
     ld a, (keyboard_state + 1)
     bit 0, a
     ld b, -player_horiz_speed
-    call z, player_hori
+    call z, move_player_left
 
     bit 1, c
     ld b, player_horiz_speed
-    call z, player_hori
+    call z, move_player_right
 
     ld a, d
     or e
@@ -430,12 +228,14 @@ inc_frame
 
     ret
 
-player_hori
+move_player_left
+    ld hl, keys_pressed
+    set keypress_left, (hl)
+
     ld a, d
     xor 1
     ld d, a
-    bit 7, b
-    jp z, ph2
+
     ld a, player_is_going_left
     ld (player_orientation), a
     ld a, (min_x)
@@ -443,10 +243,21 @@ player_hori
     ld a, (player_x)
     add b
     cp h
-    ret c
+    jr nc, minx_ok
+    ld a, h
+
+minx_ok    
     ld (player_x), a
-    ret
-ph2
+    ret    
+
+move_player_right
+    ld hl, keys_pressed
+    set keypress_right, (hl)
+
+    ld a, d
+    xor 1
+    ld d, a
+    
     ld a, player_is_going_right
     ld (player_orientation), a
 
@@ -455,25 +266,56 @@ ph2
     ld a, (player_x)
     add b
     cp h
-    ret nc
-    ld (player_x), a
-    ret    
+    jr c, maxx_ok
+    ld a, h
 
-player_vert
+maxx_ok    
+    ld (player_x), a
+    ret
+
+move_player_up
+    ld hl, keys_pressed
+    set keypress_up, (hl)
+
+    ld a, e
+    xor 1
+    ld e, a    
+
+    ld a, player_is_going_up
+    ld (player_orientation), a
+
+    ld a, (min_y)
+    ld h, a
+    ld a, (player_y)
+    add b
+    cp h
+    jr nc, miny_ok
+    ld a, h
+
+miny_ok    
+    ld (player_y), a
+    ret
+
+move_player_down
+    ld hl, keys_pressed
+    set keypress_down, (hl)
+
     ld a, e
     xor 1
     ld e, a
+
     ld a, player_is_going_down
-    bit 7, b
-    jp z, pv2
-    ld a, player_is_going_up
-pv2    
     ld (player_orientation), a
 
+    ld a, (max_y)
+    ld h, a
     ld a, (player_y)
     add b
-    cp 174
-    ret nc
+    cp h
+    jr c, maxy_ok
+    ld a, h
+    
+maxy_ok    
     ld (player_y), a
     ret
 
@@ -508,6 +350,12 @@ player_x
 player_y
     defb 0
 
+player_collision_x
+    defb 0
+
+player_collision_y
+    defb 0
+
 player_orientation
     defb 0
 
@@ -518,6 +366,9 @@ num_lives
     defb 0
 
 energy
+    defb 0
+
+keys_pressed
     defb 0
 
 game_over
