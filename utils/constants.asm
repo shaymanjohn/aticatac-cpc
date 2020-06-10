@@ -7,7 +7,14 @@ rotation_left       equ 0xe0        ; landscape %11100000
 
 max_doors           equ 8       ; per room
 player_width        equ 5       ; bytes
-player_height       equ 20      ; rows
+
+knight_height           equ 20
+wizard_height           equ 21
+serf_height             equ 19
+
+max_player_height       equ wizard_height
+average_player_height   equ 20
+
 player_horiz_speed  equ 1
 player_vert_speed   equ 2
 max_energy          equ 240
@@ -66,3 +73,15 @@ keypress_up         equ 0
 keypress_down       equ 1
 keypress_left       equ 2
 keypress_right      equ 3
+
+character_left      equ 20
+character_mid       equ 40
+character_right     equ 60
+
+character_select_y  equ 0x80
+character_gap       equ 20
+
+skeleton_room1      equ 0x53
+skeleton_room2      equ 0x8f
+skeleton_room3      equ 0x33
+skeleton_room4      equ 0x55

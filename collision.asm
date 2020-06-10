@@ -109,7 +109,7 @@ standard_collision
     cp d
     jp nc, next_collision_check
 
-    add player_height
+    add average_player_height
     sub 8                   ; tolerance
     cp (ix + 2)
     jp nc, do_collision
@@ -205,7 +205,7 @@ landscape_coll_right
     ld b, a
     ld a, c
     sub b
-    sub player_height / 2
+    sub average_player_height / 2
     ld (player_y), a
     ret    
 
@@ -222,7 +222,7 @@ landscape_coll_left
     ld b, a
     ld a, c
     sub b
-    sub player_height / 2
+    sub average_player_height / 2
     ld (player_y), a
     ret    
 
@@ -231,7 +231,7 @@ portrait_coll_bot
     ld d, a
     ld a, c
     sub d
-    sub player_height
+    sub average_player_height
     add 4
     ld (player_y), a
 

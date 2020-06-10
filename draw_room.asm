@@ -50,10 +50,24 @@ draw_outline
     ld h, 0
     add hl, hl
     add hl, bc
-    ld a, (hl)            ; room colour
+    ld d, (hl)            ; room colour
 
     push hl
 
+    cp skeleton_room1
+    jr z, skeleton_room
+    cp skeleton_room2
+    jr z, skeleton_room
+    cp skeleton_room3
+    jr z, skeleton_room
+    cp skeleton_room4
+    jr nz, not_skeleton_room
+
+skeleton_room
+    ld d, 0    
+
+not_skeleton_room
+    ld a, d
     and 0x03
     ld c, a
     ld b, 0

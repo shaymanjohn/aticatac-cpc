@@ -252,29 +252,29 @@ sprite_bank_player_ku_2_0
     defb 0xff, 0x00, 0xff, 0x00, 0xaa, 0x50, 0x55, 0xa0, 0xff, 0x00
 
 sprite_bank_player_kd_0_1
-    defs player_width * player_height * 2
+    defs player_width * knight_height * 2
 sprite_bank_player_kd_1_1
-    defs player_width * player_height * 2
+    defs player_width * knight_height * 2
 sprite_bank_player_kd_2_1
-    defs player_width * player_height * 2
+    defs player_width * knight_height * 2
 sprite_bank_player_kl_0_1
-    defs player_width * player_height * 2
+    defs player_width * knight_height * 2
 sprite_bank_player_kl_1_1
-    defs player_width * player_height * 2
+    defs player_width * knight_height * 2
 sprite_bank_player_kl_2_1
-    defs player_width * player_height * 2
+    defs player_width * knight_height * 2
 sprite_bank_player_kr_0_1
-    defs player_width * player_height * 2
+    defs player_width * knight_height * 2
 sprite_bank_player_kr_1_1
-    defs player_width * player_height * 2
+    defs player_width * knight_height * 2
 sprite_bank_player_kr_2_1
-    defs player_width * player_height * 2
+    defs player_width * knight_height * 2
 sprite_bank_player_ku_0_1
-    defs player_width * player_height * 2
+    defs player_width * knight_height * 2
 sprite_bank_player_ku_1_1
-    defs player_width * player_height * 2
+    defs player_width * knight_height * 2
 sprite_bank_player_ku_2_1
-    defs player_width * player_height * 2
+    defs player_width * knight_height * 2
 
 knight_frames_table
     defw sprite_bank_player_kd_0_0

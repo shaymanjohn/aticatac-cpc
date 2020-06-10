@@ -61,8 +61,9 @@ dplay1
     pop bc
     pop hl
 
-draw_player_entry2                  
-    ld ixh, player_height           ; hl as screen address, de as gfx
+draw_player_entry2           
+    ld a, (actual_player_height)       
+    ld ixh, a                       ; hl as screen address, de as gfx
 
 dplay2
     push hl
@@ -146,7 +147,8 @@ erasex
     or l
     ret z                       ; stop here if not yet set
 
-    ld b, player_height
+    ld a, (actual_player_height)
+    ld b, a
 
 eplay2
     push hl
@@ -341,6 +343,140 @@ still_alive
 
     ret
 
+erase_player_select
+    ld a, (player_select_y)
+    ld l, a
+    ld h, 0
+    add hl, hl
+    ld de, (scr_addr_table)
+    add hl, de
+
+    ld a, (hl)
+    inc hl
+    ld h, (hl)
+    ld l, a
+
+    ld a, (player_select_x)
+    dec a                           ; subtract 1 so we don't leave a trail when moving
+    srl a
+    ld c, a
+    ld b, 0
+    add hl, bc
+
+    ld b, max_player_height           ; hl as screen address, de as gfx
+    ld e, 0
+
+dplay_erase_fast_2
+    push hl
+    
+    ld (hl), e
+    inc hl
+    ld (hl), e
+    inc hl
+    ld (hl), e
+    inc hl
+    ld (hl), e
+    inc hl
+    ld (hl), e
+    inc hl
+    ld (hl), e                      ; clear an extra column, again to stop moving trails
+
+    pop hl
+    call scr_next_line
+
+    djnz dplay_erase_fast_2
+
+    ret
+
+draw_player_select              ; don't save background or mask here
+    ld a, (player_select_y)
+    ld l, a
+    ld h, 0
+    add hl, hl
+    ld de, (scr_addr_table)
+    add hl, de
+
+    ld a, (hl)
+    inc hl
+    ld h, (hl)
+    ld l, a
+
+    ld a, (player_select_x)
+    srl a
+    ld c, a
+    ld b, 0
+    add hl, bc
+
+    push hl
+
+    ld b, 0
+    and 1
+    jp z, dplay_fast1
+    ld b, num_player_frames
+
+dplay_fast1
+    ld a, (player_frame)
+    srl a
+    srl a
+    add b
+
+    ld b, a
+    ld a, (player_orientation)
+    add b
+
+    ld l, a
+    ld h, 0
+    add hl, hl
+    ld de, (anim_frames_table)
+    add hl, de
+    ld e, (hl)
+    inc hl
+    ld d, (hl)
+
+    pop hl
+
+    ld a, (actual_player_height)
+    ld b, a                     ; hl as screen address, de as gfx
+
+dplay_fast_2
+    push hl
+
+    inc de                        ; ignore mask data
+    ld a, (de)
+    ld (hl), a
+    inc hl
+    inc de
+
+    inc de
+    ld a, (de)
+    ld (hl), a
+    inc hl
+    inc de
+
+    inc de
+    ld a, (de)
+    ld (hl), a
+    inc hl
+    inc de
+
+    inc de
+    ld a, (de)
+    ld (hl), a
+    inc hl
+    inc de
+
+    inc de
+    ld a, (de)
+    ld (hl), a
+    inc de
+
+    pop hl
+    call scr_next_line
+
+    djnz dplay_fast_2
+
+    ret    
+
 player_character
     defb 0
 
@@ -349,6 +485,15 @@ player_x
 
 player_y
     defb 0
+
+actual_player_height
+    defb 0    
+
+player_select_x
+    defb 0
+
+player_select_y
+    defb 0    
 
 player_collision_x
     defb 0
@@ -399,10 +544,10 @@ save_player_address_80
     defw 0
     
 save_screen_data_c0
-    defs player_height * player_width
+    defs max_player_height * player_width
 
 save_screen_data_80
-    defs player_height * player_width    
+    defs max_player_height * player_width    
 
 anim_frames_table
     defw knight_frames_table

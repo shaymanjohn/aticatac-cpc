@@ -78,41 +78,8 @@ select_menu
     call set_pens_off
 
     call clear_screen
-
-; show text on menu
-    ld b, (text_for_menu_end - text_for_menu) / 2
-    ld hl, text_for_menu
-
-menu_text_loop
-    push hl
-    push bc
-
-    ld c, (hl)
-    inc hl
-    ld b, (hl)
-
-    ld ixh, b
-    ld ixl, c
-    call show_text
-
-    pop bc
-    pop hl
-
-    inc hl
-    inc hl
-    djnz menu_text_loop
-
-    call set_pens
+    call init_menu
     ret
-
-text_for_menu
-    defw play_game_text
-    defw cursors_text
-    defw menu_text
-    defw interrupts_text
-    defw next_screen_text
-    defw previous_screen_text
-text_for_menu_end
 
 select_game
     ld hl, game_interrupts
@@ -206,4 +173,4 @@ clear_screen
 
     ret
 
-include "bank_includes.asm"
+include "include_banks.asm"

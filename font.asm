@@ -1,21 +1,28 @@
 include "fontdata.asm"
 
-play_game_text
-    defb 0x00, 0x02, 0xff, "PRESS G FOR GAME", 0x00    ; x, y, colour, message, terminator
-cursors_text
-    defb 0x00, 0x04, 0xff, "CURSOR KEYS TO MOVE", 0x00    ; x, y, colour, message, terminator
-menu_text
-    defb 0x00, 0x06, 0xf3, "PRESS M TO RETURN TO MENU", 0x00    ; x, y, colour, message, terminator
-interrupts_text
-    defb 0x00, 0x08, 0x33, "PRESS V TO TOGGLE INTERRUPT TIMINGS", 0x00    ; x, y, colour, message, terminator
-next_screen_text
-    defb 0x00, 0x0a, 0xcf, "PRESS N FOR NEXT SCREEN" 0x00    ; x, y, colour, message, terminator
-previous_screen_text
-    defb 0x00, 0x0c, 0xcf, "PRESS B FOR PREVIOUS SCREEN", 0x00    ; x, y, colour, message, terminator    
+show_text                       ; IN: ix = message address
+    call calc_text_scr_address
 
-; 15 = 0xff, 14 = 0x3f, 13 = 0xf3, 12 = 0x33, 11 = 0xcf, 10 = 0x0f, 9 = 0xc3, 8 = 0x03
+    ld a, (ix + 2)
+    ld (font_colour), a
 
-show_text                   ; IN: ix = message address
+    push hl
+    push ix
+
+    call show_text_loop
+
+    pop ix
+    pop hl
+
+; Draw same string on 2nd screen
+    ld a, h
+    xor 0x40
+    ld h, a
+    call show_text_loop
+
+    ret
+
+calc_text_scr_address
     ld h, 0
     ld l, (ix + 1)
 
@@ -35,21 +42,6 @@ show_text                   ; IN: ix = message address
     ld b, 0
     add hl, bc
 
-    ld a, (ix + 2)
-    ld iyh, a
-
-    push hl
-    push ix
-    call show_text_loop
-    pop ix
-    pop hl
-
-; Draw same string on 2nd screen
-    ld a, h
-    xor 0x40
-    ld h, a
-    call show_text_loop
-
     ret
 
 show_text_loop
@@ -59,11 +51,11 @@ show_text_loop
 
     push hl
     call draw_letter
-    inc ix
     pop hl
-    inc hl
-    inc hl
 
+    inc ix
+    inc hl
+    inc hl
     jr show_text_loop
 
 ; IN: a = character to draw, hl = screen address
@@ -84,99 +76,33 @@ draw_letter
     add hl, de
 
     ex de, hl
+
     ld h, b             ; get screen address back in hl
-    ld l, c   
+    ld l, c
 
-    ld bc, &800
-    add hl, bc
+    ld a, (font_colour)
+    ld iyh, a
+    ld b, 8
 
-start_draw_letter 
-    ld bc, &800 - 1
+draw_letter_loop
+    push hl
 
     ld a, (de)
     and iyh    
     ld (hl), a
     inc hl
     inc de
+
     ld a, (de)
     and iyh
     ld (hl), a
     inc de
-    add hl, bc
 
-    ld a, (de)
-    and iyh    
-    ld (hl), a
-    inc hl
-    inc de
-    ld a, (de)
-    and iyh    
-    ld (hl), a
-    inc de
-    add hl, bc
-
-    ld a, (de)
-    and iyh    
-    ld (hl), a
-    inc hl
-    inc de
-    ld a, (de)
-    and iyh
-    ld (hl), a
-    inc de
-    add hl, bc
-
-    ld a, (de)
-    and iyh    
-    ld (hl), a
-    inc hl
-    inc de
-    ld a, (de)
-    and iyh
-    ld (hl), a
-    inc de
-    add hl, bc
-
-    ld a, (de)
-    and iyh    
-    ld (hl), a
-    inc hl
-    inc de
-    ld a, (de)
-    and iyh    
-    ld (hl), a
-    inc de
-    add hl, bc
-
-    ld a, (de)
-    and iyh    
-    ld (hl), a
-    inc hl
-    inc de
-    ld a, (de)
-    and iyh    
-    ld (hl), a
-    inc de
-    add hl, bc
-
-    ld a, (de)
-    and iyh    
-    ld (hl), a
-    inc hl
-    inc de
-    ld a, (de)
-    and iyh    
-    ld (hl), a
-    inc de
-    add hl, bc
-
-    ld a, (de)
-    and iyh    
-    ld (hl), a
-    inc hl
-    inc de
-    ld a, (de)
-    and iyh    
-    ld (hl), a
+    pop hl
+    call scr_next_line
+    djnz draw_letter_loop
 
     ret                        
+
+font_colour
+    defb 0

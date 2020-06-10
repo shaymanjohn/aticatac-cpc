@@ -83,11 +83,11 @@ current_interrupts
 
 menu_interrupts
 	dw interrupt_switch_screens
+	dw interrupt_clear_character_select			; clear character selection sprites
+	dw interrupt_menu_keyboard					; read keys, update position of characters
+	dw interrupt_update_character_select		; fast draw them
 	dw interrupt_empty
 	dw interrupt_empty
-	dw interrupt_empty
-	dw interrupt_empty
-	dw interrupt_keyboard
 
 game_interrupts
 	dw interrupt_switch_screens_and_update
@@ -201,26 +201,19 @@ interrupt_switch_screens_and_update
 	ret
 
 interrupt_update_chicken
-	ld a, (energy)
-	and a
-	ret z
-	dec a
-	ld (energy), a
+	call update_chicken
+	ret
 
-	ld b, a
-	ld a, max_energy
-	sub b
-	sra a
-	sra a
-	sra a
-	sra a
-	and a
-	ret z
-	ld hl, carcass + 1
-	ld (hl), a
+interrupt_menu_keyboard
+	ld d, 0x56
+	call background_on
 
-    ld ix, carcass_item
-    call draw_item
+	call read_keys
+	call poll_master_keys
+
+	call update_menu
+
+	call background_off	
 	ret
 
 interrupt_keyboard
@@ -292,73 +285,41 @@ interrupt_update_game
 	call background_off
 	ret
 
+interrupt_clear_character_select
+	ld d, 0x55
+	call background_on
+
+	call clear_character_selects
+
+	call background_off
+	ret
+
+interrupt_update_character_select
+	ld d, 0x55
+	call background_on
+
+; switch to sprite bank
+	ld bc, sprite_bank_config
+	out (c), c
+
+	call update_character_selects
+
+; switch back to tile bank
+	ld bc, item_bank_config
+	out (c), c	
+
+	call background_off
+    ret
+
 background_on
-	ld a, (show_vsync)
+    ld a, (show_vsync)
 	cp 1
 	ret z
 
 	call set_border
-	ret
+    ret
 
 background_off
 	ld d, hw_black
 	call set_border
-	ret
-
-poll_master_keys
-    ld a, (keyboard_state + 4)          ; m for menu
-    bit 6, a
-    jr z, show_menu
-
-    ld a, (keyboard_state + 6)			; g for game
-    bit 4, a
-    jr z, show_game
-
-    ld a, (keyboard_state + 6)          ; v for timing bars
-    bit 7, a
-    jr z, toggle_sync_bars
-
-	ld a, (keyboard_state + 5)			; n for next screen
-	bit 6, a
-	jr z, show_next_screen
-
-	ld a, (keyboard_state + 6)
-	bit 6, a
-	jr z, show_previous_screen
-
-    ret
-
-toggle_sync_bars
-    ld a, (show_vsync)
-    xor 1
-    ld (show_vsync), a
-	ret
-
-show_menu
-    ld b, state_menu
-    call switch_game_state
-    ret
-
-show_game
-    ld b, state_game
-    call switch_game_state
-    ret
-
-show_next_screen
-	ld hl, room_number
-	inc (hl)
-	jr room_change
-
-show_previous_screen
-	ld a, (room_number)
-	and a
-	ret z
-
-dec_room
-	dec a
-	ld (room_number), a
-
-room_change
-	ld a, 1
-	ld (room_changed), a
 	ret

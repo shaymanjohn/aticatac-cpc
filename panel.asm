@@ -30,7 +30,7 @@ show_lives
     push hl                     ; hl is screen address, save it
 
 ; clear all lives first
-    ld b, player_height
+    ld b, max_player_height
 
 clear_lives_loop
     push bc
