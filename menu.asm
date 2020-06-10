@@ -23,20 +23,11 @@ menu_text_loop
 
     call set_pens
 
-    ld a, character_mid
-    ld (player_select_x), a
-
-    ld a, knight_height
-    ld (actual_player_height), a
-
-    ld a, character_select_y
-    ld (player_select_y), a
-
     ld a, player_is_going_left
     ld (player_orientation), a
 
-    ld ix, knight_text
-    call show_text
+    ld a, 1
+    ld (characters_moving), a    
 
     ret
 
@@ -83,7 +74,10 @@ character_named
     ld (characters_moving), a
 
     ld a, 5
-    ld (player_frame), a    
+    ld (player_frame), a
+
+    ld a, knight_height
+    ld (actual_player_height), a    ; TODO: change this per character...    
 
     ret
 
@@ -110,10 +104,7 @@ point_left
     ld (player_orientation), a
 
     ld a, 1
-    ld (characters_moving), a
-
-    ld ix, blank_text
-    call show_text    
+    ld (characters_moving), a 
     ret
 
 menu_keyboard_right
@@ -139,10 +130,7 @@ point_right
     ld (player_orientation), a
 
     ld a, 1
-    ld (characters_moving), a
-
-    ld ix, blank_text
-    call show_text    
+    ld (characters_moving), a 
     ret
 
 clear_character_selects

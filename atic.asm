@@ -43,7 +43,11 @@ setup_game_data
     call gen_mask
 
 	ld bc, item_bank_config             ; default page back in
-	out (c), c    
+	out (c), c
+
+    ld a, character_mid
+    ld (player_select_x), a
+    ld (characters_target), a
 
     ld b, state_game
     ld b, state_menu

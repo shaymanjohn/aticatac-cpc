@@ -82,10 +82,10 @@ current_interrupts
 	dw 0
 
 menu_interrupts
-	dw interrupt_switch_screens
-	dw interrupt_clear_character_select			; clear character selection sprites
+	dw interrupt_switch_screens_and_clear
 	dw interrupt_menu_keyboard					; read keys, update position of characters
 	dw interrupt_update_character_select		; fast draw them
+	dw interrupt_empty
 	dw interrupt_empty
 	dw interrupt_empty
 
@@ -98,7 +98,7 @@ game_interrupts
 	dw interrupt_sprites
 
 falling_interrupts
-	dw interrupt_switch_screens_x
+	dw interrupt_switch_screens
 	dw interrupt_fall
 	dw interrupt_empty
 	dw interrupt_empty
@@ -190,8 +190,9 @@ interrupt_switch_screens
 	call switch_screens
 	ret
 
-interrupt_switch_screens_x
+interrupt_switch_screens_and_clear
 	call switch_screens
+	call interrupt_clear_character_select
 	ret	
 
 interrupt_switch_screens_and_update
