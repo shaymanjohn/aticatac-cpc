@@ -79,6 +79,7 @@ select_menu
 
     call clear_screen
 
+; show text on menu
     ld b, (text_for_menu_end - text_for_menu) / 2
     ld hl, text_for_menu
 
@@ -126,7 +127,6 @@ select_game
     ld (room_number), a
     ld (player_orientation), a
     ld (game_over), a
-    ld (panel_drawn), a
 
     inc a
     ld (room_changed), a

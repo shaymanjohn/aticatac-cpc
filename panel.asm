@@ -81,5 +81,3 @@ carcass_item
 panel_item
     defb 0x04, 0x00, 0x00, 0xd4, 192, 0x00      ; y is bottom row of item...
  
-panel_drawn
-    defb 0

@@ -18,10 +18,6 @@ draw_room
     
     ld ixh, num_rows
     ld ixl, 48
-    ; ld a, (panel_drawn)
-    ; and a
-    ; jr nz, copy_loop
-    ; ld ixl, 80
 
 copy_loop    
     push hl
@@ -39,9 +35,6 @@ copy_loop
 
     xor a
     ld (room_changed), a
-
-    inc a
-    ld (panel_drawn), a    
 
     ld hl, 0
     ld (save_player_address_c0), hl
