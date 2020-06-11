@@ -344,7 +344,8 @@ still_alive
     ret
 
 erase_player_select
-    ld l, character_select_y
+    ld a, (player_select_y)
+    ld l, a
     ld h, 0
     add hl, hl
     ld de, (scr_addr_table)
@@ -388,7 +389,8 @@ dplay_erase_fast_2
     ret
 
 draw_player_select              ; don't save background or mask here
-    ld l, character_select_y
+    ld a, (player_select_y)
+    ld l, a
     ld h, 0
     add hl, hl
     ld de, (scr_addr_table)
@@ -485,10 +487,13 @@ player_y
     defb 0
 
 actual_player_height
-    defb knight_height
+    defb serf_height
 
 player_select_x
     defb 0
+
+player_select_y
+    defb 0    
 
 player_collision_x
     defb 0
@@ -545,4 +550,4 @@ save_screen_data_80
     defs max_player_height * player_width    
 
 anim_frames_table
-    defw knight_frames_table
+    defw serf_frames_table

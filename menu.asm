@@ -27,14 +27,17 @@ menu_text_loop
     ld (player_orientation), a
 
     ld a, 1
-    ld (characters_moving), a    
+    ld (characters_moving), a       ; say they're moving, so 1st frame will set name
+
+    ld a, 0x80
+    ld (player_select_y), a
 
     ret
 
 update_menu
     ld a, (characters_moving)
     and a
-    jr z, check_keys
+    jp z, check_keys
 
     ld a, (characters_target)
     ld b, a
@@ -60,15 +63,23 @@ character_moving_right
     ret nz
 
     ld ix, knight_text
+    ld c, 0
+    ld a, b
     cp character_mid
     jr z, character_named
+
     ld ix, serf_text
+    ld c, 2
     cp character_left
     jr z, character_named
+
     ld ix, wizard_text
+    ld c, 1
 
 character_named
+    push bc
     call show_text    
+    pop bc
 
     xor a
     ld (characters_moving), a
@@ -76,9 +87,37 @@ character_named
     ld a, 5
     ld (player_frame), a
 
-    ld a, knight_height
-    ld (actual_player_height), a    ; TODO: change this per character...    
+    ld a, c
+    cp 0
+    jr z, selected_knight
+    cp 1
+    jr z, selected_wizard
 
+    ld hl, sprite_bank_player_sl_1_1
+    ld (selected_sprite_frame), hl    
+
+    ld hl, serf_frames_table
+    ld a, serf_height
+    jr save_selection
+
+selected_knight
+    ld hl, sprite_bank_player_kl_1_1
+    ld (selected_sprite_frame), hl
+
+    ld hl, knight_frames_table
+    ld a, knight_height
+    jr save_selection
+
+selected_wizard
+    ld hl, sprite_bank_player_wl_1_1
+    ld (selected_sprite_frame), hl    
+
+    ld hl, wizard_frames_table
+    ld a, wizard_height
+
+save_selection
+    ld (selected_player), hl
+    ld (selected_player_height), a
     ret
 
 check_keys    
@@ -153,20 +192,38 @@ clear_character_selects
 	ld (player_select_x), a
     ret
 
-update_character_selects
+update_character_selects    
 	ld a, (player_select_x)
 	push af
+
+    ld hl, wizard_frames_table
+    ld (anim_frames_table), hl
+
+    ld a, wizard_height
+    ld (actual_player_height), a
 
     call draw_player_select
 
 	ld a, (player_select_x)
 	add character_gap
 	ld (player_select_x), a
+
+    ld hl, knight_frames_table    
+    ld (anim_frames_table), hl
+
+    ld a, knight_height    
+    ld (actual_player_height), a    
 	call draw_player_select
 
 	ld a, (player_select_x)
 	add character_gap
 	ld (player_select_x), a
+
+    ld hl, serf_frames_table
+    ld (anim_frames_table), hl    
+
+    ld a, serf_height
+    ld (actual_player_height), a        
 	call draw_player_select
 
 	pop af
@@ -179,6 +236,15 @@ characters_moving
 
 characters_target
     defb 0x00
+
+selected_player
+    defw 0
+
+selected_player_height
+    defb 0
+
+selected_sprite_frame
+    defw 0
 
 text_for_menu
     defw play_game_text

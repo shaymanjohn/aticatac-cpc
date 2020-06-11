@@ -57,6 +57,7 @@ hw_brightYellow     equ 0x4a
 hw_brightWhite      equ 0x4b
 hw_magenta          equ 0x58
 hw_brightMagenta    equ 0x4d
+hw_mauve            equ 0x5d
 
 character_knight    equ 0x00
 character_wizard    equ 0x01

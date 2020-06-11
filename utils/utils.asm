@@ -290,5 +290,5 @@ pens
     defb hw_pink
     defb hw_brightYellow
     defb hw_brightWhite
-    defb hw_magenta
+    defb hw_mauve
     defb hw_brightMagenta
