@@ -98,6 +98,7 @@ character_named
 
     ld hl, serf_frames_table
     ld a, serf_height
+    ld b, character_serf
     jr save_selection
 
 selected_knight
@@ -106,6 +107,7 @@ selected_knight
 
     ld hl, knight_frames_table
     ld a, knight_height
+    ld b, character_knight
     jr save_selection
 
 selected_wizard
@@ -114,10 +116,13 @@ selected_wizard
 
     ld hl, wizard_frames_table
     ld a, wizard_height
+    ld b, character_wizard
 
 save_selection
     ld (selected_player), hl
     ld (selected_player_height), a
+    ld a, b
+    ld (player_character), a
     ret
 
 check_keys    
