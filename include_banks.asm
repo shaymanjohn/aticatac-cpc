@@ -10,3 +10,9 @@ include "graphics/player_sprites_gfx_masked.asm"
 org 0x4000                  ; "items.bin" = item_bank
 include "data/items.asm"
 include "graphics/item_gfx.asm"
+
+org 0x4000
+include "graphics/pickup_gfx.asm"
+
+; org 0x4000
+; include "graphics/titlescreen.asm"

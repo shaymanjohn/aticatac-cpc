@@ -25,6 +25,33 @@ drive
 
 ;----------------------------------------	Show loading screen here (and set pens)
 
+	ld hl, file_loading_screen
+	ld de, 0x4000
+	call load_block
+
+	ld hl, 0x4000
+	ld de, 0xc000
+	ld a, 200
+
+screen_copy_loop
+	push af
+	push de
+
+	ld bc, 80
+	ldir
+
+	ex de, hl
+	
+	pop hl
+	call scr_next_line
+	ex de, hl
+
+	pop af
+	dec a
+	jr nz, screen_copy_loop
+
+	call set_pens
+
 ;----------------------------------------
 
 	ld c, 0xc4					; set bank for sprites (0, 4, 2, 3)
@@ -117,6 +144,44 @@ stb1
 	call scr_set_border			; set border colour
 	ret
 
+set_pens
+    ld hl, pens
+    ld e, 16                    ; 16 pens for mode 0
+    xor a					    ; initial pen index    
+set_pens_loop
+    ld d, (hl)		            ; d = ink for pen
+    inc hl
+	ld b, d
+	ld c, d
+	push hl
+	push af
+	push de
+    call scr_set_ink
+	pop de
+	pop af
+	pop hl
+    inc a					    ; increment pen index
+    dec e
+    jr nz, set_pens_loop
+    ret
+
+scr_next_line   	; hl = current screen address
+    ld a, h
+    add a, 8
+    ld h, a
+    and 0x38
+    ret nz
+    ld a, l
+    add a, 0x50
+    ld l, a
+    ld a, h
+    adc a, 0xc0
+    ld h, a
+    ret	
+
+file_loading_screen
+	defb "LOADING", 0
+
 file_sprites
 	defb "SPRITES.BIN", 0
 
@@ -128,6 +193,24 @@ file_items
 
 file_code
 	defb "GAMECODE.BIN", 0
+
+pens
+    defb 0
+    defb 1
+    defb 2
+    defb 9
+    defb 11
+    defb 18
+    defb 3
+    defb 4
+    defb 23
+    defb 6
+    defb 7
+    defb 8
+    defb 15
+    defb 17
+    defb 24
+	defb 26
 
 open_buffer
 	defs 2048
