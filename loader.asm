@@ -180,7 +180,7 @@ scr_next_line   	; hl = current screen address
     ret	
 
 file_loading_screen
-	defb "LOADING", 0
+	defb "LOADING.BIN", 0
 
 file_sprites
 	defb "SPRITES.BIN", 0
