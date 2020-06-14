@@ -47,15 +47,31 @@ set_pens_loop
 set_logo_pens
     ld hl, logo_pens
 set_logo_pens2    
-    ld e, 4                     ; 4 pens for mode 1
-    xor a					    ; initial pen index    
-set_logo_pens_loop
+    xor a					    ; initial pen index
+
+    ld bc, 0x7f00    
+
     ld d, (hl)		            ; d = ink for pen
+    out (c), a              ; pen number
+    out (c), d              ; pen colour
     inc hl
-    call set_ink
     inc a					    ; increment pen index
-    dec e
-    jr nz, set_logo_pens_loop
+
+    ld d, (hl)
+    out (c), a              ; pen number
+    out (c), d              ; pen colour
+    inc hl
+    inc a	
+
+    ld d, (hl)
+    out (c), a              ; pen number
+    out (c), d              ; pen colour
+    inc hl
+    inc a	
+
+    ld d, (hl)
+    out (c), a              ; pen number
+    out (c), d              ; pen colour
     ret
 
 visible_screen_base_address

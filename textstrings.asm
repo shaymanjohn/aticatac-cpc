@@ -18,8 +18,8 @@ select_player_text
 
 select_marker
     defb 0x21, 0x12
-    defb 0xf3
-    defb "////"
+    defb 0xff
+    defb "<=>?"
     defb 0x00               ; x, y, colour, message, terminator    
 
 job_titles
