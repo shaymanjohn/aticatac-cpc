@@ -1,4 +1,6 @@
 init_menu
+    ld hl, font_data_mode1
+    ld (font_type), hl
     ld b, (text_for_menu_end - text_for_menu) / 2
     ld hl, text_for_menu
 
@@ -21,6 +23,34 @@ menu_text_loop
     inc hl
     djnz menu_text_loop
 
+    ld hl, font_data_mode0
+    ld (font_type), hl
+    ld ix, select_marker
+    call show_text
+
+    ld bc, room_bank_config     ; page room info in
+    out (c), c
+
+    ld hl, (scr_addr_table)
+
+    ld a, (hl)
+    inc hl
+    ld h, (hl)
+    ld l, a
+
+    ld bc, 14
+    add hl, bc
+    push hl
+    call draw_logo
+    pop hl
+    ld a, h
+    xor 0x40
+    ld h, a
+    call draw_logo
+
+    ld bc, item_bank_config     ; page room info in
+    out (c), c    
+
     call set_pens
 
     ld a, player_is_going_left
@@ -29,8 +59,28 @@ menu_text_loop
     ld a, 1
     ld (characters_moving), a       ; say they're moving, so 1st frame will set name
 
-    ld a, 0x80
+    ld a, 0x7a
     ld (player_select_y), a
+
+    ret
+
+draw_logo       ; hl = screen address
+    ld b, 57
+    ld de, logo_mode1
+
+logo_loop
+    push bc
+    push hl
+
+    ex de, hl
+    ld bc, 52
+    ldir
+
+    ex de, hl
+    pop hl
+    call scr_next_line
+    pop bc
+    djnz logo_loop
 
     ret
 
@@ -62,25 +112,18 @@ character_moving_right
     cp b
     ret nz
 
-    ld ix, knight_text
     ld c, 0
     ld a, b
     cp character_mid
-    jr z, character_named
+    jr z, character_selected
 
-    ld ix, serf_text
     ld c, 2
     cp character_left
-    jr z, character_named
+    jr z, character_selected
 
-    ld ix, wizard_text
     ld c, 1
 
-character_named
-    push bc
-    call show_text    
-    pop bc
-
+character_selected
     xor a
     ld (characters_moving), a
 
@@ -252,11 +295,10 @@ selected_sprite_frame
     defw 0
 
 text_for_menu
+    defw copyright_text
     defw play_game_text
-    defw cursors_text
-    defw menu_text
-    defw interrupts_text
-    defw next_screen_text
-    defw previous_screen_text
+    defw select_player_text
+    defw job_titles
+    defw dev_names
 text_for_menu_end
 

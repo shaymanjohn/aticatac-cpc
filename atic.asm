@@ -8,7 +8,7 @@ start
     call wait_vsync
 
     di
-    ld sp, 0x7fff
+    ld sp, 0x8000
 
     ld d, hw_black
     call set_border                ; border to black

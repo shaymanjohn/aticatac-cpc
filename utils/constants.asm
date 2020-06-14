@@ -75,9 +75,9 @@ keypress_down       equ 1
 keypress_left       equ 2
 keypress_right      equ 3
 
-character_left      equ 20
-character_mid       equ 40
-character_right     equ 60
+character_left      equ 30
+character_mid       equ 50
+character_right     equ 70
 
 character_select_y  equ 0x80
 character_gap       equ 20

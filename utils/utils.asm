@@ -44,6 +44,20 @@ set_pens_loop
     jr nz, set_pens_loop
     ret
 
+set_logo_pens
+    ld hl, logo_pens
+set_logo_pens2    
+    ld e, 4                     ; 4 pens for mode 1
+    xor a					    ; initial pen index    
+set_logo_pens_loop
+    ld d, (hl)		            ; d = ink for pen
+    inc hl
+    call set_ink
+    inc a					    ; increment pen index
+    dec e
+    jr nz, set_logo_pens_loop
+    ret
+
 visible_screen_base_address
     defb 0xc0
 hidden_screen_base_address
@@ -292,3 +306,15 @@ pens
     defb hw_brightWhite
     defb hw_mauve
     defb hw_brightMagenta
+
+logo_pens
+    defb hw_black
+    defb hw_brightRed    
+    defb hw_pink
+    defb hw_brightWhite
+
+logo_pens2
+    defb hw_black
+    defb hw_brightRed    
+    defb hw_brightGreen
+    defb hw_brightWhite    

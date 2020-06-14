@@ -1,4 +1,5 @@
 include "fontdata.asm"
+include "fontdata_mode1.asm"
 
 show_text                       ; IN: ix = message address
     call calc_text_scr_address
@@ -60,7 +61,7 @@ show_text_loop
 
 ; IN: a = character to draw, hl = screen address
 draw_letter
-    ld de, font_data
+    ld de, (font_type)
     ld b, h             ; bc saves screen address
     ld c, l
 
@@ -88,13 +89,13 @@ draw_letter_loop
     push hl
 
     ld a, (de)
-    and iyh    
+    and iyh 
     ld (hl), a
     inc hl
     inc de
 
     ld a, (de)
-    and iyh
+    and iyh 
     ld (hl), a
     inc de
 
@@ -102,7 +103,10 @@ draw_letter_loop
     call scr_next_line
     djnz draw_letter_loop
 
-    ret                        
+    ret
 
 font_colour
     defb 0
+
+font_type
+    defw font_data_mode0

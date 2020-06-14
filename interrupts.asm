@@ -85,9 +85,9 @@ menu_interrupts
 	dw interrupt_switch_screens_and_clear
 	dw interrupt_menu_keyboard					; read keys, update position of characters
 	dw interrupt_update_character_select		; fast draw them
-	dw interrupt_empty
-	dw interrupt_empty
-	dw interrupt_empty
+	dw interrupt_set_mode0
+	dw interrupt_set_mode1_delayed	
+	dw interrupt_empty	
 
 game_interrupts
 	dw interrupt_switch_screens_and_update
@@ -192,11 +192,41 @@ interrupt_switch_screens
 
 interrupt_switch_screens_and_clear
 	call switch_screens
+	call interrupt_set_mode1
 	call interrupt_clear_character_select
+	ret
+
+interrupt_set_mode1
+	ld bc, 0x7f00 + 128 + 4 + 8 + 1		; change screen mode
+	out (c), c
+
+	call set_logo_pens
 	ret	
+
+interrupt_set_mode1_delayed
+	ld b, 180
+delay_mode1
+	nop
+	djnz delay_mode1
+
+	ld bc, 0x7f00 + 128 + 4 + 8 + 1		; change screen mode
+	out (c), c
+
+	ld hl, logo_pens2
+	call set_logo_pens2
+	ret		
+
+interrupt_set_mode0
+	ld bc, 0x7f00 + 128 + 4 + 8 + 0		; change screen mode
+	out (c), c
+
+	ld hl, pens
+	call set_logo_pens2
+	ret
 
 interrupt_switch_screens_and_update
 	call switch_screens
+	call interrupt_set_mode0
 	call interrupt_update_game
 	call interrupt_check_doors	
 	ret
@@ -232,9 +262,6 @@ interrupt_keyboard
 interrupt_check_doors
 	ld d, 0x45
 	call background_on
-
-	; ld bc, 0x7f00 + 128 + 4 + 8 + 1		; change screen mode
-	; out (c), c	
 
 	ld bc, room_bank_config
 	out (c), c
