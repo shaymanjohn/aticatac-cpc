@@ -15,7 +15,7 @@ draw_panel
     ret
 
 show_lives
-    ld hl, 0x00fa               ; row 0xf0
+    ld hl, 246
     ld de, (scr_addr_table)
     add hl, de
 
@@ -24,7 +24,7 @@ show_lives
     ld h, (hl)
     ld l, a
 
-    ld bc, 0x0035               ; col 0x39
+    ld bc, 0x0035               ; col 
     add hl, bc
 
     push hl                     ; hl is screen address, save it
@@ -74,7 +74,7 @@ lives_loop
 
 chicken_item    
 ;        item                x     y    rot
-    defb 0x13, 0x00, 0x00, 0xde, 0x7b, 0x00
+    defb 0x13, 0x00, 0x00, 0xde, 0x78, 0x00
 
 carcass_item
     defb 0x14, 0x00, 0x00, 0xe8, 0x70, 0x00

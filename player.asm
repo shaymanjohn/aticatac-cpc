@@ -180,9 +180,6 @@ eplay2
     ret
 
 move_player
-    xor a
-    ld (keys_pressed), a
-
     ld a, (screen_transition_in_progress)
     and a
     jp z, can_move
@@ -192,27 +189,21 @@ move_player
     ret
 
 can_move    
-    ld a, (keyboard_state)
+    ld a, (keys_pressed)
     ld c, a
-    ld d, 0
-    ld e, 0
+    ld de, 0
 
-    bit 0, c
-    ld b, -player_vert_speed
-    call z, move_player_up
+    bit player_up_bit, c
+    call nz, move_player_up
 
-    bit 2, c
-    ld b, player_vert_speed
-    call z, move_player_down
+    bit player_down_bit, c
+    call nz, move_player_down
 
-    ld a, (keyboard_state + 1)
-    bit 0, a
-    ld b, -player_horiz_speed
-    call z, move_player_left
+    bit player_left_bit, c
+    call nz, move_player_left
 
-    bit 1, c
-    ld b, player_horiz_speed
-    call z, move_player_right
+    bit player_right_bit, c
+    call nz, move_player_right
 
     ld a, d
     or e
@@ -231,9 +222,6 @@ inc_frame
     ret
 
 move_player_left
-    ld hl, keys_pressed
-    set keypress_left, (hl)
-
     ld a, d
     xor 1
     ld d, a
@@ -243,7 +231,7 @@ move_player_left
     ld a, (min_x)
     ld h, a    
     ld a, (player_x)
-    add b
+    add -player_horiz_speed
     cp h
     jr nc, minx_ok
     ld a, h
@@ -253,9 +241,6 @@ minx_ok
     ret    
 
 move_player_right
-    ld hl, keys_pressed
-    set keypress_right, (hl)
-
     ld a, d
     xor 1
     ld d, a
@@ -266,7 +251,7 @@ move_player_right
     ld a, (max_x)
     ld h, a
     ld a, (player_x)
-    add b
+    add player_horiz_speed
     cp h
     jr c, maxx_ok
     ld a, h
@@ -276,9 +261,6 @@ maxx_ok
     ret
 
 move_player_up
-    ld hl, keys_pressed
-    set keypress_up, (hl)
-
     ld a, e
     xor 1
     ld e, a    
@@ -289,7 +271,7 @@ move_player_up
     ld a, (min_y)
     ld h, a
     ld a, (player_y)
-    add b
+    add -player_vert_speed
     cp h
     jr nc, miny_ok
     ld a, h
@@ -299,9 +281,6 @@ miny_ok
     ret
 
 move_player_down
-    ld hl, keys_pressed
-    set keypress_down, (hl)
-
     ld a, e
     xor 1
     ld e, a
@@ -312,7 +291,7 @@ move_player_down
     ld a, (max_y)
     ld h, a
     ld a, (player_y)
-    add b
+    add player_vert_speed
     cp h
     jr c, maxy_ok
     ld a, h
@@ -511,9 +490,6 @@ num_lives
     defb 0
 
 energy
-    defb 0
-
-keys_pressed
     defb 0
 
 game_over

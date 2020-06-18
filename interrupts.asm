@@ -20,6 +20,7 @@ interrupt_callback
 	push hl
 	push de
 	push ix
+	push iy
 
 	ld b, 0xf5
 	in a, (c)
@@ -57,6 +58,7 @@ interrupt_call
 	call 0						; modified in line above to have correct address
 
 skipInterrupt
+	pop iy
 	pop ix
 	pop de
 	pop hl

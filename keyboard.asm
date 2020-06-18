@@ -26,6 +26,68 @@ key_loop
     ld bc, 0xf782
     out (c), c
 
+; Store up / down / left / right / fire state in 1 byte
+    xor a
+    ld (keys_pressed), a
+    ld b, a
+
+; Start with joystick
+    ld a, (keyboard_state + joystick_port_1)
+    bit 2, a
+    jp nz, check_right_joystick
+    set player_left_bit, b
+
+check_right_joystick
+    bit 3, a
+    jp nz, check_up_joystick
+    set player_right_bit, b
+
+check_up_joystick
+    bit 0, a
+    jp nz, check_down_joystick
+    set player_up_bit, b
+
+check_down_joystick
+    bit 1, a
+    jp nz, check_fire1_joystick
+    set player_down_bit, b
+
+check_fire1_joystick
+    bit 4, a
+    jp nz, check_fire2_joystick
+    set player_fire1_bit, b
+
+check_fire2_joystick
+    bit 5, a
+    jp nz, check_player_keys
+    set player_fire2_bit, b
+
+check_player_keys
+    ld a, (keyboard_state)
+
+    bit 0, a
+    jp nz, check_down_keyboard
+    set player_up_bit, b
+
+check_down_keyboard
+    bit 2, a
+    jp nz, check_right_keyboard
+    set player_down_bit, b
+
+check_right_keyboard
+    bit 1, a
+    jp nz, check_left_keyboard
+    set player_right_bit, b
+
+check_left_keyboard
+    ld a, (keyboard_state + 1)
+    bit 0, a
+    jp nz, save_input_state
+    set player_left_bit, b    
+
+save_input_state
+    ld a, b
+    ld (keys_pressed), a
     ret
 
 poll_master_keys
@@ -89,3 +151,6 @@ room_change
 
 keyboard_state
     defs 10
+
+keys_pressed
+    defb 0

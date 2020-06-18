@@ -40,6 +40,16 @@ player_is_going_up      equ num_player_frames * 2
 player_is_going_left    equ num_player_frames * 4
 player_is_going_right   equ num_player_frames * 6
 
+; player move bits based on joystick / keys pressed
+player_left_bit     equ 0
+player_right_bit    equ 1
+player_up_bit       equ 2
+player_down_bit     equ 3
+player_fire1_bit    equ 4
+player_fire2_bit    equ 5
+
+joystick_port_1     equ 9
+
 ; colours
 hw_black            equ 0x54
 hw_blue             equ 0x44
@@ -68,12 +78,6 @@ item_table          equ 0x12
 item_bookcase       equ 0x17
 item_trapdoor       equ 0x19
 item_barrel         equ 0x1a
-
-
-keypress_up         equ 0
-keypress_down       equ 1
-keypress_left       equ 2
-keypress_right      equ 3
 
 character_left      equ 30
 character_mid       equ 50

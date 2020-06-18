@@ -169,9 +169,9 @@ save_selection
     ret
 
 check_keys    
-    ld a, (keyboard_state + 1)
-    bit 0, a
-    jr nz, menu_keyboard_right
+    ld a, (keys_pressed)
+    bit player_left_bit, a
+    jr z, menu_keyboard_right
 
     ld a, (player_select_x)
     cp character_left
@@ -195,9 +195,8 @@ point_left
     ret
 
 menu_keyboard_right
-	ld a, (keyboard_state)
-    bit 1, a
-    ret nz
+    bit player_right_bit, a
+    jr z, check_fire_on_menu
 
     ld a, (player_select_x)
     cp character_right
@@ -218,6 +217,18 @@ point_right
 
     ld a, 1
     ld (characters_moving), a 
+    ret
+
+check_fire_on_menu
+    bit player_fire1_bit, a
+    jr nz, fired_on_menu
+
+ check_fire2_on_menu
+    bit player_fire2_bit, a
+    ret z
+
+fired_on_menu
+    call show_game
     ret
 
 clear_character_selects
@@ -298,7 +309,11 @@ text_for_menu
     defw copyright_text
     defw play_game_text
     defw select_player_text
-    defw job_titles
-    defw dev_names
+    defw graphics_title
+    defw code_title
+    defw sound_title
+    defw dev_day
+    defw dev_ward
+    defw dev_cross
 text_for_menu_end
 

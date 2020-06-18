@@ -25,14 +25,14 @@ check_doors
 
     ld a, (player_x)
 
-    bit keypress_left, c
+    bit player_left_bit, c
     jp z, check_right_key
     cp d
     jp nz, check_right_key
     sub 6
 
 check_right_key
-    bit keypress_right, c
+    bit player_right_bit, c
     jp z, check_up_key
     cp e
     jp nz, check_up_key
@@ -48,14 +48,14 @@ check_up_key
 
     ld a, (player_y)
 
-    bit keypress_up, c
+    bit player_up_bit, c
     jr z, check_down_key
     cp d
     jr nz, check_down_key
     sub 8
 
 check_down_key
-    bit keypress_down, c
+    bit player_down_bit, c
     jr z, end_key_check
     cp e
     jr nz, end_key_check
@@ -169,10 +169,9 @@ collide1
     inc hl
     ld a, (hl)              ; move to room this item is in
     ld (room_number), a
+    
     ld a, 1
     ld (room_changed), a
-
-    ld a, 1
     ld (screen_transition_in_progress), a
 
     inc hl

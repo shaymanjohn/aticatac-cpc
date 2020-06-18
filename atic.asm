@@ -82,6 +82,7 @@ switch_game_state
 	ld (interrupt_index), a
 
     ld a, b
+    ld (current_game_state), a
     cp state_menu
     jp z, select_menu
 
@@ -204,5 +205,8 @@ clear_screen
     ldir
 
     ret
+
+current_game_state
+    defb 0
 
 include "include_banks.asm"
