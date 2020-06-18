@@ -223,11 +223,14 @@ check_fire_on_menu
     bit player_fire1_bit, a
     jr nz, fired_on_menu
 
- check_fire2_on_menu
+check_fire2_on_menu
     bit player_fire2_bit, a
     ret z
 
 fired_on_menu
+    call set_pens_off
+    call wait_vsync
+
     call show_game
     ret
 
