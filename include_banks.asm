@@ -1,7 +1,3 @@
-org 0x4000                  ; "items.bin" = item_bank
-include "data/items.asm"
-include "graphics/item_gfx.asm"
-
 org 0x4000                  ; "sprites.bin" = sprite_bank
 include "graphics/player_sprites_gfx_masked.asm"
 
@@ -13,5 +9,9 @@ include "data/item_pointers.asm"
 include "graphics/menu_gfx.asm"
 include "graphics/pickup_gfx.asm"
 
-org 0x4000
-include "graphics/titlescreen_gfx.asm"
+org 0x4000                  ; "items.bin" = item_bank
+include "data/items.asm"
+include "graphics/item_gfx.asm"
+
+; org 0x4000
+; include "graphics/titlescreen_gfx.asm"

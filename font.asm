@@ -28,9 +28,6 @@ calc_text_scr_address
     ld l, (ix + 1)
 
     add hl, hl
-    add hl, hl
-    add hl, hl
-    add hl, hl
     ld de, (scr_addr_table)
     add hl, de
 

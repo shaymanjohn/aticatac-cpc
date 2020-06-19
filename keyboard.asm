@@ -82,8 +82,14 @@ check_right_keyboard
 check_left_keyboard
     ld a, (keyboard_state + 1)
     bit 0, a
-    jp nz, save_input_state
+    jp nz, check_fire_keyboard
     set player_left_bit, b    
+
+check_fire_keyboard
+    ld a, (keyboard_state + 5)
+    bit 7, a
+    jp nz, save_input_state
+    set player_fire1_bit, b
 
 save_input_state
     ld a, b

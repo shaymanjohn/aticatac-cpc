@@ -151,6 +151,13 @@ select_game
 
     call draw_panel
 
+    ld hl, font_0 - 256
+    ld (font_type), hl
+    ld ix, time_text
+    call show_text
+    ld ix, score_text
+    call show_text   
+
     ld a, (hidden_screen_base_address)
     ld h, a
     ld l, 0
