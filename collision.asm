@@ -121,15 +121,32 @@ next_collision_check
     ret
 
 trapdoor_collision
+    ld a, (ix + 1)          ; get door x + width * 2
+    add (ix + 5)
+    add (ix + 5)
+    sub 8                   ; tolerance
+    ld d, a
     ld a, (player_x)
-    sub (ix + 1)
-    cp 5
+    cp d
     jp nc, next_collision_check
 
+    add player_width
+    sub 4                   ; tolerance
+    cp (ix + 1)
+    jp c, next_collision_check
+
+    ld a, (ix + 2)          ; now height
+    add (ix + 6)
+    sub 20
+    ld d, a
     ld a, (player_y)
-    sub (ix + 2)
-    cp 5
+    cp d
     jp nc, next_collision_check
+
+    add average_player_height
+    sub 12                   ; tolerance
+    cp (ix + 2)
+    jp c, next_collision_check
 
     ld l, (ix + 3)
     ld h, (ix + 4)

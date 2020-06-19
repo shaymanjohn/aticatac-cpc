@@ -98,7 +98,7 @@ set_ink                     ; IN: a = pen, d = hardware colour. if pen is 16, th
     out (c), d              ; pen colour
     ret
 
-set_border
+set_border                  ; d = border colour (hardware value)
     ld bc, 0x7f00
     ld a, 0x10
     out (c), a
