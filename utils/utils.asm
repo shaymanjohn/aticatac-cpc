@@ -1,4 +1,12 @@
 switch_screens
+	ld a, (heartbeat)
+	inc a
+	cp 50
+	jp nz, save_heartbeat
+	xor a
+save_heartbeat
+	ld (heartbeat), a
+
     ld a, (visible_screen_base_address)
     ld (hidden_screen_base_address), a
     ld e, a       
@@ -24,6 +32,7 @@ switch_screens
 
     ld hl, scr_addr_table_80
     ld (scr_addr_table), hl
+	    
     ret    
     
 backbuffer_is_c0

@@ -121,6 +121,7 @@ select_game
     ld (room_number), a
     ld (player_orientation), a
     ld (game_over), a
+    ld (heartbeat), a
 
     inc a
     ld (room_changed), a
@@ -153,10 +154,14 @@ select_game
 
     ld hl, font_0 - 256
     ld (font_type), hl
+
+    call reset_clock    
+
     ld ix, time_text
-    call show_text
+    call show_text_fast
+
     ld ix, score_text
-    call show_text   
+    call show_text_fast
 
     ld a, (hidden_screen_base_address)
     ld h, a

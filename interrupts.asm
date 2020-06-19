@@ -70,51 +70,6 @@ skipInterrupt
 
 	ret
 
-interrupt_previous_stack
-	dw 0
-
-interrupt_stack
-	defs 256
-interrupt_stack_start
-
-interrupt_index
-	db interrupt_notReady
-
-current_interrupts
-	dw 0
-
-menu_interrupts
-	dw interrupt_switch_screens_and_clear
-	dw interrupt_menu_keyboard					; read keys, update position of characters
-	dw interrupt_update_character_select		; fast draw them
-	dw interrupt_set_mode0
-	dw interrupt_set_mode1_delayed	
-	dw interrupt_empty	
-
-game_interrupts
-	dw interrupt_switch_screens_and_update
-	dw interrupt_keyboard	
-	dw interrupt_sprites
-	dw interrupt_sprites
-	dw interrupt_sprites
-	dw interrupt_sprites
-
-falling_interrupts
-	dw interrupt_switch_screens
-	dw interrupt_fall
-	dw interrupt_empty
-	dw interrupt_empty
-	dw interrupt_empty
-	dw interrupt_empty
-
-end_interrupts
-	dw interrupt_switch_screens
-	dw interrupt_empty
-	dw interrupt_empty
-	dw interrupt_empty
-	dw interrupt_empty
-	dw interrupt_keyboard	
-
 interrupt_empty
 	ret
 
@@ -256,9 +211,31 @@ interrupt_keyboard
 	call read_keys
 	call poll_master_keys
 
+	call background_off	
+	ret
+
+interrupt_keyboard_and_clock
+	ld d, 0x56
+	call background_on
+
+	call read_keys
+	call poll_master_keys
+
 	call interrupt_move_player
+	call interrupt_clock
 
 	call background_off	
+	ret	
+
+interrupt_clock
+	ld a, (heartbeat)
+	cp 45
+	ret nz
+
+	call update_clock
+
+	ld ix, time_text
+	call show_text_fast	
 	ret
 
 interrupt_check_doors
@@ -353,3 +330,51 @@ background_off
 	ld d, hw_black
 	call set_border
 	ret
+
+interrupt_previous_stack
+	dw 0
+
+interrupt_stack
+	defs 256
+interrupt_stack_start
+
+interrupt_index
+	db interrupt_notReady
+
+current_interrupts
+	dw 0
+
+menu_interrupts
+	dw interrupt_switch_screens_and_clear
+	dw interrupt_menu_keyboard					; read keys, update position of characters
+	dw interrupt_update_character_select		; fast draw them
+	dw interrupt_set_mode0
+	dw interrupt_set_mode1_delayed	
+	dw interrupt_empty	
+
+game_interrupts
+	dw interrupt_switch_screens_and_update
+	dw interrupt_keyboard_and_clock
+	dw interrupt_sprites
+	dw interrupt_sprites
+	dw interrupt_sprites
+	dw interrupt_sprites
+
+falling_interrupts
+	dw interrupt_switch_screens
+	dw interrupt_fall
+	dw interrupt_clock
+	dw interrupt_empty
+	dw interrupt_empty
+	dw interrupt_empty
+
+end_interrupts
+	dw interrupt_switch_screens
+	dw interrupt_empty
+	dw interrupt_empty
+	dw interrupt_empty
+	dw interrupt_empty
+	dw interrupt_keyboard		
+
+heartbeat
+	defb 0

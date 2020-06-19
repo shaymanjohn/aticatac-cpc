@@ -61,6 +61,7 @@ dev_cross
 time_text
     defb 0x37, 0x41
     defb 0xff
+game_time    
     defb "000:00"
     defb 0x00
 
