@@ -100,49 +100,6 @@ end_fall
 	ld (interrupt_index), a
 	ret
 
-interrupt_sprites
-	ld d, 0x4e
-	call background_on
-
-sprite_loop1
-	ld a, (hidden_screen_base_address)
-	ld h, a
-	ld l, 0
-	ld de, door_portrait
-
-	ld b, 22
-
-sprite_loop2
-	push hl
-
-	ld a, (de)
-	xor (hl)
-	ld (hl), a
-	inc hl
-	inc de
-	ld a, (de)
-	xor (hl)
-	ld (hl), a
-	inc hl
-	inc de
-	ld a, (de)
-	xor (hl)
-	ld (hl), a
-	inc hl
-	inc de
-	ld a, (de)
-	xor (hl)
-	ld (hl), a
-	inc de
-
-	pop hl
-	call scr_next_line
-
-	djnz sprite_loop2
-
-	call background_off
-	ret
-
 interrupt_switch_screens
 	call switch_screens
 	ret
@@ -223,6 +180,10 @@ interrupt_keyboard_and_clock
 
 	call interrupt_move_player
 	call interrupt_clock
+	
+	ld a, (keys_pressed)
+	bit player_fire2_bit, a
+	call nz, pickup_tapped
 
 	call background_off	
 	ret	
@@ -362,10 +323,10 @@ menu_interrupts
 game_interrupts
 	dw interrupt_switch_screens_and_update
 	dw interrupt_keyboard_and_clock
-	dw interrupt_sprites
-	dw interrupt_sprites
-	dw interrupt_sprites
-	dw interrupt_sprites
+	dw interrupt_empty
+	dw interrupt_empty
+	dw interrupt_empty
+	dw interrupt_empty
 
 falling_interrupts
 	dw interrupt_switch_screens

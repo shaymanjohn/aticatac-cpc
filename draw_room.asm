@@ -9,8 +9,13 @@ draw_room
     call draw_outline
     call draw_items
 
-    ; call draw_collectables
+    ld bc, room_bank_config
+    out (c), c
+    call draw_collectables
     ; call draw_transients
+
+    ld bc, item_bank_config
+    out (c), c    
 
     call calc_dimensions
 
