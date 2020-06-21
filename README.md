@@ -1,12 +1,13 @@
 
-Insert the aticatac.hfe disk into the emulator (supported on RetroVirtualMachine2, not sure about other emulators)
+Insert the aticatac.dsk disk into the 6128 emulator (not yet tested on 64K machine with memory expansion)
 
-And then in the emulator (needs to be a 6128):
-run"atic
+In the emulator: run"atic
 
-Joystick or cursor keys to move
+Joystick left and right to select player (or cursor keys)
 
 Joystick button 1 or Space to start
+
+Joystick or cursor keys to move
 
 Joystick button 2 or G to pick up items
 
