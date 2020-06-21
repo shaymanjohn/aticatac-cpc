@@ -341,8 +341,7 @@ not_neg_y
     ld d, 1
 
 cant_collect
-    ret    
-
+    ret
 
 collectable_items
 ; room - 0xfe if in a pocket
