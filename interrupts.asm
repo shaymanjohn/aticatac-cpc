@@ -313,7 +313,14 @@ interrupt_update_character_select
 
 ; switch back to tile bank
 	ld bc, item_bank_config
-	out (c), c	
+	out (c), c
+
+	ld b, 200
+wait_a_bit	
+	nop
+	nop
+	nop
+	djnz wait_a_bit
 
 	call background_off
     ret

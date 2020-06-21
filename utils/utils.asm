@@ -184,10 +184,6 @@ scr_next_line   ; hl = current screen address
     ret
 
 rotate_gfx          ; IN: IX = source, de = destination, b = width in bytes, c = height in rows.
-    inc ix
-    inc de
-
-rotate2    
     ld h, 0
     push bc
 
@@ -205,104 +201,12 @@ rotate1
     ld h, a
     
     inc ix
-    inc ix
-    inc de
     inc de
     djnz rotate1
 
     pop bc
     dec c
-    jr nz, rotate2
-    ret
-
-; generate mask for rotated sprites
-gen_mask
-    ld d, h
-    ld e, l
-    inc de
-    ld ixh, b
-
-fix_mask
-    ld b, ixh
-
-fix_mask2
-    ld a, (de)
-
-    call mask_gen
-
-    ld (hl), a    
-    inc hl
-    inc hl
-    inc de
-    inc de
-    djnz fix_mask2
-
-    dec c
-    jr nz, fix_mask
-
-    ret
-
-mask_gen
-    push bc
-    push de
-
-    ld b, a
-    and 0xaa
-    ld d, a
-    ld a, b
-    and 0x55
-    ld e, a             ; de now has left pixel / right pixel
-
-    ld b, 0x00
-    ld a, d
-    and a
-    jr nz, do_right_pixel
-    ld b, 0xaa
-
-do_right_pixel
-    ld c, 0x00
-    ld a, e
-    and a
-    jr nz, done_both
-    ld c, 0x55
-
-done_both
-    ld a, b
-    or c
-
-    pop de
-    pop bc
-
-    ret
-
-flip_gfx
-    push bc
-    push ix
-
-    ld a, c
-    ld c, b
-    ld b, 0
-    add ix, bc
-
-flip1    
-    ld a, (ix + 0)
-    and 0xaa
-    srl a
-    ld c, a
-    ld a, (ix + 0)
-    and 0x55
-    sla a
-    or c
-    ld (de), a
-    dec ix
-    inc de
-    djnz flip1
-
-    pop ix
-    pop bc
-    dec c
-    jr nz, flip_gfx
-
+    jr nz, rotate_gfx
     ret
 
 scr_addr_table_c0              ; table/array for screen addresses for each scan line

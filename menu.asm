@@ -59,9 +59,6 @@ menu_text_loop
     ld a, 1
     ld (characters_moving), a       ; say they're moving, so 1st frame will set name
 
-    ld a, 0x7a
-    ld (player_select_y), a
-
     ret
 
 draw_logo       ; hl = screen address

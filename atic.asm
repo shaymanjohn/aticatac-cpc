@@ -34,35 +34,19 @@ setup_game_data
     ld de, sprite_bank_player_kd_0_1
     ld b, player_width
     ld c, knight_height * 12
-    call rotate_gfx                 ; (& ignore mask)
+    call rotate_gfx
 
     ld ix, sprite_bank_player_wd_0_0
     ld de, sprite_bank_player_wd_0_1
     ld b, player_width
     ld c, wizard_height * 12
-    call rotate_gfx                 ; (& ignore mask)    
+    call rotate_gfx
 
     ld ix, sprite_bank_player_sd_0_0
     ld de, sprite_bank_player_sd_0_1
     ld b, player_width
     ld c, serf_height * 12
-    call rotate_gfx                 ; (& ignore mask)        
-
-; and then generate a new mask for them.
-    ld hl, sprite_bank_player_kd_0_1
-    ld b, player_width
-    ld c, knight_height * 12
-    call gen_mask
-
-    ld hl, sprite_bank_player_wd_0_1
-    ld b, player_width
-    ld c, wizard_height * 12
-    call gen_mask
-
-    ld hl, sprite_bank_player_sd_0_1
-    ld b, player_width
-    ld c, serf_height * 12
-    call gen_mask        
+    call rotate_gfx
 
 	ld bc, item_bank_config             ; default page back in
 	out (c), c

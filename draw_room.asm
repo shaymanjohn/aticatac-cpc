@@ -9,6 +9,9 @@ draw_room
     call draw_outline
     call draw_items
 
+    ; call draw_collectables
+    ; call draw_transients
+
     call calc_dimensions
 
 ; Copy room to other screen 

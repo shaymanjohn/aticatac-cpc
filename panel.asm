@@ -62,8 +62,6 @@ lives_loop
     push hl
     push bc
     ld de, (selected_sprite_frame)
-    ; ld de, sprite_bank_player_kl_1_1
-    ld bc, save_screen_data_c0
     call draw_player_entry2
     pop bc
     pop hl

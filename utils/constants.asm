@@ -83,10 +83,13 @@ character_left      equ 30
 character_mid       equ 50
 character_right     equ 70
 
-character_select_y  equ 0x80
+character_select_y  equ 0x7a
 character_gap       equ 20
 
 skeleton_room1      equ 0x53
 skeleton_room2      equ 0x8f
 skeleton_room3      equ 0x33
 skeleton_room4      equ 0x55
+
+type_collectable    equ 0x00
+type_toxic          equ 0x01

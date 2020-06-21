@@ -88,11 +88,31 @@ check_left_keyboard
 check_fire_keyboard
     ld a, (keyboard_state + 5)
     bit 7, a
-    jp nz, save_input_state
+    jp nz, check_fire2_keyboard
     set player_fire1_bit, b
 
+check_fire2_keyboard
+    ld a, (keyboard_state + 6)
+    bit 4, a
+    jp nz, save_input_state
+    set player_fire2_bit, b    
+
 save_input_state
+    ld a, (keys_fire2)
+    ld c, a
+
+    ld a, b    
+    ld (keys_pressed), a
+
+    and 1 << player_fire2_bit       ; current fire2
+    ld (keys_fire2), a
+    ret z
+
+    cp c
+    ret nz
+
     ld a, b
+    res player_fire2_bit, a
     ld (keys_pressed), a
     ret
 
@@ -100,10 +120,6 @@ poll_master_keys
     ld a, (keyboard_state + 4)          ; m for menu
     bit 6, a
     jr z, show_menu
-
-    ld a, (keyboard_state + 6)			; g for game
-    bit 4, a
-    jr z, show_game
 
     ld a, (keyboard_state + 6)          ; v for timing bars
     bit 7, a
@@ -154,9 +170,9 @@ room_change
 	ld (room_changed), a
 	ret
 
-
 keyboard_state
     defs 10
-
 keys_pressed
+    defb 0
+keys_fire2
     defb 0

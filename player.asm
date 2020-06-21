@@ -23,12 +23,10 @@ draw_player
     cp 0xc0
     jp z, save_address_c0
     ld (save_player_address_80), hl        ; save this for erase later
-    ld bc, save_screen_data_80
     jp saved_address
 
 save_address_c0
     ld (save_player_address_c0), hl
-    ld bc, save_screen_data_c0    
 
 saved_address
     push bc
@@ -61,6 +59,19 @@ dplay1
     pop bc
     pop hl
 
+    ex de, hl
+    ld a, (hidden_screen_base_address)
+    cp 0xc0
+    jp z, save_frame_c0
+    ld (save_player_frame_80), hl        ; save this for erase later
+    jp saved_frame
+
+save_frame_c0
+    ld (save_player_frame_c0), hl
+
+saved_frame
+    ex de, hl
+
 draw_player_entry2           
     ld a, (actual_player_height)       
     ld ixh, a                       ; hl as screen address, de as gfx
@@ -71,53 +82,34 @@ dplay2
     ex de, hl
     
     ld a, (de)              ; de is screen
-    ld (bc), a              ; bc is save space
-    and (hl)                ; hl is gfx
-    inc hl
-    or (hl)
-    inc hl
+    xor (hl)                ; hl is gfx
     ld (de), a
+    inc hl
     inc de
-    inc bc
 
     ld a, (de)
-    ld (bc), a
-    and (hl)
-    inc hl
-    or (hl)
-    inc hl
+    xor (hl)
     ld (de), a
+    inc hl    
     inc de
-    inc bc
 
     ld a, (de)
-    ld (bc), a
-    and (hl)
-    inc hl
-    or (hl)
-    inc hl
+    xor (hl)
     ld (de), a
+    inc hl    
     inc de
-    inc bc
 
     ld a, (de)
-    ld (bc), a
-    and (hl)
-    inc hl
-    or (hl)
-    inc hl
+    xor (hl)
     ld (de), a
+    inc hl    
     inc de
-    inc bc
 
     ld a, (de)
-    ld (bc), a 
-    and (hl)
-    inc hl
-    or (hl)
-    inc hl
+    xor (hl)
     ld (de), a
-    inc bc
+    inc de
+    inc hl
 
     ex de, hl
 
@@ -134,50 +126,22 @@ erase_player
     cp 0xc0
     jp nz, erase_with_80
 
+    ld hl, (save_player_frame_c0)
+    ex de, hl
     ld hl, (save_player_address_c0)
-    ld de, save_screen_data_c0 
     jp erasex
 
 erase_with_80
+    ld hl, (save_player_frame_80)
+    ex de, hl
     ld hl, (save_player_address_80)
-    ld de, save_screen_data_80    
     
 erasex
     ld a, h
     or l
     ret z                       ; stop here if not yet set
 
-    ld a, (actual_player_height)
-    ld b, a
-
-eplay2
-    push hl
-    
-    ld a, (de)
-    ld (hl), a
-    inc hl
-    inc de
-    ld a, (de)
-    ld (hl), a
-    inc hl
-    inc de
-    ld a, (de)
-    ld (hl), a
-    inc hl
-    inc de    
-    ld a, (de)
-    ld (hl), a
-    inc hl
-    inc de
-    ld a, (de)
-    ld (hl), a
-    inc de
-
-    pop hl
-    call scr_next_line
-    djnz eplay2
-
-    ret
+    jp draw_player_entry2
 
 move_player
     ld a, (screen_transition_in_progress)
@@ -323,8 +287,7 @@ still_alive
     ret
 
 erase_player_select
-    ld a, (player_select_y)
-    ld l, a
+    ld l, character_select_y
     ld h, 0
     add hl, hl
     ld de, (scr_addr_table)
@@ -368,9 +331,7 @@ dplay_erase_fast_2
     ret
 
 draw_player_select              ; don't save background or mask here
-    ld a, (player_select_y)
-    ld l, a
-    ld h, 0
+    ld hl, character_select_y
     add hl, hl
     ld de, (scr_addr_table)
     add hl, de
@@ -420,34 +381,13 @@ dplay_fast1
 dplay_fast_2
     push hl
 
-    inc de                        ; ignore mask data
-    ld a, (de)
-    ld (hl), a
-    inc hl
-    inc de
-
-    inc de
-    ld a, (de)
-    ld (hl), a
-    inc hl
-    inc de
-
-    inc de
-    ld a, (de)
-    ld (hl), a
-    inc hl
-    inc de
-
-    inc de
-    ld a, (de)
-    ld (hl), a
-    inc hl
-    inc de
-
-    inc de
-    ld a, (de)
-    ld (hl), a
-    inc de
+    ex de, hl
+    ldi
+    ldi
+    ldi
+    ldi
+    ldi
+    ex de, hl
 
     pop hl
     call scr_next_line
@@ -470,9 +410,6 @@ actual_player_height
 
 player_select_x
     defb 0
-
-player_select_y
-    defb 0    
 
 player_collision_x
     defb 0
@@ -518,12 +455,12 @@ save_player_address_c0
 
 save_player_address_80    
     defw 0
-    
-save_screen_data_c0
-    defs max_player_height * player_width
 
-save_screen_data_80
-    defs max_player_height * player_width    
+save_player_frame_c0
+    defw 0
+
+save_player_frame_80    
+    defw 0    
 
 anim_frames_table
     defw serf_frames_table
