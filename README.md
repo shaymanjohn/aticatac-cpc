@@ -4,7 +4,11 @@ Insert the aticatac.hfe disk into the emulator (supported on RetroVirtualMachine
 And then in the emulator (needs to be a 6128):
 run"atic
 
-Cursor keys to move, G to return to first screen
+Joystick or cursor keys to move
+
+Joystick button 1 or Space to start
+
+Joystick button 2 or G to pick up items
 
 V to toggle interrupt timings in border
 
@@ -12,7 +16,7 @@ N go to next screen
 
 B go back to previous screen
 
-M show menu (blank at the moment, tap G to go back to game)
+M show menu (blank at the moment)
 
 Thanks to this site for the info on the data formats:
 
