@@ -1,0 +1,4 @@
+rm aticatac.dsk
+rasm atic.asm -s -sl -sq
+rasm loader.asm
+echo "Build complete"

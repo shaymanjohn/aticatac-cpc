@@ -1,6 +1,3 @@
-include "fontdata.asm"
-include "fontdata_mode1.asm"
-
 show_text                       ; IN: ix = message address
     call calc_text_scr_address
 

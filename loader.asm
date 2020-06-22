@@ -3,6 +3,8 @@
 ; http://www.cpcwiki.eu/index.php/Programming:An_example_loader
 ;
 org 0x8000
+loader_start
+
 	ld hl, (amsdos_reserved)	; store the drive number the loader was run from
 	ld a, (hl)
 	ld (drive + 1), a
@@ -215,6 +217,8 @@ pens
 open_buffer
 	defs 2048
 
+loader_end
+
 scr_set_mode		equ 0xbc0e
 scr_set_border		equ 0xbc38
 scr_set_ink			equ 0xbc32
@@ -224,3 +228,5 @@ cas_in_close		equ 0xbc7a
 mc_start_program	equ 0xbd16
 kl_rom_walk			equ 0xbccb
 amsdos_reserved		equ 0xbe7d
+
+save"atic.bin",0x8000,loader_end-loader_start,DSK,"aticatac.dsk"

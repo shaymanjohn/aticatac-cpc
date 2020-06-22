@@ -205,4 +205,8 @@ clear_screen
 current_game_state
     defb 0
 
+code_end
+
+save"gamecode.bin",0x400,code_end-code_start,DSK,"aticatac.dsk"
+
 include "include_banks.asm"

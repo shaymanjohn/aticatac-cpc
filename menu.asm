@@ -1,4 +1,7 @@
 init_menu
+    ld bc, room_bank_config
+    out (c), c
+    
     ld hl, font_data_mode1
     ld (font_type), hl
     ld b, (text_for_menu_end - text_for_menu) / 2
@@ -21,15 +24,15 @@ menu_text_loop
 
     inc hl
     inc hl
-    djnz menu_text_loop
+    djnz menu_text_loop    
 
     ld hl, font_data_mode0
     ld (font_type), hl
     ld ix, select_marker
     call show_text
 
-    ld bc, room_bank_config     ; page room info in
-    out (c), c
+    ; ld bc, room_bank_config     ; page room info in
+    ; out (c), c
 
     ld hl, (scr_addr_table)
 
