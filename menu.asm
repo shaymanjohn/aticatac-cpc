@@ -31,9 +31,6 @@ menu_text_loop
     ld ix, select_marker
     call show_text
 
-    ; ld bc, room_bank_config     ; page room info in
-    ; out (c), c
-
     ld hl, (scr_addr_table)
 
     ld a, (hl)
@@ -65,7 +62,7 @@ menu_text_loop
     ret
 
 draw_logo       ; hl = screen address
-    ld b, 57
+    ld b, 57                ; height of atic atac logo
     ld de, logo_mode1
 
 logo_loop
