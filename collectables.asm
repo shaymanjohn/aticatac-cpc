@@ -324,8 +324,8 @@ not_neg_x
     jr nc, cant_collect
 
     ld a, (player_y)
+    add average_player_height / 2    
     ld e, a
-    add average_player_height / 2
     ld a, (ix + 4)
     add 8
     sub e
@@ -335,7 +335,7 @@ not_neg_x
     neg
 
 not_neg_y
-    cp 16
+    cp 8
     jr nc, cant_collect
 
     ld d, 1
