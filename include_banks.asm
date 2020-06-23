@@ -22,8 +22,8 @@ include "data/items_per_room.asm"
 include "data/item_pointers.asm"
 include "graphics/menu_gfx.asm"
 include "graphics/pickup_gfx.asm"
-include "fontdata.asm"
-include "fontdata_mode1.asm"
+include "fonts/fontdata.asm"
+include "fonts/fontdata_mode1.asm"
 rooms_bank_end
 save"rooms.bin",0x4000,rooms_bank_end-rooms_bank_start,DSK,"aticatac.dsk"
 
@@ -32,3 +32,16 @@ org 0x4000
 include "graphics/titlescreen_gfx.asm"
 save"loading.bin",0x4000,16000,DSK,"aticatac.dsk"
 
+BANK
+org 0x4000
+sound_bank_start
+include "sound/Music_Empty.asm"
+
+PLY_AKG_HARDWARE_CPC = 1
+PLY_AKG_MANAGE_SOUND_EFFECTS = 1
+
+SoundEffects
+include "sound/SoundEffects.asm"
+include "sound/PlayerAkg.asm"
+sound_bank_end
+save"sounds.bin",0x4000,sound_bank_end-sound_bank_start,DSK,"aticatac.dsk"

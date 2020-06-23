@@ -120,7 +120,18 @@ wait_vsync_loop
 	in a, (c)
 	rrca
 	jr nc, wait_vsync_loop
-    ret    
+    ret
+
+play_sfx                            ; a = sound effect number
+	ld bc, sound_bank_config
+	out (c), c
+
+    ld bc, 0x0001                   ; full volume, both channels
+    call PLY_AKG_PlaySoundEffect
+
+	ld bc, item_bank_config         ; default page back in
+	out (c), c    
+    ret
 
 ; IN  h = x byte coord, l = y line
 ; OUT hl = screen address
@@ -217,6 +228,9 @@ scr_addr_table_80
 
 scr_addr_table
     defs 2
+
+sound_channel
+    defb 0
 
 pens
     defb hw_black

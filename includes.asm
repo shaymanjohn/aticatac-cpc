@@ -1,4 +1,4 @@
-org 0x400
+org 0x100
 
 code_start
 
@@ -17,8 +17,8 @@ include "interrupts.asm"
 include "keyboard.asm"
 include "falling.asm"
 include "font.asm"
-include "textstrings.asm"
 include "chicken.asm"
 include "menu.asm"
 include "clock.asm"
+include "fonts/textstrings.asm"
 include "collectables.asm"

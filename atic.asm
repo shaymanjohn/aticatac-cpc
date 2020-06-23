@@ -1,14 +1,11 @@
 include "includes.asm"
 
 start
-    xor a
-    call scr_set_mode    
-
     call set_pens_off
     call wait_vsync
 
     di
-    ld sp, 0x8000
+    ld sp, 0x4000
 
     ld d, hw_black
     call set_border                ; border to black
@@ -47,6 +44,17 @@ setup_game_data
     ld b, player_width
     ld c, serf_height * 12
     call rotate_gfx
+
+
+	ld bc, sound_bank_config
+	out (c), c    
+
+    ld hl, Newsong_Start
+    xor a
+    call PLY_AKG_Init
+
+    ld hl, SoundEffects
+    call PLY_AKG_InitSoundEffects
 
 	ld bc, item_bank_config             ; default page back in
 	out (c), c
@@ -207,6 +215,6 @@ current_game_state
 
 code_end
 
-save"gamecode.bin",0x400,code_end-code_start,DSK,"aticatac.dsk"
+save"gamecode.bin",0x100,code_end-code_start,DSK,"aticatac.dsk"
 
 include "include_banks.asm"

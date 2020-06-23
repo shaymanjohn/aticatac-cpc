@@ -19,6 +19,9 @@ collectable_loop
     ret
 
 pickup_tapped
+    ld a, sound_collect
+    call play_sfx
+
     ld a, (room_number)
     ld c, a
 
@@ -404,3 +407,5 @@ pocket3
 save_collectable_screen_loc
     defw 0
 
+sound_effect_number
+    defb 1

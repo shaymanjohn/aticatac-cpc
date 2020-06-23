@@ -18,9 +18,6 @@ show_text                       ; IN: ix = message address
     ld h, a
     jp show_text_loop
 
-show_text_fast                    ; IN: ix = message address
-    jp show_text_loop_fast
-
 calc_text_scr_address
     ld h, 0
     ld l, (ix + 1)
@@ -54,6 +51,7 @@ show_text_loop
     inc hl
     jr show_text_loop
 
+show_text_fast
 show_text_loop_fast             ; no colour option, unrolled loop
     call calc_text_scr_address
 

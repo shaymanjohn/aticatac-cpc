@@ -74,6 +74,15 @@ screen_copy_loop
 
 ;----------------------------------------
 
+	ld c, 0xc6					; set bank for sound (0, 6, 2, 3)
+	call set_bank
+
+	ld hl, file_sounds			; sound data in bank 6
+	ld de, 0x4000
+	call load_block	
+
+;----------------------------------------
+
 	ld c, 0xc0					; set bank for items (0, 1, 2, 3)
 	call set_bank
 
@@ -84,12 +93,12 @@ screen_copy_loop
 ;----------------------------------------
 
 	ld hl, file_code			; main game code in bank 0
-	ld de, 0x400
+	ld de, 0x100
 	call load_block
 
 ;----------------------------------------
 
-	jp 0x400					; start game
+	jp 0x100					; start game
 
 ;----------------------------------------	
 
@@ -195,6 +204,9 @@ file_items
 
 file_code
 	defb "GAMECODE.BIN", 0
+
+file_sounds
+	defb "SOUNDS.BIN", 0
 
 pens
     defb 0

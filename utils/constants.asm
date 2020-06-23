@@ -1,5 +1,3 @@
-scr_set_mode        equ 0xbc0e
-
 rotation_top        equ 0x00        ; portrait  %00000000
 rotation_bottom     equ 0x80        ; portrait  %10000000
 rotation_right      equ 0x60        ; landscape %01100000
@@ -8,9 +6,9 @@ rotation_left       equ 0xe0        ; landscape %11100000
 max_doors           equ 8       ; per room
 player_width        equ 5       ; bytes
 
-knight_height           equ 20
-wizard_height           equ 21
-serf_height             equ 19
+knight_height       equ 20
+wizard_height       equ 21
+serf_height         equ 19
 
 max_player_height       equ wizard_height
 average_player_height   equ 20
@@ -29,9 +27,10 @@ state_end           equ 0x03
 fall_time           equ 75
 
 ; memory banks
+item_bank_config    equ 0x7fc0      ; default bank
 sprite_bank_config  equ 0x7fc4
-item_bank_config    equ 0x7fc0
 room_bank_config    equ 0x7fc5
+sound_bank_config   equ 0x7fc6
 
 ; player anim
 num_player_frames       equ 4
@@ -90,3 +89,6 @@ skeleton_room1      equ 0x53
 skeleton_room2      equ 0x8f
 skeleton_room3      equ 0x33
 skeleton_room4      equ 0x55
+
+sound_collect       equ 1
+sound_menu          equ 5

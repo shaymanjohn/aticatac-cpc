@@ -70,7 +70,7 @@ logo_loop
     push hl
 
     ex de, hl
-    ld bc, 52
+    ld bc, 52               ; width
     ldir
 
     ex de, hl
@@ -189,6 +189,8 @@ point_left
 
     ld a, 1
     ld (characters_moving), a 
+
+    call play_menu_sound
     ret
 
 menu_keyboard_right
@@ -214,6 +216,8 @@ point_right
 
     ld a, 1
     ld (characters_moving), a 
+
+    call play_menu_sound
     ret
 
 check_fire_on_menu
@@ -229,6 +233,11 @@ fired_on_menu
     call wait_vsync
 
     call show_game
+    ret
+
+play_menu_sound
+    ld a, sound_menu                         ; sfx number
+    call play_sfx
     ret
 
 clear_character_selects
