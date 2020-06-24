@@ -122,17 +122,6 @@ wait_vsync_loop
 	jr nc, wait_vsync_loop
     ret
 
-play_sfx                            ; a = sound effect number
-	ld bc, sound_bank_config
-	out (c), c
-
-    ld bc, 0x0001                   ; full volume, both channels
-    call PLY_AKG_PlaySoundEffect
-
-	ld bc, item_bank_config         ; default page back in
-	out (c), c    
-    ret
-
 ; IN  h = x byte coord, l = y line
 ; OUT hl = screen address
 get_scr_addr
@@ -178,6 +167,10 @@ mst1
     call scr_next_line
     pop bc
     djnz mst1
+
+    ld hl, scr_addr_table_c0
+    ld (scr_addr_table), hl
+        
     ret
 
 scr_next_line   ; hl = current screen address

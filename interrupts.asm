@@ -175,7 +175,7 @@ interrupt_keyboard_and_clock
 	ld d, 0x56
 	call background_on
 
-	call interrupt_akg
+	call service_sound_system
 
 	call read_keys
 	call poll_master_keys
@@ -301,16 +301,6 @@ background_off
 	call set_border
 	ret
 
-interrupt_akg
-	ld bc, sound_bank_config
-	out (c), c
-
-	call PLY_AKG_Play	
-
-	ld bc, item_bank_config
-	out (c), c	
-	ret
-
 interrupt_previous_stack
 	dw 0
 
@@ -330,7 +320,7 @@ menu_interrupts
 	dw interrupt_update_character_select		; fast draw them
 	dw interrupt_set_mode0
 	dw interrupt_set_mode1_delayed	
-	dw interrupt_akg	
+	dw service_sound_system	
 
 game_interrupts
 	dw interrupt_switch_screens_and_update

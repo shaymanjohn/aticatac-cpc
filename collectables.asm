@@ -346,57 +346,6 @@ not_neg_y
 cant_collect
     ret
 
-collectable_items
-; room - 0xfe if in a pocket
-; item_gfx address
-; x, y
-; 3 bytes fill
-
-col_acgkey1
-    defb 0x00
-    defw item_acgkey1
-    defb 0x10, 0x30
-    defb 0x00, 0x00, 0x00
-
-col_acgkey2
-    defb 0x00
-    defw item_acgkey2
-    defb 0x15, 0x30
-    defb 0x00, 0x00, 0x00
-
-col_acgkey3
-    defb 0x00
-    defw item_acgkey3
-    defb 0x1a, 0x30
-    defb 0x00, 0x00, 0x00
-
-col_key_blue
-    defb 0x07
-    defw key_blue
-    defb 0x10, 0x60
-    defb 0x00, 0x00, 0x00
-
-col_key_green
-    defb 0x00
-    defw key_green
-    defb 0x18, 0x62
-    defb 0x00, 0x00, 0x00
-
-col_key_red
-    defb 0x00
-    defw key_red
-    defb 0x0a, 0x76
-    defb 0x00, 0x00, 0x00
-
-col_key_yellow
-    defb 0x00
-    defw key_yellow
-    defb 0x18, 0x70
-    defb 0x00, 0x00, 0x00
-
-end_colls
-    defb 0xff
-
 pocket1
     defb 0xff
 pocket2
@@ -407,5 +356,3 @@ pocket3
 save_collectable_screen_loc
     defw 0
 
-sound_effect_number
-    defb 1

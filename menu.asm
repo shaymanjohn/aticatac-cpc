@@ -124,7 +124,7 @@ character_selected
     xor a
     ld (characters_moving), a
 
-    ld a, 5
+    ld a, default_frame
     ld (player_frame), a
 
     ld a, c

@@ -19,10 +19,8 @@ start
 
 setup_game_data
     call make_scr_table
-    ld hl, scr_addr_table_c0
-    ld (scr_addr_table), hl
 
-; Create copy of sprites, rotated a pixel to the left
+; Create copy of hero sprites, rotated a mode 0 pixel to the left
 
 	ld bc, sprite_bank_config           ; page in sprite bank
 	out (c), c    
@@ -45,19 +43,10 @@ setup_game_data
     ld c, serf_height * 12
     call rotate_gfx
 
+    call init_sound_system
 
-	ld bc, sound_bank_config
+	ld bc, item_bank_config
 	out (c), c    
-
-    ld hl, Newsong_Start
-    xor a
-    call PLY_AKG_Init
-
-    ld hl, SoundEffects
-    call PLY_AKG_InitSoundEffects
-
-	ld bc, item_bank_config             ; default page back in
-	out (c), c
 
     ld a, character_mid
     ld (player_select_x), a
@@ -118,7 +107,7 @@ select_game
     inc a
     ld (room_changed), a
 
-    ld a, 5                     ; second frame - 5 because each frame is shown 4 times
+    ld a, default_frame
     ld (player_frame), a
 
     ld a, 0x2c

@@ -38,6 +38,7 @@ player_is_going_down    equ 0
 player_is_going_up      equ num_player_frames * 2
 player_is_going_left    equ num_player_frames * 4
 player_is_going_right   equ num_player_frames * 6
+default_frame           equ 5
 
 ; player move bits based on joystick / keys pressed
 player_left_bit     equ 0
@@ -90,5 +91,5 @@ skeleton_room2      equ 0x8f
 skeleton_room3      equ 0x33
 skeleton_room4      equ 0x55
 
-sound_collect       equ 1
-sound_menu          equ 5
+type_transient      equ 0x01
+type_mushroom       equ 0x02
