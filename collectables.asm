@@ -130,7 +130,7 @@ draw_pockets
     inc hl
     ld h, (hl)
     ld l, a
-    ld de, 0x0037           ; first pocket item x
+    ld de, 0x0032           ; first pocket item x
     add hl, de
 
     push hl                 ; save screen address for later copy

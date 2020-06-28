@@ -243,7 +243,7 @@ left_side_loop
     ld (hl), c
 
     pop hl
-    ld de, 0x50
+    ld de, 0x40
     add hl, de
     djnz left_side_loop
     ld (hl), c
@@ -320,7 +320,7 @@ right_side_loop
     ld (hl), c
 
     pop hl
-    ld de, 0x50
+    ld de, 0x40
     add hl, de
     djnz right_side_loop
     ld (hl), c
