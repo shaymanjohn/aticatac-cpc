@@ -114,7 +114,7 @@ weapon2
     ld a, (de)
     ; xor (hl)
     ld (hl), a
-    inc hl
+    inc l
     inc de
 
     ld a, (de)
@@ -122,7 +122,7 @@ weapon2
     ld (hl), a
     inc de
 
-    dec hl
+    dec l
     call scr_next_line
     djnz weapon2
 
@@ -132,13 +132,13 @@ weapon3
     ld a, (de)
     ; xor (hl)
     ld (hl), a
-    inc hl
+    inc l
     inc de
 
     ld a, (de)
     ; xor (hl)
     ld (hl), a
-    inc hl
+    inc l
     inc de    
 
     ld a, (de)
@@ -146,8 +146,8 @@ weapon3
     ld (hl), a
     inc de
 
-    dec hl
-    dec hl
+    dec l
+    dec l
     call scr_next_line
     djnz weapon3
 
@@ -158,19 +158,19 @@ weapon4
     ld a, (de)
     ; xor (hl)
     ld (hl), a
-    inc hl
+    inc l
     inc de
 
     ld a, (de)
     ; xor (hl)
     ld (hl), a
-    inc hl
+    inc l
     inc de
 
     ld a, (de)
     ; xor (hl)
     ld (hl), a
-    inc hl
+    inc l
     inc de
 
     ld a, (de)
@@ -188,7 +188,7 @@ weapon_type
     defw spell_data
 
 weapon_x
-    defb 0x40
+    defb 0x38
 
 weapon_y
     defb 0x80

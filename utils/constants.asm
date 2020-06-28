@@ -80,9 +80,9 @@ item_bookcase       equ 0x17
 item_trapdoor       equ 0x19
 item_barrel         equ 0x1a
 
-character_left      equ 30
-character_mid       equ 50
-character_right     equ 70
+character_left      equ 20
+character_mid       equ 40
+character_right     equ 60
 
 character_select_y  equ 0x7a
 character_gap       equ 20

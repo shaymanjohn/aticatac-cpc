@@ -213,7 +213,7 @@ flip_pixels           ; swap left and right pixels
     pop bc
 
     ld (hl), a
-    inc hl
+    inc l
     dec de
     djnz dif1
 
@@ -231,7 +231,7 @@ draw_item_noflip
 dinf1
     ld a, (de)
     ld (hl), a
-    inc hl
+    inc l
     inc de
     djnz dinf1
 

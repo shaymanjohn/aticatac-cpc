@@ -2,6 +2,8 @@
 ; Line drawing routine by fgbrain on cpcwiki.eu forum
 ; see http://www.cpcwiki.eu/forum/programming/fast-line-draw-in-assembly-(breseham-algorithm)/
 ;
+; modified to cope with different screen width
+;
 
 plot_line               ; IN: bc = start vertex, de = end vertex
   di
@@ -106,24 +108,23 @@ x1
 y1
   ld hl, 1
 
-; Fast Plot for MODE 0 by Executioner follows...
-FPLOT
-  ld a, l            ;A = Lowbyte Y
-  and %00000111        ;isolate Bit 0..2
-  ld h, a            ;= y MOD 8 to H
-  xor l            ;A = Bit 3..7 of Y
-  ld l, a            ;= (Y\*8 to L
-  ld c,a             ;store in C
+  ld a, l
+  ld hl, (scr_addr_table)
+  
+  ld iyl, e
 
-scr_offset_value
-  ld b, 0x60         ;B = &C0\2 = Highbyte Screenstart\2  ; this value set prior to drawing room outline
-  add hl, hl        ;HL * 2
-  add hl, hl        ;HL * 4
-  add hl, bc        ;+ BC = Startaddress
-  add hl, hl        ;of the raster line
-  srl e            ;calculate X\2, because 2 pixel per byte, Carry is X MOD 2
-  ld c, %10101010            ;Bitmask for MODE 0
-  jp nc, NSHIFT        ;-> = 0, no shift
+  ld e, a
+  add hl, de
+  add hl, de
+  ld a, (hl)
+  inc hl
+  ld h, (hl)
+  ld l, a
+
+  ld e, iyl
+  srl e               ;calculate X\2, because 2 pixel per byte, Carry is X MOD 2
+  ld c, %10101010     ;Bitmask for MODE 0
+  jp nc, NSHIFT       ;-> = 0, no shift
 
 SHIFT
   ld c, %01010101            ;other bitmask for right pixel

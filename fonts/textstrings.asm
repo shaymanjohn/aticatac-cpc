@@ -1,23 +1,23 @@
 copyright_text
-    defb 0x18, 0x08 * 8
+    defb 0x10, 0x08 * 8
     defb 0xff
     defb "COPYRIGHT A.C.G."
     defb 0x00
 
 play_game_text
-    defb 0x14, 0x0d * 8
+    defb 0x0d, 0x0d * 8
     defb 0xff
     defb "PRESS FIRE TO START"
     defb 0x00               ; x, y, colour, message, terminator
 
 select_player_text 
-    defb 0x08, 0x0b * 8
+    defb 0x01, 0x0b * 8
     defb %00001111
     defb "USE LEFT + RIGHT TO SELECT HERO"
     defb 0x00               ; x, y, colour, message, terminator
 
 select_marker
-    defb 0x21, 0x12 * 8
+    defb 0x1c, 0x12 * 8
     defb 0xff
     defb "<=>?"
     defb 0x00               ; x, y, colour, message, terminator    
@@ -29,13 +29,13 @@ graphics_title
     defb 0x00               ; x, y, colour, message, terminator        
 
 code_title
-    defb 0x24, 0x16 * 8
+    defb 0x1c, 0x16 * 8
     defb %00001111
     defb "CODE"
     defb 0x00               ; x, y, colour, message, terminator            
 
 sound_title
-    defb 0x41, 0x16 * 8
+    defb 0x31, 0x16 * 8
     defb %00001111
     defb "SOUND"
     defb 0x00               ; x, y, colour, message, terminator            
@@ -47,26 +47,26 @@ dev_day
     defb 0x00               ; x, y, colour, message, terminator        
 
 dev_ward
-    defb 0x1f, 0x17 * 8
+    defb 0x17, 0x17 * 8
     defb 0xff
     defb "JOHN WARD"
     defb 0x00               ; x, y, colour, message, terminator        
 
 dev_cross
-    defb 0x3c, 0x17 * 8
+    defb 0x2c, 0x17 * 8
     defb 0xff
     defb "SAUL CROSS"
     defb 0x00               ; x, y, colour, message, terminator
 
 time_text
-    defb 0x37, 0x41
+    defb 0x32, 0x41
     defb 0xff
 game_time    
     defb "000:00"
     defb 0x00
 
 score_text
-    defb 0x37, 0x51
+    defb 0x32, 0x51
     defb 0xff
     defb "000000"
     defb 0x00    

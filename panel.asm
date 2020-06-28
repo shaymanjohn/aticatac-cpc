@@ -24,7 +24,7 @@ show_lives
     ld h, (hl)
     ld l, a
 
-    ld bc, 0x0035               ; col 
+    ld bc, 0x0030               ; col 
     add hl, bc
 
     push hl                     ; hl is screen address, save it
@@ -72,11 +72,11 @@ lives_loop
 
 chicken_item    
 ;        item                x     y    rot
-    defb 0x13, 0x00, 0x00, 0xde, 0x78, 0x00
+    defb 0x13, 0x00, 0x00, 0xca, 0x78, 0x00
 
 carcass_item
     defb 0x14, 0x00, 0x00, 0xe8, 0x70, 0x00
 
 panel_item
-    defb 0x04, 0x00, 0x00, 0xd4, 192, 0x00      ; y is bottom row of item...
+    defb 0x04, 0x00, 0x00, 0xc2, 192, 0x00      ; y is bottom row of item...
  

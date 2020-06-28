@@ -151,21 +151,22 @@ make_scr_table
     ld ix, scr_addr_table_c0	; address to store table
     ld iy, scr_addr_table_80
     ld hl, 0xc000				; start address of first scanline
-    ld b, 200					; number of scanlines on screen
+    ld b, num_rows				; number of scanlines on screen
+
 mst1
     ld (ix + 0), l
     ld (ix + 1), h
-    inc ix
-    inc ix
     ld a, h
     xor 0x40
     ld (iy + 0), l
     ld (iy + 1), a
+
+    inc ix
+    inc ix
     inc iy
     inc iy
-    push bc
+
     call scr_next_line
-    pop bc
     djnz mst1
 
     ld hl, scr_addr_table_c0
@@ -180,7 +181,7 @@ scr_next_line   ; hl = current screen address
     and 0x38
     ret nz
     ld a, l
-    add a, 0x50
+    add a, 0x40
     ld l, a
     ld a, h
     adc a, 0xc0
@@ -214,10 +215,10 @@ rotate1
     ret
 
 scr_addr_table_c0              ; table/array for screen addresses for each scan line
-    defs 200 * 2
+    defs num_rows * 2
 
 scr_addr_table_80
-    defs 200 * 2
+    defs num_rows * 2
 
 scr_addr_table
     defs 2

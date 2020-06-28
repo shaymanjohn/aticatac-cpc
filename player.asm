@@ -75,25 +75,25 @@ dplay2
     ld a, (de)              ; de is screen
     xor (hl)                ; hl is gfx
     ld (hl), a
-    inc hl
+    inc l
     inc de
 
     ld a, (de)
     xor (hl)
     ld (hl), a
-    inc hl    
+    inc l    
     inc de
 
     ld a, (de)
     xor (hl)
     ld (hl), a
-    inc hl    
+    inc l    
     inc de
 
     ld a, (de)
     xor (hl)
     ld (hl), a
-    inc hl    
+    inc l    
     inc de
 
     ld a, (de)
@@ -297,15 +297,15 @@ dplay_erase_fast_2
     push hl
     
     ld (hl), e
-    inc hl
+    inc l
     ld (hl), e
-    inc hl
+    inc l
     ld (hl), e
-    inc hl
+    inc l
     ld (hl), e
-    inc hl
+    inc l
     ld (hl), e
-    inc hl
+    inc l
     ld (hl), e                      ; clear an extra column, again to stop moving trails
 
     pop hl

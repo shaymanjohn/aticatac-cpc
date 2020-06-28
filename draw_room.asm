@@ -1,7 +1,7 @@
 draw_room
-    ld a, (hidden_screen_base_address)
-    sra a
-    ld (scr_offset_value + 1), a
+    ; ld a, (hidden_screen_base_address)
+    ; sra a
+    ; ld (scr_offset_value + 1), a
 
     ld bc, room_bank_config
     out (c), c
@@ -114,6 +114,9 @@ not_skeleton_room
     inc hl                ; de now has width / height
     ex de, hl
     ld (room_size), hl         ; save it
+
+    ; ret
+
     ex de, hl
 
     ld e, (hl)

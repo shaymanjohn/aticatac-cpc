@@ -103,7 +103,7 @@ draw_letter_loop
     ld a, (de)
     and iyh 
     ld (hl), a
-    inc hl
+    inc l
     inc de
 
     ld a, (de)
@@ -150,7 +150,7 @@ draw_letter_loop_fast       ; de is font data, hl is screen
 
     ld (hl), b
     ld h, c
-    inc hl
+    inc l
     inc de
 
     ld a, (de)
@@ -180,37 +180,7 @@ draw_letter_loop_fast       ; de is font data, hl is screen
 
     ld (hl), b
     ld h, c
-    inc hl
-    inc de
-
-    ld a, (de)
-    ld (hl), a
-    ld b, a    
-    ld c, h
-
-    ld a, h
-    xor 0x40
-    ld h, a
-    
-    ld (hl), b
-    ld h, c
-    inc de
-    dec hl
-
-    call scr_next_line
-
-    ld a, (de)
-    ld (hl), a
-    ld b, a
-    ld c, h
-
-    ld a, h
-    xor 0x40
-    ld h, a
-
-    ld (hl), b
-    ld h, c
-    inc hl
+    inc l
     inc de
 
     ld a, (de)
@@ -240,7 +210,7 @@ draw_letter_loop_fast       ; de is font data, hl is screen
 
     ld (hl), b
     ld h, c
-    inc hl
+    inc l
     inc de
 
     ld a, (de)
@@ -270,7 +240,7 @@ draw_letter_loop_fast       ; de is font data, hl is screen
 
     ld (hl), b
     ld h, c
-    inc hl
+    inc l
     inc de
 
     ld a, (de)
@@ -300,7 +270,7 @@ draw_letter_loop_fast       ; de is font data, hl is screen
 
     ld (hl), b
     ld h, c
-    inc hl
+    inc l
     inc de
 
     ld a, (de)
@@ -330,7 +300,37 @@ draw_letter_loop_fast       ; de is font data, hl is screen
 
     ld (hl), b
     ld h, c
-    inc hl
+    inc l
+    inc de
+
+    ld a, (de)
+    ld (hl), a
+    ld b, a    
+    ld c, h
+
+    ld a, h
+    xor 0x40
+    ld h, a
+    
+    ld (hl), b
+    ld h, c
+    inc de
+    dec hl
+
+    call scr_next_line
+
+    ld a, (de)
+    ld (hl), a
+    ld b, a
+    ld c, h
+
+    ld a, h
+    xor 0x40
+    ld h, a
+
+    ld (hl), b
+    ld h, c
+    inc l
     inc de
 
     ld a, (de)

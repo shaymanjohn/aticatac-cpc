@@ -38,7 +38,7 @@ menu_text_loop
     ld h, (hl)
     ld l, a
 
-    ld bc, 14
+    ld bc, 6
     add hl, bc
     push hl
     call draw_logo
@@ -134,7 +134,7 @@ character_selected
     jr z, selected_wizard
 
     ld hl, sprite_bank_player_sl_1_1
-    ld (selected_sprite_frame), hl    
+    ld (selected_sprite_frame), hl
 
     ld hl, axe_data
     ld (weapon_type), hl
@@ -149,7 +149,7 @@ selected_knight
     ld (selected_sprite_frame), hl
 
     ld hl, sword_data
-    ld (weapon_type), hl    
+    ld (weapon_type), hl
 
     ld hl, knight_frames_table
     ld a, knight_height
@@ -161,7 +161,7 @@ selected_wizard
     ld (selected_sprite_frame), hl    
 
     ld hl, spell_data
-    ld (weapon_type), hl    
+    ld (weapon_type), hl
 
     ld hl, wizard_frames_table
     ld a, wizard_height
