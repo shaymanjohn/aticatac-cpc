@@ -59,7 +59,7 @@ screen_copy_loop
 	ld c, 0xc4					; set bank for sprites (0, 4, 2, 3)
 	call set_bank
 
-	ld hl, file_sprites			; sprites in bank 4
+	ld hl, file_heroes			; sprites in bank 4
 	ld de, 0x4000
 	call load_block
 
@@ -193,8 +193,8 @@ scr_next_line   	; hl = current screen address
 file_loading_screen
 	defb "LOADING.BIN", 0
 
-file_sprites
-	defb "SPRITES.BIN", 0
+file_heroes
+	defb "HEROES.BIN", 0
 
 file_room
 	defb "ROOMS.BIN", 0

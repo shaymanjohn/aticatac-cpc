@@ -48,6 +48,15 @@ copy_loop
     ld (save_player_address_c0), hl
     ld (save_player_address_80), hl
 
+    ld (sprite1 + 8), hl
+    ld (sprite1 + 10), hl
+    ld (sprite2 + 8), hl
+    ld (sprite2 + 10), hl
+    ld (sprite3 + 8), hl
+    ld (sprite3 + 10), hl
+    ld (boss + 8), hl
+    ld (boss + 10), hl
+
     ret
 
 draw_outline

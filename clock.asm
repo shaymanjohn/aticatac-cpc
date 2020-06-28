@@ -2,7 +2,7 @@ update_clock
     ld a, (game_time + 5)
     inc a
     ld (game_time + 5), a
-    cp ":"
+    cp "9" + 1
     ret nz
 
     ld a, "0"
@@ -20,7 +20,7 @@ update_clock
     ld a, (game_time + 2)
     inc a
     ld (game_time + 2), a    
-    cp ":"
+    cp "9" + 1
     ret nz
 
     ld a, "0"
@@ -29,7 +29,7 @@ update_clock
     ld a, (game_time + 1)
     inc a
     ld (game_time + 1), a    
-    cp ":"
+    cp "9" + 1
     ret nz
 
     ld a, "0"
@@ -38,7 +38,7 @@ update_clock
     ld a, (game_time)
     inc a
     ld (game_time), a    
-    cp ":"
+    cp "9" + 1
     ret nz
 
 ; times up - finish game

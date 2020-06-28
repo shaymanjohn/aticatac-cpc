@@ -9,6 +9,7 @@ player_width        equ 5       ; bytes
 knight_height       equ 20
 wizard_height       equ 21
 serf_height         equ 19
+boss_height         equ 24
 
 max_player_height       equ wizard_height
 average_player_height   equ 20

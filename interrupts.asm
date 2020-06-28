@@ -128,6 +128,11 @@ delay_mode1
 
 	ld hl, logo_pens2
 	call set_logo_pens2
+
+	call erase_weapon
+	call move_weapon
+	call draw_weapon
+
 	ret		
 
 interrupt_set_mode0
@@ -288,6 +293,46 @@ wait_a_bit
 	call background_off
     ret
 
+interrupt_sprite1
+	ld d, 0x55
+	call background_on
+
+	ld ix, sprite1
+	call do_sprite
+
+	call background_off
+	ret
+
+interrupt_sprite2
+	ld d, 0x55
+	call background_on
+
+	ld ix, sprite2
+	call do_sprite
+
+	call background_off
+	ret
+
+interrupt_sprite3
+	ld d, 0x55
+	call background_on
+
+	ld ix, sprite3
+	call do_sprite
+
+	call background_off
+	ret
+
+interrupt_boss
+	ld d, 0x55
+	call background_on
+
+	ld ix, boss
+	call do_sprite
+
+	call background_off
+	ret	
+
 background_on
     ld a, (show_vsync)
 	cp 1
@@ -325,10 +370,12 @@ menu_interrupts
 game_interrupts
 	dw interrupt_switch_screens_and_update
 	dw interrupt_keyboard_and_clock
+	dw interrupt_sprite1
+	dw interrupt_sprite2
 	dw interrupt_empty
+	; dw interrupt_sprite3
 	dw interrupt_empty
-	dw interrupt_empty
-	dw interrupt_empty
+	; dw interrupt_boss
 
 falling_interrupts
 	dw interrupt_switch_screens

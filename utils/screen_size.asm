@@ -18,8 +18,8 @@ set_crtc_vals
 
 crtc_vals
   defb 0x3f              ;; R0 - Horizontal Total
-  defb 40               ;; R1 - Horizontal Displayed  (32 chars wide)
-  defb 46               ;; R2 - Horizontal Sync Position (centralises screen)
+  defb 40 ;32 ;40               ;; R1 - Horizontal Displayed  (32 chars wide)
+  defb 46 ;s42 ;46               ;; R2 - Horizontal Sync Position (centralises screen)
   defb 0x86              ;; R3 - Horizontal and Vertical Sync Widths
   defb 38               ;; R4 - Vertical Total
   defb 0			          ;; R5 - Vertical Adjust

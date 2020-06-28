@@ -136,6 +136,9 @@ character_selected
     ld hl, sprite_bank_player_sl_1_1
     ld (selected_sprite_frame), hl    
 
+    ld hl, axe_data
+    ld (weapon_type), hl
+
     ld hl, serf_frames_table
     ld a, serf_height
     ld b, character_serf
@@ -145,6 +148,9 @@ selected_knight
     ld hl, sprite_bank_player_kl_1_1
     ld (selected_sprite_frame), hl
 
+    ld hl, sword_data
+    ld (weapon_type), hl    
+
     ld hl, knight_frames_table
     ld a, knight_height
     ld b, character_knight
@@ -153,6 +159,9 @@ selected_knight
 selected_wizard
     ld hl, sprite_bank_player_wl_1_1
     ld (selected_sprite_frame), hl    
+
+    ld hl, spell_data
+    ld (weapon_type), hl    
 
     ld hl, wizard_frames_table
     ld a, wizard_height

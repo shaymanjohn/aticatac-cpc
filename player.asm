@@ -17,7 +17,7 @@ draw_player
     ld b, 0
     add hl, bc
 
-    push hl
+    push hl                                ; save screen address
 
     ld a, (hidden_screen_base_address)
     cp 0xc0
@@ -29,8 +29,6 @@ save_address_c0
     ld (save_player_address_c0), hl
 
 saved_address
-    push bc
-
     ld b, 0
     ld a, (player_x)
     and 1
@@ -56,68 +54,57 @@ dplay1
     inc hl
     ld d, (hl)
 
-    pop bc
-    pop hl
+    pop hl                                  ; hl is screen, de is gfx
 
-    ex de, hl
     ld a, (hidden_screen_base_address)
     cp 0xc0
     jp z, save_frame_c0
-    ld (save_player_frame_80), hl        ; save this for erase later
-    jp saved_frame
+    ld (save_player_frame_80), de        ; save this for erase later
+    jp draw_player_entry2
 
 save_frame_c0
-    ld (save_player_frame_c0), hl
-
-saved_frame
-    ex de, hl
+    ld (save_player_frame_c0), de
 
 draw_player_entry2           
-    ld a, (actual_player_height)       
-    ld ixh, a                       ; hl as screen address, de as gfx
+    ld a, (actual_player_height)
+    ld b, a
 
 dplay2
     push hl
-
-    ex de, hl
     
     ld a, (de)              ; de is screen
     xor (hl)                ; hl is gfx
-    ld (de), a
+    ld (hl), a
     inc hl
     inc de
 
     ld a, (de)
     xor (hl)
-    ld (de), a
+    ld (hl), a
     inc hl    
     inc de
 
     ld a, (de)
     xor (hl)
-    ld (de), a
+    ld (hl), a
     inc hl    
     inc de
 
     ld a, (de)
     xor (hl)
-    ld (de), a
+    ld (hl), a
     inc hl    
     inc de
 
     ld a, (de)
     xor (hl)
-    ld (de), a
+    ld (hl), a
     inc de
-    inc hl
-
-    ex de, hl
 
     pop hl
     call scr_next_line
 
-    dec ixh
-    jp nz, dplay2
+    djnz dplay2
 
     ret
 
@@ -126,14 +113,12 @@ erase_player
     cp 0xc0
     jp nz, erase_with_80
 
-    ld hl, (save_player_frame_c0)
-    ex de, hl
+    ld de, (save_player_frame_c0)
     ld hl, (save_player_address_c0)
     jp erasex
 
 erase_with_80
-    ld hl, (save_player_frame_80)
-    ex de, hl
+    ld de, (save_player_frame_80)
     ld hl, (save_player_address_80)
     
 erasex

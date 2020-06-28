@@ -10,8 +10,10 @@ BANK
 org 0x4000
 sprite_bank_start
 include "graphics/player_sprites_gfx.asm"
+include "graphics/boss_gfx.asm"
+include "graphics/weapon_gfx.asm"
 sprite_bank_end
-save"sprites.bin",0x4000,sprite_bank_end-sprite_bank_start,DSK,"aticatac.dsk"
+save"heroes.bin",0x4000,sprite_bank_end-sprite_bank_start,DSK,"aticatac.dsk"
 
 BANK
 org 0x4000
