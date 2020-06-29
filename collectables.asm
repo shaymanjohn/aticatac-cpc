@@ -206,26 +206,26 @@ draw_full_pocket
 dfpl1
     ld a, (de)
     ld (hl), a
-    inc hl
+    inc l
     inc de
 
     ld a, (de)    
     ld (hl), a
-    inc hl
+    inc l
     inc de
 
     ld a, (de)
     ld (hl), a    
-    inc hl
+    inc l
     inc de
 
     ld a, (de)
     ld (hl), a
     inc de
 
-    dec hl
-    dec hl
-    dec hl
+    dec l
+    dec l
+    dec l
     call scr_next_line
     djnz dfpl1
 
@@ -237,11 +237,11 @@ draw_empty_pocket
 depl1
     push hl    
     ld (hl), e
-    inc hl
+    inc l
     ld (hl), e
-    inc hl
+    inc l
     ld (hl), e    
-    inc hl
+    inc l
     ld (hl), e    
     pop hl
     call scr_next_line
@@ -282,19 +282,19 @@ collectable_draw_loop
     ld a, (de)
     xor (hl)
     ld (hl), a
-    inc hl
+    inc l
     inc de
 
     ld a, (de)
     xor (hl)
     ld (hl), a
-    inc hl
+    inc l
     inc de
 
     ld a, (de)
     xor (hl)
     ld (hl), a
-    inc hl
+    inc l
     inc de
 
     ld a, (de)

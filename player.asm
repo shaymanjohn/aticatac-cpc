@@ -81,7 +81,7 @@ dplay2
     ld a, (de)
     xor (hl)
     ld (hl), a
-    inc l    
+    inc l
     inc de
 
     ld a, (de)

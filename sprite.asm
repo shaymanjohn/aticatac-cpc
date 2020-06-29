@@ -32,18 +32,15 @@ sprite_erase_loop
     push hl
 
     ld (hl), c
-    inc hl
+    inc l
 
     ld (hl), c
-    inc hl
+    inc l
 
     ld (hl), c
-    inc hl
+    inc l
 
     ld (hl), c
-    ; inc hl
-
-    ; ld (hl), c
 
     pop hl
     call scr_next_line
@@ -77,40 +74,43 @@ draw_sprite_entry2
     ld b, (ix + 3)
 
 sprite_draw_loop
-    push hl
+    ; push hl
 
     ld a, (de)
     ld (hl), a
-    inc hl
-    inc de
-
-    ld a, (de)
-    ld (hl), a
-    inc hl
+    inc l
     inc de
 
     ld a, (de)
     ld (hl), a
-    inc hl
+    inc l
     inc de
 
     ld a, (de)
     ld (hl), a
-    ; inc hl
+    inc l
+    inc de
+
+    ld a, (de)
+    ld (hl), a
     inc de
     inc de
 
-    ; ld a, (de)
-    ; ld (hl), a
-    ; inc de
+    dec l
+    dec l
+    dec l
 
-    pop hl
+    ; pop hl
     call scr_next_line
     djnz sprite_draw_loop
 
     ret
 
 move_sprite
+    ; ld a, (ix + 1)
+    ; inc a
+    ; and 0x7f
+    ; ld (ix + 1), a
     ret    
 
 ; sprite struct
@@ -123,7 +123,7 @@ move_sprite
 ; draw 1 gfx address, draw 2 gfx address
 
 sprite1
-    defb 0x10, 0x10
+    defb 0x20, 0x20
     defb 0x05, boss_height
     defb 0x00
     defw boss_dracula_0_0
@@ -132,7 +132,7 @@ sprite1
     defw 0x0000, 0x0000
 
 sprite2
-    defb 0x30, 0x10
+    defb 0x40, 0x20
     defb 0x05, boss_height
     defb 0x00
     defw boss_dracula_0_0
@@ -141,7 +141,7 @@ sprite2
     defw 0x0000, 0x0000
 
 sprite3
-    defb 0x30, 0x30
+    defb 0x40, 0x30
     defb 0x05, boss_height
     defb 0x00
     defw boss_dracula_0_0
@@ -150,7 +150,7 @@ sprite3
     defw 0x0000, 0x0000
 
 boss
-    defb 0x10, 0x30
+    defb 0x20, 0x30
     defb 0x05, boss_height
     defb 0x00
     defw boss_dracula_0_0

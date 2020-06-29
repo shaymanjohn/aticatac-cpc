@@ -5,8 +5,6 @@ draw_weapon
     ld a, (weapon_frame)
     srl a
     srl a
-    ; srl a
-    ; srl a
 
     add a
     ld c, a
@@ -83,13 +81,13 @@ erase_weapon_loop
     push hl
 
     ld (hl), c
-    inc hl
+    inc l
 
     ld (hl), c
-    inc hl
+    inc l
 
     ld (hl), c
-    inc hl
+    inc l
 
     ld (hl), c
 
@@ -105,20 +103,17 @@ move_weapon
     ld a, (weapon_frame)
     add b
     and 0x1f                     ; valid frames: 0 -> 31
-    ; and 0x7f
     ld (weapon_frame), a
 
     ret
 
 weapon2
     ld a, (de)
-    ; xor (hl)
     ld (hl), a
     inc l
     inc de
 
     ld a, (de)
-    ; xor (hl)
     ld (hl), a
     inc de
 
@@ -130,19 +125,16 @@ weapon2
 
 weapon3
     ld a, (de)
-    ; xor (hl)
     ld (hl), a
     inc l
     inc de
 
     ld a, (de)
-    ; xor (hl)
     ld (hl), a
     inc l
     inc de    
 
     ld a, (de)
-    ; xor (hl)
     ld (hl), a
     inc de
 
@@ -156,25 +148,21 @@ weapon3
 weapon4
     push hl
     ld a, (de)
-    ; xor (hl)
     ld (hl), a
     inc l
     inc de
 
     ld a, (de)
-    ; xor (hl)
     ld (hl), a
     inc l
     inc de
 
     ld a, (de)
-    ; xor (hl)
     ld (hl), a
     inc l
     inc de
 
     ld a, (de)
-    ; xor (hl)
     ld (hl), a
     inc de
 

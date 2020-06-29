@@ -47,8 +47,8 @@ show_text_loop
     pop hl
 
     inc ix
-    inc hl
-    inc hl
+    inc l
+    inc l
     jr show_text_loop
 
 show_text_fast
@@ -67,8 +67,8 @@ show_text_loop_fast2
 skip_colon
     inc ix
 
-    inc hl
-    inc hl
+    inc l
+    inc l
     jp show_text_loop_fast2
 
 ; IN: a = character to draw, hl = screen address
