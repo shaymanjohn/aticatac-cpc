@@ -1,6 +1,6 @@
 draw_weapon
-    ld bc, sprite_bank_config
-    out (c), c
+	ld a, sprite_bank_config
+	call set_memory_bank
 
     ld a, (weapon_frame)
     srl a

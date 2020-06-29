@@ -1,14 +1,13 @@
 do_sprite       ; ix points to sprite
-    ld bc, sprite_bank_config
-    out (c), c
+	ld a, sprite_bank_config
+	call set_memory_bank
 
     call erase_sprite
     call move_sprite
     call draw_sprite
 
-    ld bc, item_bank_config
-    out (c), c    
-    ret
+    ld a, item_bank_config
+    jp set_memory_bank
 
 erase_sprite
     ld a, (hidden_screen_base_address)
@@ -29,8 +28,6 @@ erase_sprite_start
     ld b, (ix + 3)
     ld c, 0
 sprite_erase_loop
-    push hl
-
     ld (hl), c
     inc l
 
@@ -42,7 +39,9 @@ sprite_erase_loop
 
     ld (hl), c
 
-    pop hl
+    dec l
+    dec l
+    dec l
     call scr_next_line
     djnz sprite_erase_loop
 
@@ -74,8 +73,6 @@ draw_sprite_entry2
     ld b, (ix + 3)
 
 sprite_draw_loop
-    ; push hl
-
     ld a, (de)
     ld (hl), a
     inc l
@@ -100,17 +97,12 @@ sprite_draw_loop
     dec l
     dec l
 
-    ; pop hl
     call scr_next_line
     djnz sprite_draw_loop
 
     ret
 
 move_sprite
-    ; ld a, (ix + 1)
-    ; inc a
-    ; and 0x7f
-    ; ld (ix + 1), a
     ret    
 
 ; sprite struct

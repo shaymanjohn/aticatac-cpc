@@ -1,3 +1,20 @@
+menu_tasks
+	call clear_heroes
+    call update_menu
+
+; switch to sprite bank
+	ld a, sprite_bank_config
+	call set_memory_bank
+
+    call update_heroes
+
+   	call erase_weapon
+	call move_weapon
+	call draw_weapon 
+
+    ld a, item_bank_config
+    jp set_memory_bank
+
 init_menu
     ld bc, room_bank_config
     out (c), c
@@ -48,8 +65,8 @@ menu_text_loop
     ld h, a
     call draw_logo
 
-    ld bc, item_bank_config     ; page room info in
-    out (c), c    
+    ld a, item_bank_config
+    call set_memory_bank
 
     call set_pens
 
@@ -249,7 +266,7 @@ play_menu_sound
     call play_sfx
     ret
 
-clear_character_selects
+clear_heroes
 	ld a, (player_select_x)
 	push af
 
@@ -269,7 +286,7 @@ clear_character_selects
 	ld (player_select_x), a
     ret
 
-update_character_selects    
+update_heroes
 	ld a, (player_select_x)
 	push af
 

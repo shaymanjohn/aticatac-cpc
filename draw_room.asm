@@ -3,19 +3,20 @@ draw_room
     ; sra a
     ; ld (scr_offset_value + 1), a
 
-    ld bc, room_bank_config
-    out (c), c
+    ld a, room_bank_config
+    call set_memory_bank
 
     call draw_outline
     call draw_items
 
-    ld bc, room_bank_config
-    out (c), c
+    ld a, room_bank_config
+    call set_memory_bank
+    
     call draw_collectables
     ; call draw_transients
 
-    ld bc, item_bank_config
-    out (c), c    
+    ld a, item_bank_config
+    call set_memory_bank
 
     call calc_dimensions
 

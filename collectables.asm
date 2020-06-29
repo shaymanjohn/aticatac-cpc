@@ -67,8 +67,9 @@ shuffle_pockets                 ; if nothing collected, a is 0xff, else b has co
     ld (ix + 0), 0xfe           ; take out of current room
 
     push de
-    ld bc, room_bank_config
-    out (c), c
+    
+    ld a, room_bank_config
+    call set_memory_bank
 
     call draw_this_collectable              ; and erase from both screens
     ld hl, (save_collectable_screen_loc)
@@ -107,8 +108,8 @@ pockets_done
     add 4
     ld (ix + 4), a
 
-    ld bc, room_bank_config
-    out (c), c
+    ld a, room_bank_config
+    call set_memory_bank
 
     call draw_this_collectable
     ld hl, (save_collectable_screen_loc)
@@ -135,8 +136,8 @@ draw_pockets
 
     push hl                 ; save screen address for later copy
 
-    ld bc, room_bank_config
-    out (c), c    
+    ld a, room_bank_config
+    call set_memory_bank
 
     push hl
     ld a, (pocket1)
@@ -153,8 +154,8 @@ draw_pockets
     ld a, (pocket3)
     call draw_this_pocket
 
-    ld bc, item_bank_config
-    out (c), c    
+    ld a, item_bank_config
+    call set_memory_bank
 
     pop hl
 

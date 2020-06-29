@@ -28,10 +28,10 @@ state_end           equ 0x03
 fall_time           equ 75
 
 ; memory banks
-item_bank_config    equ 0x7fc0      ; default bank
-sprite_bank_config  equ 0x7fc4
-room_bank_config    equ 0x7fc5
-sound_bank_config   equ 0x7fc6
+item_bank_config    equ 0xc0    ; 0x7fc0      ; default bank
+sprite_bank_config  equ 0xc4    ; 0x7fc4
+room_bank_config    equ 0xc5    ; 0x7fc5
+sound_bank_config   equ 0xc6    ; 0x7fc6
 
 ; player anim
 num_player_frames       equ 4
@@ -94,3 +94,9 @@ skeleton_room4      equ 0x55
 
 type_transient      equ 0x01
 type_mushroom       equ 0x02
+
+interrupt_notReady		equ -2
+interrupt_firstValue	equ -1
+
+sound_collect       equ 1
+sound_menu          equ 5

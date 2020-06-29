@@ -16,8 +16,8 @@ draw_items
     ex de, hl
 
 draw_item_loop
-    ld bc, room_bank_config     ; page room info in
-    out (c), c
+    ld a, room_bank_config
+    call set_memory_bank
 
     ld e, (hl)                  ; hl = pointer in items_per_room
     inc hl
@@ -28,9 +28,8 @@ draw_item_loop
     or e
     jr nz, continue_items       ; de = pointer in BackLocLists
 
-    ld bc, item_bank_config     ; page default bank back in
-    out (c), c 
-    ret   
+    ld a, item_bank_config
+    jp set_memory_bank
 
 continue_items
     ld ixh, d
@@ -70,10 +69,12 @@ draw_item                       ; ix + 0 = item, 3 = x, 4 = y, 5 = rotation
     and 0xfe
     ld (rotation), a
 
+    ld e, a
     push bc
-    ld bc, item_bank_config
-    out (c), c
+    ld a, item_bank_config
+    call set_memory_bank
     pop bc
+    ld a, e
 
     ld e, (hl)
     inc hl
@@ -305,8 +306,8 @@ explode_item                      ; IN: ix = item address in room_bank_item_list
     ld iyh, a                       ; save rotation value in iyh
 
     push bc
-    ld bc, item_bank_config
-    out (c), c
+    ld a, item_bank_config
+    call set_memory_bank
     pop bc
 
     ld a, (hl)
@@ -377,9 +378,8 @@ inc_list
     inc (hl)
 
 skip_save
-    ld bc, room_bank_config
-    out (c), c
-    ret
+    ld a, room_bank_config
+    jp set_memory_bank
 
 check_clock_is_door
     ld b, a

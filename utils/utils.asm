@@ -4,6 +4,7 @@ switch_screens
 	cp 50
 	jp nz, save_heartbeat
 	xor a
+
 save_heartbeat
 	ld (heartbeat), a
 
@@ -32,12 +33,24 @@ save_heartbeat
 
     ld hl, scr_addr_table_80
     ld (scr_addr_table), hl
-	    
+
+    xor a
+	ld (frame_ready), a
     ret    
     
 backbuffer_is_c0
     ld hl, scr_addr_table_c0
     ld (scr_addr_table), hl
+
+	xor a
+	ld (frame_ready), a    
+    ret
+
+set_memory_bank     ; a = bank
+    ld b, 0x7f
+    ld c, a
+    out (c), c
+    ld (memory_bank), a
     ret
 
 set_pens
@@ -83,10 +96,19 @@ set_logo_pens2
     out (c), d              ; pen colour
     ret
 
-visible_screen_base_address
-    defb 0xc0
-hidden_screen_base_address
-    defb 0x80
+clear_screens
+    ld hl, 0xc000
+    ld de, 0xc001
+    ld bc, 0x3fff
+    ld (hl), 0
+    ldir
+
+    ld hl, 0x8000
+    ld de, 0x8001
+    ld bc, 0x3fff
+    ld (hl), 0
+    ldir
+    ret    
 
 set_pens_off
     ld hl, pens
@@ -223,6 +245,11 @@ scr_addr_table_80
 scr_addr_table
     defs 2
 
+visible_screen_base_address
+    defb 0xc0
+hidden_screen_base_address
+    defb 0x80    
+
 sound_channel
     defb 0
 
@@ -255,3 +282,8 @@ logo_pens2
     defb hw_brightRed    
     defb hw_brightGreen
     defb hw_brightWhite    
+
+memory_bank
+    defb item_bank_config
+save_memory_bank
+    defb 0x00

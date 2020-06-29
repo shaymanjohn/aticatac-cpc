@@ -1,6 +1,6 @@
 init_sound_system
-	ld bc, sound_bank_config
-	out (c), c    
+	ld a, sound_bank_config
+	call set_memory_bank
 
     ld hl, Newsong_Start
     xor a
@@ -11,25 +11,26 @@ init_sound_system
     ret
 
 service_sound_system
-	ld bc, sound_bank_config
-	out (c), c
+	ld a, (memory_bank)
+	ld (save_memory_bank), a
 
-	call PLY_AKG_Play	
+	ld a, sound_bank_config
+	call set_memory_bank
 
-	ld bc, item_bank_config
-	out (c), c	
+	call PLY_AKG_Play
+
+    ld a, (save_memory_bank)
+    call set_memory_bank
 	ret    
 
 play_sfx                            ; a = sound effect number
-	ld bc, sound_bank_config
-	out (c), c
+    ld e, a
+	ld a, sound_bank_config
+	call set_memory_bank
+    ld a, e
 
     ld bc, 0x0001                   ; full volume, both channels
     call PLY_AKG_PlaySoundEffect
 
-	ld bc, item_bank_config         ; default page back in
-	out (c), c
-    ret
-
-sound_collect       equ 1
-sound_menu          equ 5
+    ld a, item_bank_config
+    jp set_memory_bank
