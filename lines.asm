@@ -6,8 +6,6 @@
 ;
 
 plot_line               ; IN: bc = start vertex, de = end vertex
-  ; di
-
   srl b
   srl d                   ; divide both x-coords by 2
 

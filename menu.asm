@@ -1,16 +1,25 @@
 menu_tasks
 	call clear_heroes
-    call update_menu
 
-; switch to sprite bank
 	ld a, sprite_bank_config
 	call set_memory_bank
 
+    BORDER_ON hw_brightRed
     call update_heroes
 
-   	call erase_weapon
-	call move_weapon
-	call draw_weapon 
+    ; BORDER_ON hw_brightWhite
+   	; call erase_weapon
+
+    ; BORDER_ON hw_green
+	; call move_weapon
+
+    ; BORDER_ON hw_red
+	; call draw_weapon 
+
+    BORDER_ON hw_skyBlue
+    call update_menu
+
+    BORDER_OFF
 
     ld a, item_bank_config
     jp set_memory_bank
@@ -255,10 +264,8 @@ check_fire2_on_menu
     ret z
 
 fired_on_menu
-    call set_pens_off
-    call wait_vsync
-
-    call show_game
+    ld b, state_game
+    call switch_game_state
     ret
 
 play_menu_sound

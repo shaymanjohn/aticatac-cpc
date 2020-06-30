@@ -52,10 +52,9 @@ show_text_loop
     jr show_text_loop
 
 show_text_fast
-show_text_loop_fast             ; no colour option, unrolled loop
     call calc_text_scr_address
 
-show_text_loop_fast2
+show_text_loop_fast
     ld a, (ix + 3)
     and a
     ret z
@@ -69,7 +68,7 @@ skip_colon
 
     inc l
     inc l
-    jp show_text_loop_fast2
+    jp show_text_loop_fast
 
 ; IN: a = character to draw, hl = screen address
 draw_letter
@@ -141,208 +140,84 @@ draw_letter_fast
 draw_letter_loop_fast       ; de is font data, hl is screen
     ld a, (de)
     ld (hl), a
-    ld b, a
-    ld c, h
-
-    ld a, h
-    xor 0x40
-    ld h, a
-
-    ld (hl), b
-    ld h, c
     inc l
     inc de
 
     ld a, (de)
     ld (hl), a
-    ld b, a    
-    ld c, h
-
-    ld a, h
-    xor 0x40
-    ld h, a
-
-    ld (hl), b
-    ld h, c
     inc de
-    dec hl
+    dec l
 
     call scr_next_line
 
     ld a, (de)
     ld (hl), a
-    ld b, a
-    ld c, h
-
-    ld a, h
-    xor 0x40
-    ld h, a
-
-    ld (hl), b
-    ld h, c
     inc l
     inc de
 
     ld a, (de)
     ld (hl), a
-    ld b, a    
-    ld c, h
-
-    ld a, h
-    xor 0x40
-    ld h, a
-    
-    ld (hl), b
-    ld h, c
     inc de
-    dec hl
+    dec l
 
     call scr_next_line
 
     ld a, (de)
     ld (hl), a
-    ld b, a
-    ld c, h
-
-    ld a, h
-    xor 0x40
-    ld h, a
-
-    ld (hl), b
-    ld h, c
     inc l
     inc de
 
     ld a, (de)
     ld (hl), a
-    ld b, a    
-    ld c, h
-
-    ld a, h
-    xor 0x40
-    ld h, a
-    
-    ld (hl), b
-    ld h, c
     inc de
-    dec hl
+    dec l
 
     call scr_next_line
 
     ld a, (de)
     ld (hl), a
-    ld b, a
-    ld c, h
-
-    ld a, h
-    xor 0x40
-    ld h, a
-
-    ld (hl), b
-    ld h, c
     inc l
     inc de
 
     ld a, (de)
     ld (hl), a
-    ld b, a    
-    ld c, h
-
-    ld a, h
-    xor 0x40
-    ld h, a
-    
-    ld (hl), b
-    ld h, c
     inc de
-    dec hl
+    dec l
 
     call scr_next_line
 
     ld a, (de)
     ld (hl), a
-    ld b, a
-    ld c, h
-
-    ld a, h
-    xor 0x40
-    ld h, a
-
-    ld (hl), b
-    ld h, c
     inc l
     inc de
 
     ld a, (de)
     ld (hl), a
-    ld b, a    
-    ld c, h
-
-    ld a, h
-    xor 0x40
-    ld h, a
-    
-    ld (hl), b
-    ld h, c
     inc de
-    dec hl
+    dec l
 
     call scr_next_line
 
     ld a, (de)
     ld (hl), a
-    ld b, a
-    ld c, h
-
-    ld a, h
-    xor 0x40
-    ld h, a
-
-    ld (hl), b
-    ld h, c
     inc l
     inc de
 
     ld a, (de)
     ld (hl), a
-    ld b, a    
-    ld c, h
-
-    ld a, h
-    xor 0x40
-    ld h, a
-    
-    ld (hl), b
-    ld h, c
     inc de
-    dec hl
+    dec l
 
     call scr_next_line
 
     ld a, (de)
     ld (hl), a
-    ld b, a
-    ld c, h
-
-    ld a, h
-    xor 0x40
-    ld h, a
-
-    ld (hl), b
-    ld h, c
     inc l
     inc de
 
     ld a, (de)
     ld (hl), a
-    ld b, a    
-    ld c, h
 
-    ld a, h
-    xor 0x40
-    ld h, a
-    
-    ld (hl), b
     ret    
 
 font_colour

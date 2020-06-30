@@ -76,10 +76,7 @@ select_game
     ld hl, font_0 - 256
     ld (font_type), hl
 
-    call reset_clock    
-
-    ld ix, time_text
-    call show_text_fast
+    call reset_clock
 
     ld ix, score_text
     call show_text_fast
@@ -90,7 +87,7 @@ select_game
     xor 0x40
     ld d, a
     ld e, 0
-    ld bc, 0x3fff
+    ld bc, 0x4000
     ldir
 
     call set_pens
@@ -115,6 +112,9 @@ select_falling
 
     ld a, -1
     ld (fall_index), a
+
+    ld a, sound_menu
+    call play_sfx    
 
     ret
 

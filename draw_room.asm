@@ -216,16 +216,16 @@ calc_dimensions
     ld (min_x), a
     ld a, 0x30
     add h
-    sub 3
+    sub 4
     ld (max_x), a
 
     ld a, 0x60
     sub l
-    sub 10
+    sub 9
     ld (min_y), a
     ld a, 0x60
     add l
-    sub 10    
+    sub 12
     ld (max_y), a
     ret
 

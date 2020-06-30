@@ -1,4 +1,7 @@
 update_clock
+    ld a, 2
+    ld (tell_time), a
+
     ld a, (game_time + 5)
     inc a
     ld (game_time + 5), a
@@ -44,7 +47,18 @@ update_clock
 ; times up - finish game
     ld b, state_menu
     call switch_game_state
+    ret
 
+show_clock
+    ld a, (tell_time)
+    and a
+    ret z
+
+    dec a
+    ld (tell_time), a
+
+    ld ix, time_text
+    call show_text_fast    
     ret
 
 reset_clock
@@ -55,4 +69,10 @@ reset_clock
 
     ld (game_time + 4), a
     ld (game_time + 5), a
+
+    ld a, 2
+    ld (tell_time), a    
     ret
+
+tell_time
+    defb 0x00

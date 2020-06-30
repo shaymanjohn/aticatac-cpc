@@ -6,6 +6,7 @@ include "utils/start.asm"
 include "utils/constants.asm"
 include "utils/screen_size.asm"
 include "utils/utils.asm"
+include "macros.asm"
 
 include "lines.asm"
 include "draw_room.asm"

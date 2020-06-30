@@ -12,14 +12,14 @@ init_sound_system
 
 service_sound_system
 	ld a, (memory_bank)
-	ld (save_memory_bank), a
+    push af
 
 	ld a, sound_bank_config
 	call set_memory_bank
 
 	call PLY_AKG_Play
 
-    ld a, (save_memory_bank)
+    pop af
     call set_memory_bank
 	ret    
 

@@ -210,6 +210,19 @@ scr_next_line   ; hl = current screen address
     ld h, a
     ret
 
+background_on
+    ld a, (show_vsync)
+	and a
+	ret nz
+
+	call set_border
+    ret
+
+background_off
+	ld d, hw_black
+	call set_border
+	ret    
+
 rotate_gfx          ; IN: IX = source, de = destination, b = width in bytes, c = height in rows.
     ld h, 0
     push bc
@@ -285,5 +298,3 @@ logo_pens2
 
 memory_bank
     defb item_bank_config
-save_memory_bank
-    defb 0x00

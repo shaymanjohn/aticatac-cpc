@@ -36,7 +36,7 @@ check_right_key
     jp z, check_up_key
     cp e
     jp nz, check_up_key
-    add 4
+    add 5
     
 check_up_key
     ld (player_collision_x), a

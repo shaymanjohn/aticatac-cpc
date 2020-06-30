@@ -25,7 +25,6 @@ state_menu          equ 0x00
 state_game          equ 0x01
 state_falling       equ 0x02
 state_end           equ 0x03
-fall_time           equ 75
 
 ; memory banks
 item_bank_config    equ 0xc0    ; 0x7fc0      ; default bank

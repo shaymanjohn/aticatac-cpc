@@ -1,18 +1,21 @@
 falling_tasks
+    BORDER_ON hw_pastelCyan
     call erase_previous_tunnels
+
+    BORDER_ON hw_pink
     call draw_new_tunnels
+
+    BORDER_ON hw_orange
+    call show_clock    
+
+    BORDER_OFF
 
 	ld a, (still_falling)
 	and a
 	ret nz
 
     di
-
     call clear_room
-   	ld a, (hidden_screen_base_address)
-    xor 0x40
-    call clear_room2
-
     call draw_room
 
     ld a, state_game
@@ -23,7 +26,7 @@ falling_tasks
 
 	ld a, interrupt_notReady
 	ld (interrupt_index), a
-	ei
+    ei
 
     ret
 
@@ -250,20 +253,10 @@ left_side_loop
     push hl
     ld de, 0x800
 
+repeat 7
     ld (hl), c
     add hl, de
-    ld (hl), c
-    add hl, de
-    ld (hl), c
-    add hl, de
-    ld (hl), c
-    add hl, de
-    ld (hl), c
-    add hl, de
-    ld (hl), c
-    add hl, de
-    ld (hl), c
-    add hl, de
+rend
     ld (hl), c
 
     pop hl
@@ -327,20 +320,10 @@ right_side_loop
     push hl
     ld de, 0x800
 
+repeat 7
     ld (hl), c
     add hl, de
-    ld (hl), c
-    add hl, de
-    ld (hl), c
-    add hl, de
-    ld (hl), c
-    add hl, de
-    ld (hl), c
-    add hl, de
-    ld (hl), c
-    add hl, de
-    ld (hl), c
-    add hl, de
+rend
     ld (hl), c
 
     pop hl
@@ -352,182 +335,24 @@ right_side_loop
     ret
 
 fast_plot_line
+repeat 64
     ld (hl), a
     inc l
-    ld (hl), a
-    inc l
-    ld (hl), a
-    inc l
-    ld (hl), a
-    inc l
-    ld (hl), a
-    inc l
-    ld (hl), a
-    inc l
-    ld (hl), a
-    inc l
-    ld (hl), a
-    inc l
-    ld (hl), a
-    inc l
-    ld (hl), a
-    inc l
-    ld (hl), a
-    inc l
-    ld (hl), a
-    inc l
-    ld (hl), a
-    inc l
-    ld (hl), a
-    inc l
-    ld (hl), a
-    inc l
-    ld (hl), a
-    inc l
-    ld (hl), a
-    inc l
-    ld (hl), a
-    inc l
-    ld (hl), a
-    inc l
-    ld (hl), a
-    inc l
-    ld (hl), a
-    inc l
-    ld (hl), a
-    inc l
-    ld (hl), a
-    inc l
-    ld (hl), a
-    inc l
-    ld (hl), a
-    inc l
-    ld (hl), a
-    inc l
-    ld (hl), a
-    inc l
-    ld (hl), a
-    inc l
-    ld (hl), a
-    inc l
-    ld (hl), a
-    inc l
-    ld (hl), a
-    inc l
-    ld (hl), a
-    inc l
-    ld (hl), a
-    inc l
-    ld (hl), a
-    inc l
-    ld (hl), a
-    inc l
-    ld (hl), a
-    inc l
-    ld (hl), a
-    inc l
-    ld (hl), a
-    inc l
-    ld (hl), a
-    inc l
-    ld (hl), a
-    inc l
-    ld (hl), a
-    inc l
-    ld (hl), a
-    inc l
-    ld (hl), a
-    inc l
-    ld (hl), a
-    inc l
-    ld (hl), a
-    inc l
-    ld (hl), a
-    inc l
-    ld (hl), a
-    inc l
-    ld (hl), a
-    inc l
-    ld (hl), a
-    inc l
-    ld (hl), a
-    inc l
-    ld (hl), a
-    inc l
-    ld (hl), a
-    inc l
-    ld (hl), a
-    inc l
-    ld (hl), a
-    inc l
-    ld (hl), a
-    inc l
-    ld (hl), a
-    inc l
-    ld (hl), a
-    inc l
-    ld (hl), a
-    inc l
-    ld (hl), a
-    inc l
-    ld (hl), a
-    inc l
-    ld (hl), a
-    inc l
-    ld (hl), a
-    inc l
-    ld (hl), a
-    inc l
-    ld (hl), a
-    nop
+rend
     ret
 end_fast_plot_line
 
-falling_sequence            ; each bit is a tunnel 
+falling_sequence            ; each bit set represents a tunnel 
     defb %00000001
     defb %00000010
     defb %00000100
     defb %00001001
 
+repeat 10
     defb %00010010
     defb %00100100
     defb %01001001
-
-    defb %00010010
-    defb %00100100
-    defb %01001001
-
-    defb %00010010
-    defb %00100100
-    defb %01001001
-
-    defb %00010010
-    defb %00100100
-    defb %01001001
-
-    defb %00010010
-    defb %00100100
-    defb %01001001
-
-    defb %00010010
-    defb %00100100
-    defb %01001001
-
-    defb %00010010
-    defb %00100100
-    defb %01001001
-
-    defb %00010010
-    defb %00100100
-    defb %01001001
-
-    defb %00010010
-    defb %00100100
-    defb %01001001
-
-    defb %00010010
-    defb %00100100
-    defb %01001001
+rend
     
     defb %00010010
     defb %00100100
@@ -539,7 +364,7 @@ falling_sequence            ; each bit is a tunnel
     defb %00000000
 end_falling_sequence
 
-tunnel_data     ; y and height both have to be multiples of 8
+tunnel_data     ; y and height both have to be multiples of 8 (apart from last row)
     defb 0x00, 0x08, 0x2e, 0xb0     ; x, y, width, height
     defb 0x04, 0x18, 0x26, 0x90     ; x, y, width, height
     defb 0x08, 0x28, 0x1e, 0x70     ; x, y, width, height

@@ -285,17 +285,16 @@ erase_player_select
 
     ld a, (player_select_x)
     dec a                           ; subtract 1 so we don't leave a trail when moving
+    dec a
     srl a
     ld c, a
     ld b, 0
     add hl, bc
 
-    ld b, max_player_height           ; hl as screen address, de as gfx
+    ld b, max_player_height           ; hl has screen address
     ld e, 0
 
-dplay_erase_fast_2
-    push hl
-    
+dplay_erase_fast_2    
     ld (hl), e
     inc l
     ld (hl), e
@@ -306,11 +305,17 @@ dplay_erase_fast_2
     inc l
     ld (hl), e
     inc l
+    ld (hl), e
+    inc l    
     ld (hl), e                      ; clear an extra column, again to stop moving trails
 
-    pop hl
+    dec l
+    dec l
+    dec l
+    dec l
+    dec l
+    dec l
     call scr_next_line
-
     djnz dplay_erase_fast_2
 
     ret

@@ -130,13 +130,12 @@ interrupt_switch_screens_and_mode0
 	ret
 
 interrupt_keyboard
-	ld d, 0x56
-	call background_on
+	BORDER_ON hw_brightMagenta
 
 	call read_keys
 	call poll_master_keys
 
-	call background_off	
+	BORDER_OFF
 	ret
 
 interrupt_clock
@@ -145,19 +144,6 @@ interrupt_clock
 	ret nz
 
 	call update_clock
-	ret	
-
-background_on
-    ld a, (show_vsync)
-	and a
-	ret nz
-
-	call set_border
-    ret
-
-background_off
-	ld d, hw_black
-	call set_border
 	ret
 
 interrupt_previous_stack
@@ -203,7 +189,7 @@ end_interrupts
 	dw interrupt_empty
 	dw interrupt_empty
 	dw interrupt_empty
-	dw interrupt_empty
+	dw service_sound_system
 
 heartbeat
 	defb 0x00

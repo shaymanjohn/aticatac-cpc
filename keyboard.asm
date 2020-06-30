@@ -138,11 +138,6 @@ show_menu
     call switch_game_state
     ret
 
-show_game
-    ld b, state_game
-    call switch_game_state
-    ret
-
 keyboard_state
     defs 10
 keys_pressed
