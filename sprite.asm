@@ -1,13 +1,12 @@
 do_sprite       ; ix points to sprite
-	ld a, sprite_bank_config
-	call set_memory_bank
+    SELECT_BANK sprite_bank_config
 
     call erase_sprite
     call move_sprite
     call draw_sprite
 
-    ld a, item_bank_config
-    jp set_memory_bank
+    SELECT_BANK item_bank_config
+    ret
 
 erase_sprite
     ld a, (hidden_screen_base_address)

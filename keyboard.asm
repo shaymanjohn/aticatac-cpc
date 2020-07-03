@@ -101,46 +101,41 @@ save_input_state
     ld a, (keys_fire2)
     ld c, a
 
-    ld a, b    
+    ld a, b
     ld (keys_pressed), a
 
+    and 0x0f
+    jp z, handle_fire
+    ld (fire_direction), a               ; save last actual keys pressed, for direction of fire
+
+handle_fire
+    ld a, b
     and 1 << player_fire2_bit       ; current fire2
     ld (keys_fire2), a
-    ret z
+    jp z, poll_master_keys
 
     cp c
-    ret nz
+    jp nz, poll_master_keys
 
     ld a, b
     res player_fire2_bit, a
     ld (keys_pressed), a
-    ret
 
 poll_master_keys
-    ld a, (keyboard_state + 4)          ; m for menu
-    bit 6, a
-    jr z, show_menu
-
     ld a, (keyboard_state + 6)          ; v for timing bars
     bit 7, a
-    jr z, toggle_sync_bars
+    ret nz
 
-    ret
-
-toggle_sync_bars
     ld a, (show_vsync)
     xor 1
     ld (show_vsync), a
 	ret
 
-show_menu
-    ld b, state_menu
-    call switch_game_state
-    ret
-
 keyboard_state
     defs 10
 keys_pressed
-    defb 0
+    defb 0x00   
+fire_direction
+    defb 0x00
 keys_fire2
-    defb 0
+    defb 0x00

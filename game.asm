@@ -1,6 +1,5 @@
 game_tasks
-    ld a, item_bank_config
-    call set_memory_bank
+    SELECT_BANK item_bank_config
 
     ld a, (room_changed)
 	and a
@@ -24,8 +23,7 @@ skip_room_change
     call show_clock
 
 ; switch to sprite bank
-	ld a, sprite_bank_config
-	call set_memory_bank
+    SELECT_BANK sprite_bank_config
 
     BORDER_ON hw_brightBlue
 
@@ -35,8 +33,7 @@ skip_room_change
 
     call draw_player
 
-    ld a, room_bank_config
-    call set_memory_bank
+    SELECT_BANK room_bank_config
 
     BORDER_ON hw_brightGreen
 
@@ -46,9 +43,13 @@ skip_room_change
 	bit player_fire2_bit, a
 	call nz, pickup_tapped
 
-    ld a, item_bank_config
-    call set_memory_bank
+    SELECT_BANK item_bank_config
 
     BORDER_OFF
 
-    ret
+    ld a, (keyboard_state + 4)          ; m for menu
+    bit 6, a
+    ret nz
+
+    ld b, state_menu
+    jp switch_game_state

@@ -8,10 +8,10 @@ update_chicken
 	ld b, a
 	ld a, max_energy
 	sub b
-	sra a
-	sra a
-	sra a
-	sra a
+	srl a
+	srl a
+	srl a
+	srl a
 	and a
 	ret z
 	ld hl, carcass + 1

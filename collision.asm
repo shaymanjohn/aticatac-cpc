@@ -281,8 +281,7 @@ get_new_door_dimensions             ; hl is pointer to item in room_bank_item_li
     ld de, item_bank_items
     add hl, de
 
-    ld a, item_bank_config
-    call set_memory_bank
+    SELECT_BANK item_bank_config
 
     ld a, (hl)
     inc hl
@@ -295,8 +294,7 @@ get_new_door_dimensions             ; hl is pointer to item in room_bank_item_li
     ld a, (hl)
     ld (this_item_height), a
 
-    ld a, room_bank_config
-    call set_memory_bank
+    SELECT_BANK room_bank_config
 
     pop bc
     pop hl

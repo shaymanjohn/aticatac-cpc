@@ -3,8 +3,7 @@ setup_game_data
 
 ; Create copy of hero sprites, rotated a mode 0 pixel to the left
 
-	ld a, sprite_bank_config
-	call set_memory_bank
+    SELECT_BANK sprite_bank_config
 
     ld ix, sprite_bank_player_kd_0_0
     ld de, sprite_bank_player_kd_0_1
@@ -27,8 +26,7 @@ setup_game_data
 ; Initialise Arkos player
     call init_sound_system
 
-    ld a, item_bank_config
-    call set_memory_bank
+    SELECT_BANK item_bank_config
 
 ; Some default values
     ld a, character_mid

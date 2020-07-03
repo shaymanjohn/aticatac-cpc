@@ -81,14 +81,13 @@ interrupt_switch_screens_and_mode1
 	ld bc, 0x7f00 + 128 + 4 + 8 + 1		; mode 1
 	out (c), c
 
-	call set_logo_pens
-
 	ld a, (frame_ready)
 	and a
 	ret z
-	
-	call switch_screens
-	ret	
+
+ssm1
+	call set_logo_pens
+	jp switch_screens
 
 interrupt_set_mode1_delayed
 	ld b, 180
@@ -100,40 +99,28 @@ delay_mode1
 	out (c), c
 
 	ld hl, logo_pens2
-	call set_logo_pens2
-	ret
+	jp set_logo_pens2
 
 interrupt_set_mode0_delayed
-	ld b, 248
+	ld b, 240
 delay_mode0
 	nop
 	nop
 	nop
 	djnz delay_mode0
 
+	call set_pens
+
 	ld bc, 0x7f00 + 128 + 4 + 8 + 0		; mode 0
 	out (c), c
 
 	ld hl, pens
-	call set_logo_pens2
-	ret	
-
-interrupt_switch_screens_and_mode0
-	ld bc, 0x7f00 + 128 + 4 + 8 + 0		; mode 0
-	out (c), c
-
-	ld a, (frame_ready)
-	and a
-	ret z
-
-	call switch_screens
-	ret
+	jp set_logo_pens2
 
 interrupt_keyboard
 	BORDER_ON hw_brightMagenta
 
 	call read_keys
-	call poll_master_keys
 
 	BORDER_OFF
 	ret
@@ -168,7 +155,7 @@ menu_interrupts
 	dw service_sound_system
 
 game_interrupts
-	dw interrupt_switch_screens_and_mode0
+	dw interrupt_switch_screens
 	dw interrupt_keyboard
 	dw interrupt_clock
 	dw interrupt_empty
@@ -192,5 +179,8 @@ end_interrupts
 	dw service_sound_system
 
 heartbeat
+	defb 0x00
+
+pen_delay
 	defb 0x00
 

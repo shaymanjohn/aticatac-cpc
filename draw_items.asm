@@ -16,8 +16,7 @@ draw_items
     ex de, hl
 
 draw_item_loop
-    ld a, room_bank_config
-    call set_memory_bank
+    SELECT_BANK room_bank_config
 
     ld e, (hl)                  ; hl = pointer in items_per_room
     inc hl
@@ -28,8 +27,8 @@ draw_item_loop
     or e
     jr nz, continue_items       ; de = pointer in BackLocLists
 
-    ld a, item_bank_config
-    jp set_memory_bank
+    SELECT_BANK item_bank_config
+    ret
 
 continue_items
     ld ixh, d
@@ -71,8 +70,7 @@ draw_item                       ; ix + 0 = item, 3 = x, 4 = y, 5 = rotation
 
     ld e, a
     push bc
-    ld a, item_bank_config
-    call set_memory_bank
+    SELECT_BANK item_bank_config
     pop bc
     ld a, e
 
@@ -306,8 +304,7 @@ explode_item                      ; IN: ix = item address in room_bank_item_list
     ld iyh, a                       ; save rotation value in iyh
 
     push bc
-    ld a, item_bank_config
-    call set_memory_bank
+    SELECT_BANK item_bank_config
     pop bc
 
     ld a, (hl)
@@ -378,8 +375,8 @@ inc_list
     inc (hl)
 
 skip_save
-    ld a, room_bank_config
-    jp set_memory_bank
+    SELECT_BANK room_bank_config
+    ret
 
 check_clock_is_door
     ld b, a

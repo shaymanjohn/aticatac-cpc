@@ -8,14 +8,21 @@ switch_screens
 save_heartbeat
 	ld (heartbeat), a
 
+    ld a, (pen_delay)
+    and a
+    jp z, skip_pen_delay
+    dec a
+    ld (pen_delay), a
+
+skip_pen_delay    
     ld a, (visible_screen_base_address)
     ld (hidden_screen_base_address), a
     ld e, a       
     xor 0x40
     ld (visible_screen_base_address), a
 
-    sra a
-    sra a
+    srl a
+    srl a
 
     ld bc, 0xbc0c				; select CRTC register 12
     out (c), c
@@ -46,14 +53,11 @@ backbuffer_is_c0
 	ld (frame_ready), a    
     ret
 
-set_memory_bank     ; a = bank
-    ld b, 0x7f
-    ld c, a
-    out (c), c
-    ld (memory_bank), a
-    ret
-
 set_pens
+    ld a, (pen_delay)
+    and a
+    ret nz
+
     ld hl, pens
     ld e, 16                    ; 16 pens for mode 0
     xor a					    ; initial pen index    
@@ -68,26 +72,30 @@ set_pens_loop
 
 set_logo_pens
     ld hl, logo_pens
-set_logo_pens2    
+set_logo_pens2
+    ld a, (pen_delay)
+    and a
+    ret nz
+
     xor a					    ; initial pen index
 
     ld bc, 0x7f00    
 
     ld d, (hl)		            ; d = ink for pen
-    out (c), a              ; pen number
-    out (c), d              ; pen colour
+    out (c), a                  ; pen number
+    out (c), d                  ; pen colour
     inc hl
     inc a					    ; increment pen index
 
     ld d, (hl)
-    out (c), a              ; pen number
-    out (c), d              ; pen colour
+    out (c), a                  ; pen number
+    out (c), d                  ; pen colour
     inc hl
     inc a	
 
     ld d, (hl)
-    out (c), a              ; pen number
-    out (c), d              ; pen colour
+    out (c), a                  ; pen number
+    out (c), d                  ; pen colour
     inc hl
     inc a	
 
@@ -209,19 +217,6 @@ scr_next_line   ; hl = current screen address
     adc a, 0xc0
     ld h, a
     ret
-
-background_on
-    ld a, (show_vsync)
-	and a
-	ret nz
-
-	call set_border
-    ret
-
-background_off
-	ld d, hw_black
-	call set_border
-	ret    
 
 rotate_gfx          ; IN: IX = source, de = destination, b = width in bytes, c = height in rows.
     ld h, 0

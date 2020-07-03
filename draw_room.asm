@@ -1,22 +1,15 @@
 draw_room
-    ; ld a, (hidden_screen_base_address)
-    ; sra a
-    ; ld (scr_offset_value + 1), a
-
-    ld a, room_bank_config
-    call set_memory_bank
+    SELECT_BANK room_bank_config
 
     call draw_outline
     call draw_items
 
-    ld a, room_bank_config
-    call set_memory_bank
+    SELECT_BANK room_bank_config
     
     call draw_collectables
     ; call draw_transients
 
-    ld a, item_bank_config
-    call set_memory_bank
+    SELECT_BANK item_bank_config
 
     call calc_dimensions
 
@@ -57,6 +50,8 @@ copy_loop
     ld (sprite3 + 10), hl
     ld (boss + 8), hl
     ld (boss + 10), hl
+
+    call set_pens
 
     ret
 

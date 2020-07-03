@@ -1,8 +1,7 @@
 menu_tasks
 	call clear_heroes
 
-	ld a, sprite_bank_config
-	call set_memory_bank
+    SELECT_BANK sprite_bank_config
 
     BORDER_ON hw_brightRed
     call update_heroes
@@ -21,12 +20,25 @@ menu_tasks
 
     BORDER_OFF
 
-    ld a, item_bank_config
-    jp set_memory_bank
+    SELECT_BANK item_bank_config
+
+; Start game?
+    ld a, (keys_pressed)
+    bit player_fire1_bit, a
+    jr nz, start_the_game
+
+    bit player_fire2_bit, a
+    ret z
+
+start_the_game
+    call wait_vsync
+    call set_pens_off
+
+    ld b, state_game
+    jp switch_game_state
 
 init_menu
-    ld bc, room_bank_config
-    out (c), c
+    SELECT_BANK room_bank_config
     
     ld hl, font_data_mode1
     ld (font_type), hl
@@ -74,8 +86,7 @@ menu_text_loop
     ld h, a
     call draw_logo
 
-    ld a, item_bank_config
-    call set_memory_bank
+    SELECT_BANK item_bank_config
 
     call set_pens
 
@@ -230,7 +241,7 @@ point_left
 
 menu_keyboard_right
     bit player_right_bit, a
-    jr z, check_fire_on_menu
+    ret z
 
     ld a, (player_select_x)
     cp character_right
@@ -253,19 +264,6 @@ point_right
     ld (characters_moving), a 
 
     call play_menu_sound
-    ret
-
-check_fire_on_menu
-    bit player_fire1_bit, a
-    jr nz, fired_on_menu
-
-check_fire2_on_menu
-    bit player_fire2_bit, a
-    ret z
-
-fired_on_menu
-    ld b, state_game
-    call switch_game_state
     ret
 
 play_menu_sound

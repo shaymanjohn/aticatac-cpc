@@ -5,13 +5,12 @@ draw_panel
     ld ix, chicken_item
     call draw_item
 
-	ld a, sprite_bank_config
-	call set_memory_bank
+    SELECT_BANK sprite_bank_config
 
     call show_lives
 
-    ld a, item_bank_config
-    jp set_memory_bank
+    SELECT_BANK item_bank_config
+    ret
 
 show_lives
     ld hl, 246

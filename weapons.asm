@@ -1,6 +1,5 @@
 draw_weapon
-	ld a, sprite_bank_config
-	call set_memory_bank
+    SELECT_BANK sprite_bank_config
 
     ld a, (weapon_frame)
     srl a

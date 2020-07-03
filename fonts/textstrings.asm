@@ -65,6 +65,13 @@ game_time
     defb "000:00"
     defb 0x00
 
+seconds_text
+    defb 0x3c, 0x41
+    defb 0xff
+seconds_time    
+    defb "0"
+    defb 0x00
+
 score_text
     defb 0x32, 0x51
     defb 0xff

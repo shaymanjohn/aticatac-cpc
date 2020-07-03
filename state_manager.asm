@@ -1,9 +1,10 @@
 switch_game_state
 	ld a, interrupt_notReady
-	ld (interrupt_index), a
+	ld (interrupt_index), a    
 
     ld a, b
     ld (current_game_state), a
+
     cp state_menu
     jp z, select_menu
 
@@ -25,16 +26,20 @@ select_menu
     call wait_vsync
     call set_pens_off
 
+    ld a, 0x08
+    ld (pen_delay), a
+
     call clear_screens
     call init_menu
+
     ret
 
 select_game
     ld hl, game_interrupts
     ld (current_interrupts), hl
 
-    call wait_vsync
-    call set_pens_off
+	ld bc, 0x7f00 + 128 + 4 + 8 + 0		; mode 0
+	out (c), c    
 
     call clear_screens
 
@@ -78,6 +83,9 @@ select_game
 
     call reset_clock
 
+    ld ix, time_text
+    call show_text_fast
+
     ld ix, score_text
     call show_text_fast
 
@@ -90,7 +98,7 @@ select_game
     ld bc, 0x4000
     ldir
 
-    call set_pens
+    ; call set_pens
     ret
 
 select_falling
