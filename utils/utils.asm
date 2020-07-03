@@ -10,11 +10,11 @@ save_heartbeat
 
     ld a, (pen_delay)
     and a
-    jp z, skip_pen_delay
+    jp z, switch_em
     dec a
     ld (pen_delay), a
 
-skip_pen_delay    
+switch_em    
     ld a, (visible_screen_base_address)
     ld (hidden_screen_base_address), a
     ld e, a       
@@ -34,23 +34,20 @@ skip_pen_delay
     ld b, 0xbd		    		; B = I/O address for CRTC register write
     out (c), 0
 
+	xor a
+	ld (frame_ready), a
+
     ld a, e                     ; e holds base address of hidden screen
     cp 0xc0        
     jp z, backbuffer_is_c0
 
     ld hl, scr_addr_table_80
     ld (scr_addr_table), hl
-
-    xor a
-	ld (frame_ready), a
     ret    
     
 backbuffer_is_c0
     ld hl, scr_addr_table_c0
     ld (scr_addr_table), hl
-
-	xor a
-	ld (frame_ready), a    
     ret
 
 set_pens

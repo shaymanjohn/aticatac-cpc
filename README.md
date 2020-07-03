@@ -13,11 +13,7 @@ Joystick button 2 or G to pick up items
 
 V to toggle interrupt timings in border
 
-N go to next screen
-
-B go back to previous screen
-
-M show menu (blank at the moment)
+M return to menu
 
 Thanks to this site for the info on the data formats:
 

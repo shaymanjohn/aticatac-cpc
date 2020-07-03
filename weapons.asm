@@ -196,6 +196,12 @@ weapon_frame_inc
     defb 0x01
 
 sword_data
+    defw sword_frame7, sword_frame6
+    defw sword_frame5, sword_frame4
+    defw sword_frame3, sword_frame2
+    defw sword_frame1, sword_frame0
+
+sword_datax
     defw sword_frame0, sword_frame1
     defw sword_frame2, sword_frame3
     defw sword_frame4, sword_frame5
@@ -208,6 +214,12 @@ spell_data
     defw spell_frame1, spell_frame0
 
 axe_data
+    defw axe_frame7, axe_frame6
+    defw axe_frame5, axe_frame4
+    defw axe_frame3, axe_frame2
+    defw axe_frame1, axe_frame0    
+
+axe_datax
     defw axe_frame0, axe_frame1
     defw axe_frame2, axe_frame3
     defw axe_frame4, axe_frame5

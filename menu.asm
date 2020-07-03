@@ -6,14 +6,14 @@ menu_tasks
     BORDER_ON hw_brightRed
     call update_heroes
 
-    ; BORDER_ON hw_brightWhite
-   	; call erase_weapon
+    BORDER_ON hw_brightWhite
+   	call erase_weapon
 
-    ; BORDER_ON hw_green
-	; call move_weapon
+    BORDER_ON hw_green
+	call move_weapon
 
-    ; BORDER_ON hw_red
-	; call draw_weapon 
+    BORDER_ON hw_red
+	call draw_weapon 
 
     BORDER_ON hw_skyBlue
     call update_menu
