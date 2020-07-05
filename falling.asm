@@ -6,7 +6,9 @@ falling_tasks
     call draw_new_tunnels
 
     BORDER_ON hw_orange
-    call show_clock    
+    ld a, (tell_time)
+    and a
+    call nz, show_clock
 
     BORDER_OFF
 

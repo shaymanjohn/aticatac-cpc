@@ -65,10 +65,7 @@ draw_weapon_entry2
     ld (gfx_call + 2), a
 
 gfx_call
-    call 0x0000             ; modified above
-
-    SELECT_BANK item_bank_config
-    ret
+    jp 0x0000             ; modified above
 
 erase_weapon
     ld a, (hidden_screen_base_address)
@@ -97,8 +94,7 @@ eraseweaponx
     and a
     ret nz
 
-    call weapon_off
-    ret
+    jp weapon_off
 
 kill_weapon_with_80
     ld (save_weapon_address_80), hl

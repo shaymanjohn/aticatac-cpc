@@ -74,8 +74,7 @@ interrupt_switch_screens
 	and a
 	ret z
 
-	call switch_screens
-	ret
+	jp switch_screens
 
 interrupt_switch_screens_and_mode1
 	ld bc, 0x7f00 + 128 + 4 + 8 + 1		; mode 1
@@ -130,8 +129,7 @@ interrupt_clock
 	cp 45
 	ret nz
 
-	call update_clock
-	ret
+	jp update_clock
 
 interrupt_previous_stack
 	dw 0

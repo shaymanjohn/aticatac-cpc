@@ -54,10 +54,6 @@ update_clock
     ret
 
 show_clock
-    ld a, (tell_time)
-    and a
-    ret z
-
     dec a
     ld (tell_time), a
 
