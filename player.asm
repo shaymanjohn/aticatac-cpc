@@ -154,6 +154,9 @@ can_move
     bit player_right_bit, c
     call nz, move_player_right
 
+    bit player_fire1_bit, c
+    call nz, fire_weapon
+
     ld a, d
     or e
     jp nz, inc_frame

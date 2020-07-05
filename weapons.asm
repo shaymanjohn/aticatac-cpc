@@ -1,5 +1,7 @@
 draw_weapon
-    SELECT_BANK sprite_bank_config
+    ld a, (weapon_active)
+    and a
+    ret z
 
     ld a, (weapon_frame)
     srl a
@@ -34,11 +36,26 @@ draw_weapon
     ld l, a
 
     ld a, (weapon_x)
+    srl a
     add (ix + 2)
     ld c, a
     ld b, 0
     add hl, bc              ; hl has screen address
 
+    ; save ix and hl here...
+    ld a, (hidden_screen_base_address)
+    cp 0xc0
+    jp nz, store_weapon_with_80
+
+    ld (save_weapon_address_c0), hl
+    ld (save_weapon_pointer_c0), ix
+    jp draw_weapon_entry2
+
+store_weapon_with_80
+    ld (save_weapon_address_80), hl
+    ld (save_weapon_pointer_80), ix
+
+draw_weapon_entry2
     ld de, (ix + 4)         ; de has graphics
     ld b, (ix + 1)          ; b has height
 
@@ -56,47 +73,122 @@ gfx_call
     ret
 
 erase_weapon
-    ld a, (weapon_y)
+    ld a, (hidden_screen_base_address)
+    cp 0xc0
+    jp nz, erase_weapon_with_80
+
+    ld hl, (save_weapon_address_c0)
+    ld de, (save_weapon_pointer_c0)
+    jp eraseweaponx
+
+erase_weapon_with_80
+    ld hl, (save_weapon_address_80)
+    ld de, (save_weapon_pointer_80)
+    
+eraseweaponx
+    ld a, h
+    or l
+    ret z                       ; stop here if not yet set
+
+    ld ixh, d
+    ld ixl, e
+
+    call draw_weapon_entry2
+
+    ld a, (weapon_active)
+    and a
+    ret nz
+
+    call weapon_off
+    ret
+
+kill_weapon_with_80
+    ld (save_weapon_address_80), hl
+    ret
+
+weapon_off
+    xor a
+    ld (weapon_active), a
+
+    ld hl, 0
+    ld (save_weapon_address_c0), hl
+    ld (save_weapon_address_80), hl
+    ret
+
+fire_weapon
+    ld a, (weapon_active)
+    and a
+    ret nz
+
+    ld a, (fire_delay)
+    and a    
+    jp z, can_fire
     dec a
-    ld l, a
-    ld h, 0
-    add hl, hl
-    ld de, (scr_addr_table)
-    add hl, de
+    ld (fire_delay), a
 
-    ld a, (hl)
-    inc hl
-    ld h, (hl)
-    ld l, a
+    ret
 
-    ld a, (weapon_x)
-    ld c, a
-    ld b, 0
-    add hl, bc              ; hl has screen address
-    ld c, 0x00
-    ld b, 0x11
+can_fire
+    ld a, fire_decay
+    ld (weapon_active), a
 
-erase_weapon_loop
-    push hl
+    ld a, (player_x)
+    ld (weapon_x), a
+    
+    ld a, (player_y)
+    ld (weapon_y), a
 
-    ld (hl), c
-    inc l
+    ld a, (fire_direction)
+    ld de, 0x0000
 
-    ld (hl), c
-    inc l
+    bit player_left_bit, a
+    jp z, fire_right
+    ld d, -fire_horizontal_speed
 
-    ld (hl), c
-    inc l
+fire_right
+    bit player_right_bit, a
+    jp z, fire_down
+    ld d, fire_horizontal_speed
 
-    ld (hl), c
+fire_down
+    bit player_down_bit, a
+    jp z, fire_up
+    ld e, fire_vertical_speed
 
-    pop hl
-    call scr_next_line
-    djnz erase_weapon_loop
+fire_up
+    bit player_up_bit, a
+    jp z, fire_checked
+    ld e, -fire_vertical_speed
+
+fire_checked
+    ld a, d
+    or e
+    jp nz, something_fired
+    ld d, fire_horizontal_speed
+
+something_fired 
+    ld a, d
+    ld (weapon_x_inc), a
+    ld a, e
+    ld (weapon_y_inc), a
 
     ret
 
 move_weapon
+    ld a, (weapon_active)
+    and a
+    ret z
+
+    dec a
+    ld (weapon_active), a
+
+    and a
+    jp nz, move_weapon_2
+
+    ld a, 2
+    ld (fire_delay), a
+
+move_weapon_2
     ld a, (weapon_frame_inc)
     ld b, a
     ld a, (weapon_frame)
@@ -104,15 +196,68 @@ move_weapon
     and 0x1f                     ; valid frames: 0 -> 31
     ld (weapon_frame), a
 
+    ld a, (weapon_x_inc)
+    ld b, a
+    ld a, (weapon_x)
+    add b
+    ld (weapon_x), a
+    ld b, a                     ; b has updated weapon_x
+
+    ld a, (weapon_y_inc)
+    ld c, a
+    ld a, (weapon_y)
+    add c
+    ld (weapon_y), a
+    ld c, a                     ; c has updated weapon_y    
+
+    ld a, (min_x)
+    ld d, a
+    cp b
+    jp nc, bounce_weapon_x
+
+    ld a, (max_x)
+    ld d, a
+    cp b
+    jp nc, check_weapon_y
+
+bounce_weapon_x
+    ld a, (weapon_x_inc)
+    neg
+    ld (weapon_x_inc), a
+
+    ld a, d
+    ld (weapon_x), a
+    
+check_weapon_y
+    ld a, (min_y)
+    ld d, a
+    cp c
+    jp nc, bounce_weapon_y
+
+    ld a, (max_y)
+    ld d, a
+    cp c
+    ret nc
+
+bounce_weapon_y
+    ld a, (weapon_y_inc)
+    neg
+    ld (weapon_y_inc), a
+    
+    ld a, d
+    ld (weapon_y), a
+
     ret
 
 weapon2
     ld a, (de)
+    xor (hl)
     ld (hl), a
     inc l
     inc de
 
     ld a, (de)
+    xor (hl)    
     ld (hl), a
     inc de
 
@@ -124,16 +269,19 @@ weapon2
 
 weapon3
     ld a, (de)
+    xor (hl)    
     ld (hl), a
     inc l
     inc de
 
     ld a, (de)
+    xor (hl)    
     ld (hl), a
     inc l
     inc de    
 
     ld a, (de)
+    xor (hl)    
     ld (hl), a
     inc de
 
@@ -145,27 +293,36 @@ weapon3
     ret
 
 weapon4
-    push hl
+    ld c, h
+
     ld a, (de)
+    xor (hl)    
     ld (hl), a
     inc l
     inc de
 
     ld a, (de)
+    xor (hl)    
     ld (hl), a
     inc l
     inc de
 
     ld a, (de)
+    xor (hl)    
     ld (hl), a
     inc l
     inc de
 
     ld a, (de)
+    xor (hl)    
     ld (hl), a
     inc de
 
-    pop hl
+    dec l
+    dec l
+    dec l
+    ld h, c
+
     call scr_next_line
     djnz weapon4
 
@@ -180,7 +337,7 @@ weapon_x
 weapon_y
     defb 0x80
 
-weapon_time
+weapon_active
     defb 0x00
 
 weapon_x_inc
@@ -194,6 +351,18 @@ weapon_frame
 
 weapon_frame_inc
     defb 0x01
+
+fire_delay
+    defb 0x00
+
+save_weapon_address_c0
+    defw 0x00
+save_weapon_pointer_c0
+    defw 0x00
+save_weapon_address_80
+    defw 0x00
+save_weapon_pointer_80
+    defw 0x00
 
 sword_data
     defw sword_frame7, sword_frame6

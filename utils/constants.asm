@@ -16,6 +16,11 @@ average_player_height   equ 20
 
 player_horiz_speed  equ 1
 player_vert_speed   equ 2
+
+fire_horizontal_speed equ 2
+fire_vertical_speed   equ 3
+fire_decay            equ 100
+
 max_energy          equ 240
 num_rows            equ 192     ; same height as spectrum
 num_rooms           equ (end_room_bank - room_bank_RoomInfo) / 2

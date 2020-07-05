@@ -24,19 +24,25 @@ skip_room_change
 
 ; switch to sprite bank
     SELECT_BANK sprite_bank_config
-
     BORDER_ON hw_brightBlue
-
 	call erase_player
 
     BORDER_ON hw_brightRed
-
     call draw_player
 
-    SELECT_BANK room_bank_config
-
+    SELECT_BANK sprite_bank_config
     BORDER_ON hw_brightGreen
+    call erase_weapon
 
+    BORDER_ON hw_skyBlue
+    call move_weapon    
+
+    SELECT_BANK sprite_bank_config
+    BORDER_ON hw_pastelCyan
+    call draw_weapon
+
+    SELECT_BANK room_bank_config
+    BORDER_ON hw_brightGreen
 	call check_doors
 
 	ld a, (keys_pressed)
@@ -44,7 +50,6 @@ skip_room_change
 	call nz, pickup_tapped
 
     SELECT_BANK item_bank_config
-
     BORDER_OFF
 
     ld a, (keyboard_state + 4)          ; m for menu
