@@ -10,6 +10,19 @@ game_tasks
     and a
     call nz, show_clock
 
+    BORDER_ON hw_pink
+    call update_chicken
+
+    BORDER_ON hw_brightWhite
+    ld a, (do_pockets)
+    and a
+    jp z, no_pockets
+    
+    dec a
+    ld (do_pockets), a
+    call draw_pockets
+
+no_pockets
     BORDER_ON hw_brightYellow
     SELECT_BANK sprite_bank_config    
     call move_player
@@ -20,6 +33,10 @@ game_tasks
     call erase_weapon
     call move_weapon
     call draw_weapon
+
+    BORDER_ON hw_brightBlue
+    SELECT_BANK sprite_bank_config
+    call do_sprites
 
     BORDER_ON hw_brightGreen
     SELECT_BANK room_bank_config
@@ -39,6 +56,16 @@ game_tasks
     ld b, state_menu
     jp switch_game_state
 
+do_sprites
+    ld ix, sprite1
+    call do_sprite
+
+    ld ix, sprite2
+    call do_sprite
+
+    ld ix, sprite3
+    jp do_sprite
+
 room_has_changed
     di
     call clear_room 
@@ -49,3 +76,4 @@ room_has_changed
     ei
     
     ret
+    

@@ -48,8 +48,6 @@ copy_loop
     ld (sprite2 + 10), hl
     ld (sprite3 + 8), hl
     ld (sprite3 + 10), hl
-    ld (boss + 8), hl
-    ld (boss + 10), hl
 
     call set_pens
 

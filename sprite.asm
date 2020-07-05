@@ -1,11 +1,8 @@
 do_sprite       ; ix points to sprite
-    SELECT_BANK sprite_bank_config
-
     call erase_sprite
     call move_sprite
     call draw_sprite
 
-    SELECT_BANK item_bank_config
     ret
 
 erase_sprite
@@ -24,27 +21,7 @@ erase_sprite_start
     or l
     ret z                       ; stop here if not yet set
 
-    ld b, (ix + 3)
-    ld c, 0
-sprite_erase_loop
-    ld (hl), c
-    inc l
-
-    ld (hl), c
-    inc l
-
-    ld (hl), c
-    inc l
-
-    ld (hl), c
-
-    dec l
-    dec l
-    dec l
-    call scr_next_line
-    djnz sprite_erase_loop
-
-    ret
+    jp draw_sprite_entry2
 
 draw_sprite
     ld l, (ix + 1)
@@ -64,7 +41,13 @@ draw_sprite
     ld b, 0
     add hl, bc
 
+    ld a, (hidden_screen_base_address)
+    cp 0xc0
+    jp nz, sprite_save_with_80
     ld (ix + 8), hl 
+    jp draw_sprite_entry2
+
+sprite_save_with_80
     ld (ix + 10), hl
 
 draw_sprite_entry2
@@ -73,23 +56,28 @@ draw_sprite_entry2
 
 sprite_draw_loop
     ld a, (de)
+    xor (hl)
     ld (hl), a
     inc l
     inc de
 
     ld a, (de)
+    xor (hl)    
     ld (hl), a
     inc l
     inc de
 
     ld a, (de)
+    xor (hl)    
     ld (hl), a
     inc l
     inc de
 
     ld a, (de)
+    xor (hl)    
     ld (hl), a
     inc de
+    
     inc de
 
     dec l
@@ -102,6 +90,13 @@ sprite_draw_loop
     ret
 
 move_sprite
+    ld a, (ix + 1)
+    inc a
+    ld (ix + 1), a
+    cp 170
+    ret nz
+    xor a
+    ld (ix + 1), a
     ret    
 
 ; sprite struct
@@ -110,8 +105,8 @@ move_sprite
 ; frame
 ; sprite gfx base
 ; state: unformed, forming, alive, dying, dead
-; draw 1 scr address, draw 2 scr address
-; draw 1 gfx address, draw 2 gfx address
+; draw 1 scr address
+; draw 2 scr address
 
 sprite1
     defb 0x20, 0x20
@@ -119,32 +114,24 @@ sprite1
     defb 0x00
     defw boss_dracula_0_0
     defb 0x02
-    defw 0x0000, 0x0000
-    defw 0x0000, 0x0000
+    defw 0x0000
+    defw 0x0000
 
 sprite2
-    defb 0x40, 0x20
+    defb 0x30, 0x38
     defb 0x05, boss_height
     defb 0x00
     defw boss_dracula_0_0
     defb 0x02
-    defw 0x0000, 0x0000
-    defw 0x0000, 0x0000
+    defw 0x0000
+    defw 0x0000
 
 sprite3
-    defb 0x40, 0x30
+    defb 0x40, 0x50
     defb 0x05, boss_height
     defb 0x00
     defw boss_dracula_0_0
     defb 0x02
-    defw 0x0000, 0x0000
-    defw 0x0000, 0x0000
+    defw 0x0000
+    defw 0x0000
 
-boss
-    defb 0x20, 0x30
-    defb 0x05, boss_height
-    defb 0x00
-    defw boss_dracula_0_0
-    defb 0x02
-    defw 0x0000, 0x0000
-    defw 0x0000, 0x0000

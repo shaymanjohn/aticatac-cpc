@@ -419,7 +419,7 @@ player_frame
 num_lives
     defb 0
 
-energy
+hunger_index
     defb 0
 
 game_over

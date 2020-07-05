@@ -73,8 +73,8 @@ select_game
     ld a, 3
     ld (num_lives), a
 
-    ld a, max_energy
-    ld (energy), a
+    xor a
+    ld (hunger_index), a
 
     call draw_panel
 

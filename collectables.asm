@@ -14,9 +14,7 @@ collectable_loop
 
     ld de, 8
     add ix, de
-    jr collectable_loop
-
-    ret
+    jp collectable_loop
 
 pickup_tapped
     ld a, sound_collect
@@ -31,7 +29,7 @@ pickup_tapped
 pickup_loop
     ld a, (ix + 0)
     cp 0xff
-    jr z, shuffle_pockets
+    jp z, shuffle_pockets
 
     ld d, 0
     cp c                        ; can only pick things up in this room
@@ -39,12 +37,12 @@ pickup_loop
     
     ld a, d
     and a                       ; stop now if colllected something
-    jr nz, shuffle_pockets
+    jp nz, shuffle_pockets
 
     inc b                       ; b holds collectable item index
     ld de, 8
     add ix, de
-    jr pickup_loop
+    jp pickup_loop
 
 shuffle_pockets                 ; if nothing collected, a is 0xff, else b has collected item index
     ld c, a
@@ -60,7 +58,7 @@ shuffle_pockets                 ; if nothing collected, a is 0xff, else b has co
 
     ld a, c
     cp 0xff
-    jr z, pockets_done
+    jp z, pockets_done
 
     ld a, b
     ld (pocket1), a
@@ -81,7 +79,7 @@ shuffle_pockets                 ; if nothing collected, a is 0xff, else b has co
 pockets_done
     ld a, e                     ; drop an item?
     cp 0xff
-    jr z, no_drop
+    jp z, no_drop
 
     ; move item with this index into current room and draw it on both screens...
     ld l, a
@@ -116,8 +114,9 @@ pockets_done
     ld h, a
     call draw_this_collectable2
 
-no_drop    
-    call draw_pockets
+no_drop
+    ld a, 2
+    ld (do_pockets), a
     ret
 
 draw_pockets
@@ -131,8 +130,6 @@ draw_pockets
     ld l, a
     ld de, 0x0032           ; first pocket item x
     add hl, de
-
-    push hl                 ; save screen address for later copy
 
     SELECT_BANK room_bank_config
 
@@ -149,38 +146,11 @@ draw_pockets
     ld bc, 4
     add hl, bc
     ld a, (pocket3)
-    call draw_this_pocket
-
-    SELECT_BANK item_bank_config
-
-    pop hl
-
-    ld a, 16            ; finally copy pocket to other screen
-copy_pocket_loop    
-    push af
-    push hl
-
-    ld a, h
-    xor 0x40
-    ld d, a
-    ld e, l
-    ld bc, 12
-    ldir
-
-    pop hl
-    call scr_next_line
-    pop af    
-    dec a
-    jr nz, copy_pocket_loop
-
-    ret
 
 draw_this_pocket            ; hl = screen address, a = collectable item index
     cp 0xff
-    jr nz, draw_full_pocket
-
-    call draw_empty_pocket
-    ret
+    jp nz, draw_full_pocket
+    jp draw_empty_pocket
 
 draw_full_pocket
     push hl
@@ -232,7 +202,6 @@ draw_empty_pocket
     ld b, 16
     ld e, 0x00
 depl1
-    push hl    
     ld (hl), e
     inc l
     ld (hl), e
@@ -240,7 +209,10 @@ depl1
     ld (hl), e    
     inc l
     ld (hl), e    
-    pop hl
+    
+    dec l
+    dec l
+    dec l
     call scr_next_line
     djnz depl1
 
@@ -316,12 +288,12 @@ collect_this_collectable        ; compare centers and a tolerance
     sub e
 
     bit 7, a
-    jr z, not_neg_x
+    jp z, not_neg_x
     neg
 
 not_neg_x
     cp 4
-    jr nc, cant_collect
+    jp nc, cant_collect
 
     ld a, (player_y)
     add average_player_height / 2    
@@ -331,17 +303,20 @@ not_neg_x
     sub e
 
     bit 7, a
-    jr z, not_neg_y
+    jp z, not_neg_y
     neg
 
 not_neg_y
     cp 8
-    jr nc, cant_collect
+    jp nc, cant_collect
 
     ld d, 1
 
 cant_collect
     ret
+
+do_pockets
+    defb 0x00
 
 pocket1
     defb 0xff
