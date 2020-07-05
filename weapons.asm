@@ -42,7 +42,7 @@ draw_weapon
     ld b, 0
     add hl, bc              ; hl has screen address
 
-    ; save ix and hl here...
+    ; save ix and hl here so we don't need to calc again when erasing
     ld a, (hidden_screen_base_address)
     cp 0xc0
     jp nz, store_weapon_with_80
@@ -59,7 +59,7 @@ draw_weapon_entry2
     ld de, (ix + 4)         ; de has graphics
     ld b, (ix + 1)          ; b has height
 
-    ld a, (ix + 6)
+    ld a, (ix + 6)          ; call specific draw routine
     ld (gfx_call + 1), a
     ld a, (ix + 7)
     ld (gfx_call + 2), a
@@ -67,9 +67,7 @@ draw_weapon_entry2
 gfx_call
     call 0x0000             ; modified above
 
-    ld bc, item_bank_config
-    out (c), c    
-
+    SELECT_BANK item_bank_config
     ret
 
 erase_weapon
