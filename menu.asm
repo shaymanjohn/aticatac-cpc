@@ -22,6 +22,9 @@ menu_tasks
     ret z
 
 start_the_game
+    ld a, r
+    ld (random_seed), a
+
     call wait_vsync
     call set_pens_off
 

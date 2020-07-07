@@ -94,16 +94,17 @@ eraseweaponx
     and a
     ret nz
 
-    jp weapon_off
+    jp reset_weapon2
 
 kill_weapon_with_80
     ld (save_weapon_address_80), hl
     ret
 
-weapon_off
+reset_weapon
     xor a
     ld (weapon_active), a
 
+reset_weapon2
     ld hl, 0
     ld (save_weapon_address_c0), hl
     ld (save_weapon_address_80), hl

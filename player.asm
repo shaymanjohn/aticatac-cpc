@@ -387,6 +387,12 @@ dplay_fast_2
 
     djnz dplay_fast_2
 
+    ret
+
+reset_player
+    ld hl, 0
+    ld (save_player_address_c0), hl
+    ld (save_player_address_80), hl
     ret    
 
 player_character

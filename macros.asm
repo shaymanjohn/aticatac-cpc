@@ -24,3 +24,18 @@ macro SELECT_BANK bank_num
     ld a, c
     ld (memory_bank), a
 mend
+
+macro RANDOM_IN_A       ; from http://www.z80.info/pseudo-random.txt
+    ld a, (random_seed)
+    ld b, a 
+
+    rrca                ; multiply by 32
+    rrca
+    rrca
+    xor 0x1f
+
+    add a, b
+    sbc a, 255          ; carry
+
+    ld (random_seed), a
+mend

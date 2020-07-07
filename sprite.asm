@@ -97,7 +97,19 @@ move_sprite
     ret nz
     xor a
     ld (ix + 1), a
-    ret    
+    ret
+
+reset_sprites
+    ld hl, 0
+    ld (sprite1 + 8), hl
+    ld (sprite1 + 10), hl
+
+    ld (sprite2 + 8), hl
+    ld (sprite2 + 10), hl
+
+    ld (sprite3 + 8), hl
+    ld (sprite3 + 10), hl
+    ret
 
 ; sprite struct
 ; x, y
@@ -134,4 +146,8 @@ sprite3
     defb 0x02
     defw 0x0000
     defw 0x0000
+sprite_end
+
+old_room_sprites
+    defs sprite_end - sprite1
 

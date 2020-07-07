@@ -161,9 +161,7 @@ td1
     add hl, bc              ; hl now points to item to move to 1 = room number, 3 = x, 4 = y, 5 = rotation, etc
     inc hl
     ld a, (hl)              ; move to room this item is in
-    ld (room_number), a   
-
-    call weapon_off
+    ld (room_number), a
     
     ld b, state_falling
     call switch_game_state
@@ -185,13 +183,12 @@ collide1
 
     call get_new_door_dimensions
 
+    ld a, (room_number)
+    ld (last_room_number), a
+
     inc hl
     ld a, (hl)              ; move to room this item is in
     ld (room_number), a
-
-    push hl
-    call weapon_off
-    pop hl
     
     ld a, 1
     ld (room_changed), a
@@ -305,3 +302,4 @@ get_new_door_dimensions             ; hl is pointer to item in room_bank_item_li
     pop bc
     pop hl
     ret
+    

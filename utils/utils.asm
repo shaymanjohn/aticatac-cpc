@@ -255,8 +255,8 @@ visible_screen_base_address
 hidden_screen_base_address
     defb 0x80    
 
-sound_channel
-    defb 0
+random_seed
+    defb 0x00
 
 pens
     defb hw_black

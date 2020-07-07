@@ -38,19 +38,18 @@ copy_loop
     xor a
     ld (room_changed), a
 
-    ld hl, 0
-    ld (save_player_address_c0), hl
-    ld (save_player_address_80), hl
+    ld a, (last_room_number)
+    ld b, a
+    ld a, (room_number)
+    cp b
+    jr nz, not_gone_back
 
-    ld (sprite1 + 8), hl
-    ld (sprite1 + 10), hl
-    ld (sprite2 + 8), hl
-    ld (sprite2 + 10), hl
-    ld (sprite3 + 8), hl
-    ld (sprite3 + 10), hl
+not_gone_back
+    call reset_player
+    call reset_sprites
+    call reset_weapon
 
     call set_pens
-
     ret
 
 draw_outline
@@ -222,6 +221,13 @@ calc_dimensions
     ld (max_y), a
     ret
 
+save_old_room_info
+    ld hl, sprite1
+    ld de, old_room_sprites
+    ld bc, sprite_end - sprite1
+    ldir
+    ret    
+
 point_address
     defw 0
 
@@ -238,6 +244,8 @@ max_y
 
 room_number
     defb 0
+last_room_number
+    defb 0x00
 
 room_changed
     defb 0
