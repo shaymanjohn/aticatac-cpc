@@ -217,7 +217,7 @@ flip_pixels           ; swap left and right pixels
     djnz dif1
 
     pop hl
-    call scr_next_line
+    GET_NEXT_SCR_LINE
     pop bc
     dec c
     jp nz, draw_item_flip
@@ -235,7 +235,7 @@ dinf1
     djnz dinf1
 
     pop hl
-    call scr_next_line
+    GET_NEXT_SCR_LINE
     pop bc
     dec c
     jp nz, draw_item_noflip

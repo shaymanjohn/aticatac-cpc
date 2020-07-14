@@ -41,7 +41,7 @@ clear_lives_loop
     ld bc, (player_width + 1) * 3
     ; ldir
     pop hl
-    call scr_next_line
+    GET_NEXT_SCR_LINE
     pop bc
     djnz clear_lives_loop
 

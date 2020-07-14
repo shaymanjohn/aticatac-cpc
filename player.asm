@@ -102,7 +102,7 @@ dplay2
     inc de
 
     pop hl
-    call scr_next_line
+    GET_NEXT_SCR_LINE
 
     djnz dplay2
 
@@ -318,9 +318,8 @@ dplay_erase_fast_2
     dec l
     dec l
     dec l
-    call scr_next_line
+    GET_NEXT_SCR_LINE
     djnz dplay_erase_fast_2
-
     ret
 
 draw_player_select              ; don't save background or mask here
@@ -383,10 +382,9 @@ dplay_fast_2
     ex de, hl
 
     pop hl
-    call scr_next_line
+    GET_NEXT_SCR_LINE
 
     djnz dplay_fast_2
-
     ret
 
 reset_player

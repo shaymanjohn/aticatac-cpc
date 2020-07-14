@@ -193,7 +193,7 @@ dfpl1
     dec l
     dec l
     dec l
-    call scr_next_line
+    GET_NEXT_SCR_LINE
     djnz dfpl1
 
     ret
@@ -213,7 +213,7 @@ depl1
     dec l
     dec l
     dec l
-    call scr_next_line
+    GET_NEXT_SCR_LINE
     djnz depl1
 
     ret
@@ -272,7 +272,7 @@ collectable_draw_loop
     inc de
 
     pop hl
-    call scr_next_line
+    GET_NEXT_SCR_LINE
     djnz collectable_draw_loop    
 
     pop bc

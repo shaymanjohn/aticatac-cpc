@@ -193,26 +193,23 @@ mst1
     inc iy
     inc iy
 
-    call scr_next_line
-    djnz mst1
-
-    ld hl, scr_addr_table_c0
-    ld (scr_addr_table), hl
-        
-    ret
-
-scr_next_line   ; hl = current screen address
     ld a, h
     add a, 8
     ld h, a
     and 0x38
-    ret nz
+    jp nz, skipx
     ld a, l
     add a, 0x40
     ld l, a
     ld a, h
     adc a, 0xc0
     ld h, a
+
+skipx
+    djnz mst1
+
+    ld hl, scr_addr_table_c0
+    ld (scr_addr_table), hl 
     ret
 
 rotate_gfx          ; IN: IX = source, de = destination, b = width in bytes, c = height in rows.

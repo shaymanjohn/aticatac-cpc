@@ -22,9 +22,6 @@ menu_tasks
     ret z
 
 start_the_game
-    ld a, r
-    ld (random_seed), a
-
     call wait_vsync
     call set_pens_off
 
@@ -106,7 +103,7 @@ logo_loop
 
     ex de, hl
     pop hl
-    call scr_next_line
+    GET_NEXT_SCR_LINE
     pop bc
     djnz logo_loop
 

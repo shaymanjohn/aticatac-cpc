@@ -4,7 +4,7 @@ game_tasks
     ld a, (room_changed)
 	and a
     jp nz, room_has_changed
-
+    
     BORDER_ON hw_orange
     ld a, (tell_time)
     and a

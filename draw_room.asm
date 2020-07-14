@@ -31,7 +31,7 @@ copy_loop
     ld c, ixl
     ldir
     pop hl
-    call scr_next_line
+    GET_NEXT_SCR_LINE
     dec ixh
     jr nz, copy_loop
 
@@ -45,6 +45,9 @@ copy_loop
     jr nz, not_gone_back
 
 not_gone_back
+    ld a, r
+    ld (random_seed), a
+    
     call reset_player
     call reset_sprites
     call reset_weapon
@@ -192,7 +195,7 @@ clear1
     inc de
     ldir
     pop hl
-    call scr_next_line
+    GET_NEXT_SCR_LINE
     pop bc
     djnz clear1
 

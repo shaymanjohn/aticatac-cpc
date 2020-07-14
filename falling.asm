@@ -151,7 +151,7 @@ draw_smallest_tunnel
     ld (hl), a
 
     pop hl
-    call scr_next_line
+    GET_NEXT_SCR_LINE
     push hl
 
     ld a, c
@@ -164,7 +164,7 @@ draw_smallest_tunnel
     ld (hl), a
 
     pop hl
-    call scr_next_line
+    GET_NEXT_SCR_LINE
     push hl    
     ld a, c
     and %01010101
@@ -176,7 +176,7 @@ draw_smallest_tunnel
     ld (hl), a
 
     pop hl
-    call scr_next_line
+    GET_NEXT_SCR_LINE
     push hl
     ld a, c
     and %01010101
@@ -188,7 +188,7 @@ draw_smallest_tunnel
     ld (hl), a
 
     pop hl
-    call scr_next_line
+    GET_NEXT_SCR_LINE
     ld a, c
     and %01010101  
     ld (hl), a

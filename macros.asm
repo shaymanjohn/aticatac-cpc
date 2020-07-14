@@ -1,5 +1,25 @@
 DEBUG=1
 
+macro GET_NEXT_SCR_LINE
+    ld a, h
+    add a, 8
+    ld h, a
+    and 0x38
+    jp nz, $+11
+    ld a, l
+    add a, 0x40
+    ld l, a
+    ld a, h
+    adc a, 0xc0
+    ld h, a
+mend
+
+macro GET_NEXT_SCR_LINE_QUICK
+    ld a, h
+    add a, 8
+    ld h, a
+mend
+
 macro BORDER_ON hw_colour
 if DEBUG
     ld d, {hw_colour}
@@ -18,10 +38,9 @@ endif
 mend
 
 macro SELECT_BANK bank_num
-    ld c, {bank_num}
+    ld a, {bank_num}    
     ld b, 0x7f
-    out (c), c
-    ld a, c
+    out (c), a
     ld (memory_bank), a
 mend
 

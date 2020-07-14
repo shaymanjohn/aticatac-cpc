@@ -257,7 +257,7 @@ weapon2
     inc de
 
     dec l
-    call scr_next_line
+    GET_NEXT_SCR_LINE
     djnz weapon2
 
     ret
@@ -282,7 +282,7 @@ weapon3
 
     dec l
     dec l
-    call scr_next_line
+    GET_NEXT_SCR_LINE
     djnz weapon3
 
     ret
@@ -318,7 +318,7 @@ weapon4
     dec l
     ld h, c
 
-    call scr_next_line
+    GET_NEXT_SCR_LINE
     djnz weapon4
 
     ret

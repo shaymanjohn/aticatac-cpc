@@ -104,3 +104,9 @@ interrupt_firstValue	equ -1
 
 sound_collect       equ 1
 sound_menu          equ 5
+
+; sprite states
+state_dead      equ 0
+state_arriving  equ 1
+state_active    equ 2
+state_dying     equ 3

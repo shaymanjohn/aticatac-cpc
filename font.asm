@@ -111,7 +111,7 @@ draw_letter_loop
     inc de
 
     pop hl
-    call scr_next_line
+    GET_NEXT_SCR_LINE
     djnz draw_letter_loop
 
     ret
@@ -148,7 +148,8 @@ draw_letter_loop_fast       ; de is font data, hl is screen
     inc de
     dec l
 
-    call scr_next_line
+repeat 5
+    GET_NEXT_SCR_LINE_QUICK
 
     ld a, (de)
     ld (hl), a
@@ -159,56 +160,9 @@ draw_letter_loop_fast       ; de is font data, hl is screen
     ld (hl), a
     inc de
     dec l
+rend
 
-    call scr_next_line
-
-    ld a, (de)
-    ld (hl), a
-    inc l
-    inc de
-
-    ld a, (de)
-    ld (hl), a
-    inc de
-    dec l
-
-    call scr_next_line
-
-    ld a, (de)
-    ld (hl), a
-    inc l
-    inc de
-
-    ld a, (de)
-    ld (hl), a
-    inc de
-    dec l
-
-    call scr_next_line
-
-    ld a, (de)
-    ld (hl), a
-    inc l
-    inc de
-
-    ld a, (de)
-    ld (hl), a
-    inc de
-    dec l
-
-    call scr_next_line
-
-    ld a, (de)
-    ld (hl), a
-    inc l
-    inc de
-
-    ld a, (de)
-    ld (hl), a
-    inc de
-    dec l
-
-    call scr_next_line
+    GET_NEXT_SCR_LINE_QUICK
 
     ld a, (de)
     ld (hl), a
