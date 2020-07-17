@@ -156,6 +156,7 @@ can_move
 
     bit player_fire1_bit, c
     call nz, fire_weapon
+    ; call fire_weapon
 
     ld a, d
     or e

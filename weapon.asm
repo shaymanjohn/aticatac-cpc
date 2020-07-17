@@ -56,16 +56,14 @@ store_weapon_with_80
     ld (save_weapon_pointer_80), ix
 
 draw_weapon_entry2
-    ld de, (ix + 4)         ; de has graphics
     ld b, (ix + 1)          ; b has height
 
-    ld a, (ix + 6)          ; call specific draw routine
-    ld (gfx_call + 1), a
-    ld a, (ix + 7)
-    ld (gfx_call + 2), a
+    ld e, (ix + 6)
+    ld d, (ix + 7)
+    push de                 ; sprite routine to call
 
-gfx_call
-    jp 0x0000             ; modified above
+    ld de, (ix + 4)         ; de has graphics    
+    ret                     ; draw sprite
 
 erase_weapon
     ld a, (hidden_screen_base_address)

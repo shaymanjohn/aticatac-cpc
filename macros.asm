@@ -58,3 +58,10 @@ macro RANDOM_IN_A       ; from http://www.z80.info/pseudo-random.txt
 
     ld (random_seed), a
 mend
+
+macro ANIMATE_SPRITE
+    ld a, (ix + spr_frame)
+    inc a
+    and 0x0f
+    ld (ix + spr_frame), a
+mend
