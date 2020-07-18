@@ -65,6 +65,15 @@ draw_sprite
     ld h, (hl)
     ld l, a
 
+    ; add sprite size if on right pixel
+    ld a, (ix + spr_x)
+    and 0x01
+    jp z, not_shifted
+
+    ; ld bc, bat_large_shifted - bat_large_0_0
+    ; add hl, bc
+
+not_shifted
     ex de, hl
 
     ld a, (hidden_screen_base_address)
@@ -92,8 +101,8 @@ draw_sprite_entry2
     ld a, (ix + spr_w)
 
 draw_sprite_entry3    
-    cp 5
-    jp z, sprite_draw_loop_5
+    ; cp 5
+    ; jp z, sprite_draw_loop_5
 
 sprite_draw_loop_4
     ld a, (de)
@@ -185,6 +194,10 @@ update_sprite
     ld (ix + spr_counter), a
     and a
     jp z, change_direction
+
+    ld a, (heartbeat)
+    and 0x01
+    jp z, check_bounce_y
 
     ld a, (ix + spr_x)
     add (ix + spr_xinc)
@@ -402,6 +415,10 @@ reset_sprites
     ld hl, 0
     ld a, state_dead
 
+    ld (boss + spr_state), a
+    ld (boss + spr_scrc0), hl
+    ld (boss + spr_scr80), hl
+
     ld (sprite1 + spr_state), a
     ld (sprite1 + spr_scrc0), hl
     ld (sprite1 + spr_scr80), hl
@@ -429,6 +446,11 @@ reset_sprites
     add 12
     ld (sprite3 + spr_counter), a
 
+    ; RANDOM_IN_A
+    ; and 0x3f
+    ; add 12
+    ; ld (boss + spr_counter), a    
+
     ret
 
 ; sprite struct
@@ -453,6 +475,25 @@ spr_wc0     equ 22  ; width of c0 frame
 spr_w80     equ 23  ; width of 80 frame
 spr_hc0     equ 24  ; height of c0 frame
 spr_h80     equ 25  ; height of 80 frame
+
+boss
+    defb 0x00, 0x00             ; x, y
+    defb 0x00, 0x00             ; x increment, y increment
+    defb 0x00                   ; counter
+    defb 0x00, 0x00             ; width, height
+    defb 0x00                   ; frame number * 4
+    defw 0x0000                 ; base sprite gfx pointer
+    defb 0x00                   ; state
+    defw 0x0000                 ; save screen c0
+    defw 0x0000                 ; save screen 80
+    defw 0x0000                 ; save gfx c0
+    defw 0x0000                 ; save gfx 80
+    defw 0x0000                 ; size of sprite data
+    defb 0x00                   ; faces direction of motion
+    defb 0x00                   ; width c0
+    defb 0x00                   ; width 80
+    defb 0x00                   ; height c0
+    defb 0x00                   ; height c0
 
 sprite1
     defb 0x00, 0x00             ; x, y
@@ -537,7 +578,7 @@ boss_frankie
     defw boss_frankie_2_0, boss_frankie_0_0
 
 boss_hunchback
-    defb 0x05               ; width
+    defb 0x04               ; width
     defb 21                 ; height
     defw 21 * 5 * 3         ; size
     defb 0x00               ; faces direction of motion    
@@ -545,7 +586,7 @@ boss_hunchback
     defw boss_hunchback_2_0, boss_hunchback_0_0
 
 boss_mummy
-    defb 0x05               ; width
+    defb 0x04               ; width
     defb 23                 ; height
     defw 23 * 5 * 3         ; size
     defb 0x00               ; faces direction of motion    
@@ -579,7 +620,7 @@ sprite_info                 ; some repeats to make random selection easier...
     defw spr_ghost2,    spr_monk
 
 spr_large_bat
-    defb 0x05               ; width
+    defb 0x04               ; width
     defb 18                 ; height
     defw 18 * 5 * 2         ; size    
     defb 0x01               ; faces direction of motion
@@ -603,7 +644,7 @@ spr_bouncy
     defw bouncy_0_0, bouncy_1_0
 
 spr_ghost1
-    defb 0x05               ; width
+    defb 0x04               ; width
     defb 16                 ; height
     defw 16 * 5 * 2         ; size
     defb 0x00               ; faces direction of motion
@@ -611,7 +652,7 @@ spr_ghost1
     defw ghost1_0_0, ghost1_1_0
 
 spr_ghost2
-    defb 0x05               ; width
+    defb 0x04               ; width
     defb 20                 ; height
     defw 20 * 5 * 2         ; size
     defb 0x00               ; faces direction of motion
@@ -619,7 +660,7 @@ spr_ghost2
     defw ghost2_0_0, ghost2_1_0
 
 spr_monk
-    defb 0x05               ; width
+    defb 0x04               ; width
     defb 20                 ; height
     defw 20 * 5 * 2         ; size
     defb 0x01               ; faces direction of motion    
@@ -627,7 +668,7 @@ spr_monk
     defw monk_0_0, monk_1_0
 
 spr_octopus
-    defb 0x05               ; width
+    defb 0x04               ; width
     defb 14                 ; height
     defw 14 * 5 * 2         ; size
     defb 0x00               ; faces direction of motion
@@ -635,7 +676,7 @@ spr_octopus
     defw octopus_0_0, octopus_1_0
 
 spr_pumpkin
-    defb 0x05               ; width
+    defb 0x04               ; width
     defb 19                 ; height
     defw 19 * 5 * 2         ; size
     defb 0x00               ; faces direction of motion
@@ -643,7 +684,7 @@ spr_pumpkin
     defw pumpkin_0_0, pumpkin_1_0
 
 spr_slime
-    defb 0x05               ; width
+    defb 0x04               ; width
     defb 11                 ; height
     defw 11 * 5 * 2         ; size
     defb 0x00               ; faces direction of motion
@@ -651,7 +692,7 @@ spr_slime
     defw slime_0_0, slime_1_0
 
 spr_spark
-    defb 0x05               ; width
+    defb 0x04               ; width
     defb 18                 ; height
     defw 18 * 5 * 2         ; size
     defb 0x00               ; faces direction of motion    
@@ -659,7 +700,7 @@ spr_spark
     defw spark_0_0, spark_1_0
 
 spr_witch
-    defb 0x05               ; width
+    defb 0x04               ; width
     defb 21                 ; height
     defw 21 * 5 * 2         ; size
     defb 0x01               ; faces direction of motion

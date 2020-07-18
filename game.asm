@@ -57,6 +57,9 @@ no_pockets
     jp switch_game_state
 
 do_sprites
+    ; ld ix, boss
+    ; call do_sprite
+
     ld ix, sprite1
     call do_sprite
 

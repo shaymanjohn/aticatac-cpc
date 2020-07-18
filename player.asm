@@ -12,6 +12,7 @@ draw_player
     ld l, a
 
     ld a, (player_x)
+    ld e, a
     srl a
     ld c, a
     ld b, 0
@@ -30,8 +31,8 @@ save_address_c0
 
 saved_address
     ld b, 0
-    ld a, (player_x)
-    and 1
+    ld a, e
+    and 0x01
     jp z, dplay1
     ld b, num_player_frames
 
