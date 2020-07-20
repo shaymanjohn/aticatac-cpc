@@ -36,6 +36,7 @@ item_bank_config    equ 0xc0    ; 0x7fc0      ; default bank
 sprite_bank_config  equ 0xc4    ; 0x7fc4
 room_bank_config    equ 0xc5    ; 0x7fc5
 sound_bank_config   equ 0xc6    ; 0x7fc6
+baddie_bank_config  equ 0xc7    ; 0x7fc7
 
 ; player anim
 num_player_frames       equ 4

@@ -336,6 +336,7 @@ draw_player_select              ; don't save background or mask here
     ld l, a
 
     ld a, (player_select_x)
+    ld e, a
     srl a
     ld c, a
     ld b, 0
@@ -344,6 +345,7 @@ draw_player_select              ; don't save background or mask here
     push hl
 
     ld b, 0
+    ld a, e
     and 1
     jp z, dplay_fast1
     ld b, num_player_frames

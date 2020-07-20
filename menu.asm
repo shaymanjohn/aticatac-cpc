@@ -22,9 +22,9 @@ menu_tasks
     ret z
 
 start_the_game
-    ld hl, Newsong_Start
+    ld hl, NoMusic_Start                ; can't stop music and keep sound playing, so play empty music track
     call init_sound_system
-    
+
     call wait_vsync
     call set_pens_off
 

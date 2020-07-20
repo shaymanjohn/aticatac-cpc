@@ -35,7 +35,7 @@ no_pockets
     call draw_weapon
 
     BORDER_ON hw_brightBlue
-    SELECT_BANK sprite_bank_config
+    SELECT_BANK baddie_bank_config
     call do_sprites
 
     BORDER_ON hw_brightGreen

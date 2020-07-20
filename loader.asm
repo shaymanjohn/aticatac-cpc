@@ -65,6 +65,15 @@ screen_copy_loop
 
 ;----------------------------------------
 
+	ld c, 0xc7					; set bank for baddies (0, 7, 2, 3)
+	call set_bank
+
+	ld hl, file_baddies			; baddies in bank 7
+	ld de, 0x4000
+	call load_block
+
+;----------------------------------------
+
 	ld c, 0xc5					; set bank for rooms (0, 5, 2, 3)
 	call set_bank
 
@@ -195,6 +204,9 @@ file_loading_screen
 
 file_heroes
 	defb "HEROES.BIN", 0
+
+file_baddies
+	defb "BADDIES.BIN", 0
 
 file_room
 	defb "ROOMS.BIN", 0
