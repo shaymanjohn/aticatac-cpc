@@ -22,6 +22,9 @@ menu_tasks
     ret z
 
 start_the_game
+    ld hl, Newsong_Start
+    call init_sound_system
+    
     call wait_vsync
     call set_pens_off
 

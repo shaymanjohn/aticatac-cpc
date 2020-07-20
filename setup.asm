@@ -23,9 +23,6 @@ setup_game_data
     ld c, serf_height * 12
     call rotate_gfx
 
-; Initialise Arkos player
-    call init_sound_system
-
     SELECT_BANK item_bank_config
 
 ; Some default values

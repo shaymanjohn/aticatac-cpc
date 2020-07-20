@@ -1,13 +1,14 @@
-init_sound_system
+init_sound_system                   ; hl = music to play
     SELECT_BANK sound_bank_config
 
-    ld hl, Newsong_Start
     xor a
     call PLY_AKG_Init
 
     ld hl, SoundEffects
     call PLY_AKG_InitSoundEffects
     ret
+
+
 
 service_sound_system
 	ld a, (memory_bank)

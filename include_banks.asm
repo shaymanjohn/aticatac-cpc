@@ -38,6 +38,7 @@ BANK
 org 0x4000
 sound_bank_start
 include "sound/Music_Empty.asm"
+include "sound/atic_title.asm"
 
 PLY_AKG_HARDWARE_CPC = 1
 PLY_AKG_MANAGE_SOUND_EFFECTS = 1

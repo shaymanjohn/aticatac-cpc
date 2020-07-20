@@ -20,6 +20,9 @@ switch_game_state
     ret
 
 select_menu
+    ld hl, atic_title_Start
+    call init_sound_system
+
     ld hl, menu_interrupts
     ld (current_interrupts), hl
 
