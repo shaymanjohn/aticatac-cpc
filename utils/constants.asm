@@ -9,7 +9,6 @@ player_width        equ 5       ; bytes
 knight_height       equ 20
 wizard_height       equ 21
 serf_height         equ 19
-boss_height         equ 24
 
 max_player_height       equ wizard_height
 average_player_height   equ 20
@@ -112,5 +111,5 @@ state_arriving  equ 1
 state_active    equ 2
 state_dying     equ 3
 
-arrival_time    equ 75
-dying_time      equ 75
+arrival_time    equ 50
+dying_time      equ 50

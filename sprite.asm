@@ -390,18 +390,15 @@ become_active
 
 random_sprite_action
     ld a, r
-    ld b, a
     and 0x3f
     add 20
     ld (ix + spr_counter), a
 
-    ld de, 0
-
-    ld a, b
+    RANDOM_IN_A     ; a is random number between 0 and 7
     and 0x07
 
-    add a
     ld hl, sprite_direction_table
+    add a    
     ld c, a
     ld b, 0
     add hl, bc
@@ -439,17 +436,17 @@ reset_sprites
 
     RANDOM_IN_A
     and 0x3f
-    add 12
+    add 5
     ld (sprite1 + spr_counter), a
 
     RANDOM_IN_A
     and 0x3f
-    add 12
+    add 5
     ld (sprite2 + spr_counter), a
 
     RANDOM_IN_A
     and 0x3f
-    add 12
+    add 5
     ld (sprite3 + spr_counter), a
 
     ; RANDOM_IN_A
