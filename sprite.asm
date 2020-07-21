@@ -397,31 +397,20 @@ random_sprite_action
 
     ld de, 0
 
-    bit 7, b    
-    jp nz, not_left
-    ld d, -1
-    jp do_y_inc
+    ld a, b
+    and 0x07
 
-not_left
-    bit 6, b
-    jp nz, do_y_inc
-    ld d, 1
-    
-do_y_inc
-    bit 5, b    
-    jp nz, not_up
-    ld e, -1
-    jp done_moving
+    add a
+    ld hl, sprite_direction_table
+    ld c, a
+    ld b, 0
+    add hl, bc
+    ld d, (hl)
+    inc hl
+    ld e, (hl)
 
-not_up
-    bit 4, b
-    jp nz, done_moving
-    ld e, 1
-
-done_moving
     ld (ix + spr_xinc), d
     ld (ix + spr_yinc), e
-
     ret
 
 is_dying
@@ -741,4 +730,14 @@ spr_witch_alt
 
 old_room_sprites
     defs sprite_end - sprite1
+
+sprite_direction_table
+    defb  0, -1
+    defb  1, -1
+    defb  1,  0
+    defb  1,  1
+    defb  0,  1
+    defb -1,  1
+    defb -1,  0
+    defb -1, -1    
 
