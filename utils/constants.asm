@@ -111,5 +111,5 @@ state_arriving  equ 1
 state_active    equ 2
 state_dying     equ 3
 
-arrival_time    equ 50
-dying_time      equ 50
+arrival_time    equ 46
+dying_time      equ 46

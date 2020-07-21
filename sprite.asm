@@ -9,6 +9,8 @@ erase_sprite
     jp nz, sprite_erase_with_80
 
     ld hl, (ix + spr_scrc0)
+    ld de, 0
+    ld (ix + spr_scrc0), de
     ld de, (ix + spr_gfxc0)
     ld b, (ix + spr_hc0)
     ld c, (ix + spr_wc0)
@@ -16,6 +18,8 @@ erase_sprite
 
 sprite_erase_with_80
     ld hl, (ix + spr_scr80)
+    ld de, 0
+    ld (ix + spr_scr80), de    
     ld de, (ix + spr_gfx80)
     ld b, (ix + spr_h80)
     ld c, (ix + spr_w80)
@@ -78,8 +82,7 @@ calc_frame
     ld h, (hl)
     ld l, a
 
-    ; add sprite size if on right pixel
-    ld a, (ix + spr_x)
+    ld a, (ix + spr_x)          ; use pixel shifted version?
     and 0x01
     jp z, not_shifted
 
@@ -410,8 +413,34 @@ random_sprite_action
     ld (ix + spr_yinc), e
     ret
 
+kill_sprite
+    ld a, state_dying
+    ld (ix + spr_state), a
+
+    ld a, dying_time
+    ld (ix + spr_counter), a
+
+    ld iy, sprite_death
+    call init_sprite
+    ret
+
 is_dying
+    ld a, (ix + spr_counter)
+    dec a
+    ld (ix + spr_counter), a
+    and a
+    jp z, become_dead
     ANIMATE_SPRITE
+    ret
+
+become_dead
+    ld a, state_dead
+    ld (ix + spr_state), a
+
+    RANDOM_IN_A
+    and 0x0f
+    add 10
+    ld (ix + spr_counter), a
     ret
 
 reset_sprites

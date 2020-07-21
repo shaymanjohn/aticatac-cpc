@@ -18,6 +18,8 @@ draw_weapon
     ld h, (hl)
     ld l, a                     ; hl now pointing to frame specific info
 
+    ld (last_drawn_weapon_frame), hl
+
     ex de, hl
     ld ixh, d
     ld ixl, e                   ; store this pointer in ix
@@ -321,6 +323,99 @@ weapon4
 
     ret
 
+check_weapon_hit
+    ld ix, (last_drawn_weapon_frame)
+    ld b, (ix + 2)
+    ld a, (weapon_x)
+    add b
+    ld h, a
+
+    ld c, (ix + 3)
+    ld a, (weapon_y)
+    add c
+    ld l, a                             ; h = weapon x, l = weapon y
+
+    ld d, (ix + 0)
+    ld e, (ix + 1)                      ; d weapon width, e = weapon height
+
+    srl d
+    ld a, h
+    add d
+    ld h, a
+
+    srl e
+    ld a, l
+    add e
+    ld l, a
+
+    ld ix, sprite1
+    ld a, (ix + spr_state)
+    cp state_active
+    call z, check_weapon_hitting_sprite
+
+    ld ix, sprite2
+    ld a, (ix + spr_state)
+    cp state_active
+    call z, check_weapon_hitting_sprite
+
+    ld ix, sprite3
+    ld a, (ix + spr_state)
+    cp state_active
+    ret nz
+
+check_weapon_hitting_sprite     ; h = weapon x, l = weapon y, d = weapon width, e = weapon height, ix = sprite
+    ld a, (weapon_active)
+    and a
+    ret z
+
+    push hl
+    push de
+
+zzz
+    ld a, h
+    srl d
+    add d
+    ld c, a
+    ld a, (ix + 0)
+    ld b, (ix + 5)
+    srl b
+    add b
+    sub c
+    bit 7, a
+    jp z, not_neg_x_weapon
+    neg
+
+not_neg_x_weapon
+    cp 4
+    jp nc, end_weapon_hit_check
+
+    ld a, l
+    srl e
+    add e
+    ld c, a
+    ld a, (ix + 1)
+    ld b, (ix + 6)
+    srl b
+    add b
+    sub c
+    bit 7, a
+    jp z, not_neg_y_weapon
+    neg
+
+not_neg_y_weapon
+    cp 8
+    jp nc, end_weapon_hit_check
+
+    call kill_sprite
+
+    ld a, 1
+    ld (weapon_active), a
+
+end_weapon_hit_check
+    pop de
+    pop hl
+    ret    
+
 weapon_type
     defw spell_data
 
@@ -347,6 +442,9 @@ weapon_frame_inc
 
 fire_delay
     defb 0x00
+
+last_drawn_weapon_frame
+    defw 0x00    
 
 save_weapon_address_c0
     defw 0x00

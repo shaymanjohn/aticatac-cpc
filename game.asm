@@ -38,6 +38,9 @@ no_pockets
     SELECT_BANK baddie_bank_config
     call do_sprites
 
+    BORDER_ON hw_brightWhite
+    call check_weapon_hit
+
     BORDER_ON hw_brightGreen
     SELECT_BANK room_bank_config
 	call check_doors
