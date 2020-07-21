@@ -52,13 +52,26 @@ draw_sprite
 
     ex de, hl                           ; swap it into de for a bit...
 
-    ld bc, (ix + spr_gfx)               ; calculate frame here
-    ld a, (ix + spr_frame)
+    ld a, (ix + spr_frame)              ; calculate frame here
     srl a
     srl a
     ld l, a
     ld h, 0
     add hl, hl
+
+    ld bc, (ix + spr_gfx)    
+
+    ld a, (ix + spr_fdom)
+    and a
+    jp z, calc_frame
+
+    ld a, (ix + spr_xinc)
+    bit 7, a
+    jp z, calc_frame
+
+    ld bc, (ix + spr_alt)
+
+calc_frame
     add hl, bc
     ld a, (hl)
     inc hl
@@ -70,7 +83,7 @@ draw_sprite
     and 0x01
     jp z, not_shifted
 
-    ld bc, eobaddies - bat_large_0_0
+    ld bc, end_of_baddies - start_of_baddies
     add hl, bc
 
 not_shifted
@@ -325,11 +338,11 @@ init_sprite
     ld a, (iy + 1)              ; height
     ld (ix + spr_h), a
 
-    ld de, (iy + 2)             ; size of data
-    ld (ix + spr_size), de
-
     ld a, (iy + 4)              ; faces direction of motion
-    ld (ix + spr_fdom), a    
+    ld (ix + spr_fdom), a
+
+    ld de, (iy + 2)             ; alternative sprite data if fdom
+    ld (ix + spr_alt), de
 
     ld bc, 5
     add iy, bc
@@ -366,6 +379,11 @@ become_active
     ld b, (hl)
     ld iyh, b
     ld iyl, a
+
+    ; ld iy, spr_witch
+    ; ld iy, spr_monk
+    ; ld iy, spr_large_bat
+    ; ld iy, spr_ghost1
 
     call random_sprite_action
     jp init_sprite
@@ -468,7 +486,7 @@ spr_scrc0   equ 11  ; save screen c0
 spr_scr80   equ 13  ; save screen 80
 spr_gfxc0   equ 15  ; save gfx c0
 spr_gfx80   equ 17  ; save gfx 80
-spr_size    equ 19  ; size of sprite data
+spr_alt     equ 19  ; alternative sprite data when facing left
 spr_fdom    equ 21  ; faces direction of motion
 spr_wc0     equ 22  ; width of c0 frame
 spr_w80     equ 23  ; width of 80 frame
@@ -487,7 +505,7 @@ boss
     defw 0x0000                 ; save screen 80
     defw 0x0000                 ; save gfx c0
     defw 0x0000                 ; save gfx 80
-    defw 0x0000                 ; size of sprite data
+    defw 0x0000                 ; alt sprite data
     defb 0x00                   ; faces direction of motion
     defb 0x00                   ; width c0
     defb 0x00                   ; width 80
@@ -506,7 +524,7 @@ sprite1
     defw 0x0000                 ; save screen 80
     defw 0x0000                 ; save gfx c0
     defw 0x0000                 ; save gfx 80
-    defw 0x0000                 ; size of sprite data
+    defw 0x0000                 ; alt sprite data
     defb 0x00                   ; faces direction of motion
     defb 0x00                   ; width c0
     defb 0x00                   ; width 80
@@ -525,7 +543,7 @@ sprite2
     defw 0x0000                 ; save screen 80
     defw 0x0000                 ; save gfx c0
     defw 0x0000                 ; save gfx 80
-    defw 0x0000                 ; size of sprite data
+    defw 0x0000                 ; alt sprite data
     defb 0x00                   ; faces direction of motion
     defb 0x00                   ; width c0
     defb 0x00                   ; width 80
@@ -544,7 +562,7 @@ sprite3
     defw 0x0000                 ; save screen 80
     defw 0x0000                 ; save gfx c0
     defw 0x0000                 ; save gfx 80
-    defw 0x0000                 ; size of sprite data
+    defw 0x0000                 ; alt sprite data
     defb 0x00                   ; faces direction of motion
     defb 0x00                   ; width c0
     defb 0x00                   ; width 80
@@ -555,7 +573,7 @@ sprite_end
 boss_devil
     defb 0x04               ; width
     defb 23                 ; height
-    defw 23 * 4 * 3         ; size
+    defw 0                  ; alt
     defb 0x00               ; faces direction of motion
     defw boss_devil_0_0, boss_devil_1_0
     defw boss_devil_2_0, boss_devil_0_0
@@ -563,7 +581,7 @@ boss_devil
 boss_dracula
     defb 0x04               ; width
     defb 23                 ; height
-    defw 23 * 4 * 3         ; size
+    defw 0                  ; alt
     defb 0x00               ; faces direction of motion    
     defw boss_dracula_0_0, boss_dracula_1_0
     defw boss_dracula_2_0, boss_dracula_0_0
@@ -571,7 +589,7 @@ boss_dracula
 boss_frankie
     defb 0x04               ; width
     defb 24                 ; height
-    defw 24 * 4 * 3         ; size
+    defw 0                  ; alt
     defb 0x00               ; faces direction of motion    
     defw boss_frankie_0_0, boss_frankie_1_0
     defw boss_frankie_2_0, boss_frankie_0_0
@@ -579,7 +597,7 @@ boss_frankie
 boss_hunchback
     defb 0x05               ; width
     defb 21                 ; height
-    defw 21 * 5 * 3         ; size
+    defw 0                  ; alt
     defb 0x00               ; faces direction of motion    
     defw boss_hunchback_0_0, boss_hunchback_1_0
     defw boss_hunchback_2_0, boss_hunchback_0_0
@@ -587,7 +605,7 @@ boss_hunchback
 boss_mummy
     defb 0x05               ; width
     defb 23                 ; height
-    defw 23 * 5 * 3         ; size
+    defw 0                  ; alt
     defb 0x00               ; faces direction of motion    
     defw boss_mummy_0_0, boss_mummy_1_0   ; 5, 7
     defw boss_mummy_2_0, boss_mummy_0_0   ; 9, 11
@@ -595,7 +613,7 @@ boss_mummy
 sprite_birth
     defb 0x04               ; width
     defb 16                 ; height
-    defw 16 * 4 * 4         ; size
+    defw 0                  ; alt
     defb 0x00               ; faces direction of motion    
     defw birth_0, birth_1
     defw birth_2, birth_3
@@ -603,7 +621,7 @@ sprite_birth
 sprite_death
     defb 0x04               ; width
     defb 16                 ; height
-    defw 16 * 4 * 4         ; size
+    defw 0                  ; alt
     defb 0x00               ; faces direction of motion
     defw death_0, death_1
     defw death_2, death_3
@@ -621,15 +639,19 @@ sprite_info                 ; some repeats to make random selection easier...
 spr_large_bat
     defb 0x05               ; width
     defb 18                 ; height
-    defw 18 * 5 * 2         ; size    
+    defw spr_large_bat_alt  ; alt    
     defb 0x01               ; faces direction of motion
     defw bat_large_0_0, bat_large_1_0
     defw bat_large_0_0, bat_large_1_0
 
+spr_large_bat_alt
+    defw bat_large_2_0, bat_large_3_0
+    defw bat_large_2_0, bat_large_3_0
+
 spr_small_bat
     defb 0x04               ; width
     defb 18                 ; height
-    defw 18 * 4 * 2         ; size
+    defw 0                  ; alt
     defb 0x00               ; faces direction of motion
     defw bat_small_0_0, bat_small_1_0
     defw bat_small_0_0, bat_small_1_0
@@ -637,7 +659,7 @@ spr_small_bat
 spr_bouncy
     defb 0x04               ; width
     defb 11                 ; height
-    defw 11 * 4 * 2         ; size
+    defw 0                  ; alt
     defb 0x00               ; faces direction of motion
     defw bouncy_0_0, bouncy_1_0
     defw bouncy_0_0, bouncy_1_0
@@ -645,15 +667,18 @@ spr_bouncy
 spr_ghost1
     defb 0x05               ; width
     defb 16                 ; height
-    defw 16 * 5 * 2         ; size
-    defb 0x00               ; faces direction of motion
+    defw spr_ghost1_alt     ; alt
+    defb 0x01               ; faces direction of motion
     defw ghost1_0_0, ghost1_1_0
     defw ghost1_0_0, ghost1_1_0
+spr_ghost1_alt
+    defw ghost1_2_0, ghost1_3_0
+    defw ghost1_2_0, ghost1_3_0
 
 spr_ghost2
     defb 0x05               ; width
     defb 20                 ; height
-    defw 20 * 5 * 2         ; size
+    defw 0                  ; alt
     defb 0x00               ; faces direction of motion
     defw ghost2_0_0, ghost2_1_0
     defw ghost2_0_0, ghost2_1_0
@@ -661,15 +686,19 @@ spr_ghost2
 spr_monk
     defb 0x05               ; width
     defb 20                 ; height
-    defw 20 * 5 * 2         ; size
+    defw spr_monk_alt       ; alt
     defb 0x01               ; faces direction of motion    
     defw monk_0_0, monk_1_0
     defw monk_0_0, monk_1_0
 
+spr_monk_alt
+    defw monk_2_0, monk_3_0
+    defw monk_2_0, monk_3_0
+
 spr_octopus
     defb 0x05               ; width
     defb 14                 ; height
-    defw 14 * 5 * 2         ; size
+    defw 0                  ; alt
     defb 0x00               ; faces direction of motion
     defw octopus_0_0, octopus_1_0
     defw octopus_0_0, octopus_1_0
@@ -677,7 +706,7 @@ spr_octopus
 spr_pumpkin
     defb 0x05               ; width
     defb 19                 ; height
-    defw 19 * 5 * 2         ; size
+    defw 0                  ; alt
     defb 0x00               ; faces direction of motion
     defw pumpkin_0_0, pumpkin_1_0
     defw pumpkin_0_0, pumpkin_1_0
@@ -685,7 +714,7 @@ spr_pumpkin
 spr_slime
     defb 0x05               ; width
     defb 11                 ; height
-    defw 11 * 5 * 2         ; size
+    defw 0                  ; alt
     defb 0x00               ; faces direction of motion
     defw slime_0_0, slime_1_0
     defw slime_0_0, slime_1_0
@@ -693,7 +722,7 @@ spr_slime
 spr_spark
     defb 0x05               ; width
     defb 18                 ; height
-    defw 18 * 5 * 2         ; size
+    defw 0                  ; alt
     defb 0x00               ; faces direction of motion    
     defw spark_0_0, spark_1_0
     defw spark_0_0, spark_1_0
@@ -701,10 +730,14 @@ spr_spark
 spr_witch
     defb 0x05               ; width
     defb 21                 ; height
-    defw 21 * 5 * 2         ; size
+    defw spr_witch_alt      ; alt
     defb 0x01               ; faces direction of motion
     defw witch_0_0, witch_1_0
     defw witch_0_0, witch_1_0
+
+spr_witch_alt
+    defw witch_2_0, witch_3_0
+    defw witch_2_0, witch_3_0    
 
 old_room_sprites
     defs sprite_end - sprite1

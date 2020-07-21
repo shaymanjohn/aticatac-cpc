@@ -26,10 +26,10 @@ setup_game_data
     SELECT_BANK baddie_bank_config
 
     ld de, shifted_baddies    
-    ld ix, bat_large_0_0
+    ld ix, start_of_baddies
 
     ld b, 5                 ; large bat
-    ld c, 18 * 2
+    ld c, 18 * 4
     call rotate_gfx
 
     ld b, 4                 ; small bat
@@ -69,7 +69,7 @@ setup_game_data
     call rotate_gfx
 
     ld b, 5                 ; ghost1
-    ld c, 16 * 2
+    ld c, 16 * 4
     call rotate_gfx
 
     ld b, 5                 ; ghost2
@@ -77,7 +77,7 @@ setup_game_data
     call rotate_gfx
 
     ld b, 5                 ; monk
-    ld c, 20 * 2
+    ld c, 20 * 4
     call rotate_gfx
 
     ld b, 5                 ; octopus
@@ -97,7 +97,7 @@ setup_game_data
     call rotate_gfx
 
     ld b, 5                 ; witch
-    ld c, 21 * 2
+    ld c, 21 * 4
     call rotate_gfx    
 
     SELECT_BANK item_bank_config
