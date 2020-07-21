@@ -16,8 +16,7 @@ falling_tasks
 	and a
 	ret nz
 
-    di
-    call clear_room
+    ; di
     call draw_room
 
     ld a, state_game
@@ -28,7 +27,7 @@ falling_tasks
 
 	ld a, interrupt_notReady
 	ld (interrupt_index), a
-    ei
+    ; ei
 
     ret
 

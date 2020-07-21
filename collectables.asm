@@ -32,7 +32,7 @@ pickup_loop
     jp z, shuffle_pockets
 
     ld d, 0
-    cp c                        ; can only pick things up in this room
+    cp c                        ; can only pick things up that are in this room
     call z, collect_this_collectable
     
     ld a, d

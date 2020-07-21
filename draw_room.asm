@@ -1,4 +1,6 @@
 draw_room
+    call clear_room
+    
     SELECT_BANK room_bank_config
 
     call draw_outline

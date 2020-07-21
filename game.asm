@@ -73,13 +73,12 @@ do_sprites
     jp do_sprite
 
 room_has_changed
-    di
-    call clear_room 
+    ; di
     call draw_room
 
 	ld a, interrupt_notReady
 	ld (interrupt_index), a
-    ei
+    ; ei
     
     ret
     
