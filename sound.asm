@@ -26,13 +26,15 @@ service_sound_system
     ld (memory_bank), a
 	ret    
 
-play_sfx                            ; a = sound effect number
-    ld e, a
-    SELECT_BANK sound_bank_config
-    ld a, e
+play_sfx                            ; e = sound effect number
+    ld a, (memory_bank)
+    ld iyh, a                       ; save current memory bank 
 
+    SELECT_BANK sound_bank_config
+
+    ld a, e
     ld bc, 0x0001                   ; full volume, both channels
     call PLY_AKG_PlaySoundEffect
 
-    SELECT_BANK item_bank_config
-    rets
+    SELECT_BANK iyh                 ; switch back to correct memory bank
+    ret

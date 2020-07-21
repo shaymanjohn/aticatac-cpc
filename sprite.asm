@@ -9,8 +9,10 @@ erase_sprite
     jp nz, sprite_erase_with_80
 
     ld hl, (ix + spr_scrc0)
+
     ld de, 0
-    ld (ix + spr_scrc0), de
+    ld (ix + spr_scrc0), de             ; don't erase again (unless redrawn)
+
     ld de, (ix + spr_gfxc0)
     ld b, (ix + spr_hc0)
     ld c, (ix + spr_wc0)
@@ -18,8 +20,10 @@ erase_sprite
 
 sprite_erase_with_80
     ld hl, (ix + spr_scr80)
+
     ld de, 0
-    ld (ix + spr_scr80), de    
+    ld (ix + spr_scr80), de             ; don't erase again (unless redrawn)
+    
     ld de, (ix + spr_gfx80)
     ld b, (ix + spr_h80)
     ld c, (ix + spr_w80)

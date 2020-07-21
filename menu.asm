@@ -261,7 +261,7 @@ point_right
     ret
 
 play_menu_sound
-    ld a, sound_menu                         ; sfx number
+    ld e, sound_menu                         ; sfx number
     call play_sfx
     ret
 

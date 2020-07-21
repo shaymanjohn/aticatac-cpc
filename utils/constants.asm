@@ -103,6 +103,7 @@ interrupt_notReady		equ -2
 interrupt_firstValue	equ -1
 
 sound_collect       equ 1
+sound_explosion     equ 2
 sound_menu          equ 5
 
 ; sprite states

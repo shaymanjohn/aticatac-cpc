@@ -17,7 +17,7 @@ collectable_loop
     jp collectable_loop
 
 pickup_tapped
-    ld a, sound_collect
+    ld e, sound_collect
     call play_sfx
 
     ld a, (room_number)

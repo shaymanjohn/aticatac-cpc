@@ -38,7 +38,7 @@ endif
 mend
 
 macro SELECT_BANK bank_num
-    ld a, {bank_num}    
+    ld a, {bank_num}
     ld b, 0x7f
     out (c), a
     ld (memory_bank), a

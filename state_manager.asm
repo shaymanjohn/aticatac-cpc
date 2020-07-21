@@ -124,7 +124,7 @@ select_falling
     ld a, -1
     ld (fall_index), a
 
-    ld a, sound_menu
+    ld e, sound_menu
     call play_sfx    
 
     ret

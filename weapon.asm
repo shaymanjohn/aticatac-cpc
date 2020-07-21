@@ -124,6 +124,9 @@ fire_weapon
     ret
 
 can_fire
+    ld e, sound_menu
+    call play_sfx
+
     ld a, fire_decay
     ld (weapon_active), a
 
@@ -405,6 +408,9 @@ not_neg_x_weapon
 not_neg_y_weapon
     cp 8
     jp nc, end_weapon_hit_check
+
+    ld e, sound_explosion
+    call play_sfx
 
     call kill_sprite
 
