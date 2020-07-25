@@ -4,6 +4,7 @@ rotation_right      equ 0x60        ; landscape %01100000
 rotation_left       equ 0xe0        ; landscape %11100000
 
 max_doors           equ 8       ; per room
+max_food            equ 5       ; per room (includes mushrooms)
 player_width        equ 5       ; bytes
 
 knight_height       equ 20
@@ -96,7 +97,7 @@ skeleton_room2      equ 0x8f
 skeleton_room3      equ 0x33
 skeleton_room4      equ 0x55
 
-type_transient      equ 0x01
+type_food           equ 0x01
 type_mushroom       equ 0x02
 
 interrupt_notReady		equ -2

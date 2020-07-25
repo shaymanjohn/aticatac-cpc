@@ -439,6 +439,12 @@ this_rooms_door_list
 this_rooms_door_count
     defb 0
 
+this_rooms_food_list
+    defs max_food * 2
+
+this_rooms_food_count
+    defb 0
+
 this_item_width
     defb 0
 

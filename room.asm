@@ -2,14 +2,13 @@ draw_room
     call clear_room
     
     SELECT_BANK room_bank_config
-
     call draw_outline
     call draw_items
 
     SELECT_BANK room_bank_config
-    
     call draw_collectables
-    ; call draw_transients
+    
+    call draw_food
 
     SELECT_BANK item_bank_config
 
@@ -112,8 +111,6 @@ not_skeleton_room
     inc hl                ; de now has width / height
     ex de, hl
     ld (room_size), hl         ; save it
-
-    ; ret
 
     ex de, hl
 

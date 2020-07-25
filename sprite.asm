@@ -288,7 +288,7 @@ is_dead
     ld a, (min_x)               ; calculate random x position inside room
     ld e, a
     ld a, (max_x)
-    sub 4                       ; not in rhs wall
+    sub 6                       ; not in rhs wall
     sub e
     ld c, a
 
@@ -305,6 +305,10 @@ is_dead
     cp c
     jp c, random_y_pos
     srl a
+
+    cp c
+    jp c, random_y_pos
+    srl a    
 
 random_y_pos
     add e
@@ -391,6 +395,7 @@ become_active
     ; ld iy, spr_monk
     ; ld iy, spr_large_bat
     ; ld iy, spr_ghost1
+    ; ld iy, boss_mummy
 
     call random_sprite_action
     jp init_sprite

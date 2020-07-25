@@ -101,7 +101,6 @@ select_game
     ld bc, 0x4000
     ldir
 
-    ; call set_pens
     ret
 
 select_falling
