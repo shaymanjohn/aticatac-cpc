@@ -374,7 +374,6 @@ check_weapon_hitting_sprite     ; h = weapon x, l = weapon y, d = weapon width, 
     push hl
     push de
 
-zzz
     ld a, h
     srl d
     add d

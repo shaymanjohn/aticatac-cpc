@@ -9,6 +9,92 @@ food_init_loop
     djnz food_init_loop
     ret
 
+check_food_collision
+    ld b, a
+    ld hl, this_rooms_food_list
+    ld iyh, 0
+
+check_next_food_item_collision
+    ld a, (hl)
+    ld ixl, a
+    inc hl
+    ld a, (hl)
+    ld ixh, a
+
+    ld a, (ix + 2)
+    and a
+    call z, check_food
+
+    ld a, iyh               ; exit early if collected food
+    and a
+    ret nz
+
+ignore_mushrooms
+    inc hl
+    djnz check_next_food_item_collision
+    ret
+
+check_food
+    push hl
+    push bc
+
+    ld a, (player_x)
+    srl a
+    add 2
+    ld e, a
+    ld a, (ix + 3)
+    add 1
+    sub e
+
+    bit 7, a
+    jp z, food_not_neg_x
+    neg
+
+food_not_neg_x
+    cp 4
+    jp nc, cant_find_food
+
+    ld a, (player_y)
+    add average_player_height / 2    
+    ld e, a
+    ld a, (ix + 4)
+    ld c, (ix + 7)
+    srl c
+    sub c
+    sub e
+
+    bit 7, a
+    jp z, food_not_neg_y
+    neg
+
+food_not_neg_y
+    cp 12
+    jp nc, cant_find_food
+
+    ld a, (ix + 0)
+    cp type_mushroom
+    jp nz, remove_food
+
+    ; decrease health only, don't remove mushrooms...
+    jp cant_find_food
+
+remove_food
+    call draw_food_item2
+
+    ld a, 1
+    ld (ix + 2), a
+    ld (save_food_index), ix
+
+    ld e, sound_collect
+    call play_sfx    
+
+    ld iyh, 1
+
+cant_find_food
+    pop bc
+    pop hl
+    ret
+
 draw_food
     xor a
     ld (this_rooms_food_count), a
@@ -33,28 +119,16 @@ draw_food_loop
     djnz draw_food_loop
     ret
 
-draw_food_item              ; ix pointer in food_items
+draw_food_item              ; hl pointer in food_items
     ld a, (hl)
     ld ixl, a
     inc hl
     ld a, (hl)
     ld ixh, a
-    ld a, (ix + 0)
-    sub 0x50
-    add a
-    ld l, a
-    ld h, 0
-    ld de, food_table
-    add hl, de
-    ld a, (hl)
-    inc hl
-    ld h, (hl)
-    ld l, a                             ; hl has food gfx
-    push hl
 
+draw_food_item2
+    ld de, (scr_addr_table)
     ld b, (ix + 3)
-    srl b
-    srl b
 
     ld a, (ix + 4)
     ld c, (ix + 7)
@@ -62,18 +136,31 @@ draw_food_item              ; ix pointer in food_items
     ld l, a
     ld h, 0
     add hl, hl
-    ld de, (scr_addr_table)
     add hl, de
 
     ld a, (hl)
     inc hl
     ld h, (hl)
-    ld l, a
+    ld l, a  
 
     ld c, b
     ld b, 0
     add hl, bc                  ; add x, now hl has screen address
-    pop de
+    ex de, hl
+
+    ld a, (ix + 0)
+    sub 0x50
+    add a
+    ld l, a
+    ld h, 0
+    ld bc, food_table
+    add hl, bc
+    ld a, (hl)
+    inc hl
+    ld h, (hl)
+    ld l, a                             ; hl has food gfx
+
+    ex de, hl
 
     ld b, (ix + 7)
 draw_food_item_loop
@@ -157,3 +244,6 @@ food_table
     defw item_icecream, item_bowl
     defw item_apple, item_milk
     defw item_mushroom
+
+save_food_index
+    defw 0x00

@@ -97,8 +97,7 @@ skeleton_room2      equ 0x8f
 skeleton_room3      equ 0x33
 skeleton_room4      equ 0x55
 
-type_food           equ 0x01
-type_mushroom       equ 0x02
+type_mushroom       equ 0x58
 
 interrupt_notReady		equ -2
 interrupt_firstValue	equ -1

@@ -79,6 +79,8 @@ select_game
     xor a
     ld (hunger_index), a
 
+    call init_food
+
     call draw_panel
 
     ld hl, font_0 - 256
