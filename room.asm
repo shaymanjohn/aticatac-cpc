@@ -52,6 +52,7 @@ not_gone_back
     call reset_player
     call reset_sprites
     call reset_weapon
+    call reset_food_collected
 
     call set_pens
     ret

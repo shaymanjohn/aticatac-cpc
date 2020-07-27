@@ -23,19 +23,19 @@ game_tasks
     call draw_pockets
 
 no_pockets
-    ld a, (save_food_index + 1)
+    ld a, (erase_food_with_index + 1)
     and a
     jp z, no_food_removal
 
     ld ixh, a
-    ld a, (save_food_index)
+    ld a, (erase_food_with_index)
     ld ixl, a
 
     SELECT_BANK room_bank_config    
     call draw_food_item2
 
     ld hl, 0
-    ld (save_food_index), hl
+    ld (erase_food_with_index), hl
 
 no_food_removal
     BORDER_ON hw_brightYellow

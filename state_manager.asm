@@ -55,6 +55,9 @@ select_game
     inc a
     ld (room_changed), a
 
+    ; ld a, 59
+    ; ld (room_number), a
+
     ld a, default_frame
     ld (player_frame), a
 
@@ -80,6 +83,7 @@ select_game
     ld (hunger_index), a
 
     call init_food
+    call init_collectables
 
     call draw_panel
 

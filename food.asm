@@ -83,7 +83,7 @@ remove_food
 
     ld a, 1
     ld (ix + 2), a
-    ld (save_food_index), ix
+    ld (erase_food_with_index), ix
 
     ld e, sound_collect
     call play_sfx    
@@ -93,6 +93,11 @@ remove_food
 cant_find_food
     pop bc
     pop hl
+    ret
+
+reset_food_collected
+    ld hl, 0
+    ld (erase_food_with_index), hl
     ret
 
 draw_food
@@ -127,15 +132,14 @@ draw_food_item              ; hl pointer in food_items
     ld ixh, a
 
 draw_food_item2
-    ld de, (scr_addr_table)
-    ld b, (ix + 3)
-
     ld a, (ix + 4)
     ld c, (ix + 7)
     sub c
     ld l, a
     ld h, 0
     add hl, hl
+    
+    ld de, (scr_addr_table)    
     add hl, de
 
     ld a, (hl)
@@ -143,7 +147,7 @@ draw_food_item2
     ld h, (hl)
     ld l, a  
 
-    ld c, b
+    ld c, (ix + 3)
     ld b, 0
     add hl, bc                  ; add x, now hl has screen address
     ex de, hl
@@ -213,7 +217,6 @@ list_food_loop
     and a
     jp nz, skip_food_item
 
-    ; add to food list here
     ld a, (this_rooms_food_count)
     add a
     ld l, a
@@ -245,5 +248,5 @@ food_table
     defw item_apple, item_milk
     defw item_mushroom
 
-save_food_index
+erase_food_with_index
     defw 0x00

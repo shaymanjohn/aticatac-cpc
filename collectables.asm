@@ -1,3 +1,61 @@
+init_collectables
+    ld a, 0xff                      ; empty the pockets
+    ld (pocket1), a
+    ld (pocket2), a
+    ld (pocket3), a
+
+    ld ix, col_key_yellow           ; move 'fixed' items back
+init_coll1
+    ld a, (ix + 0)
+    cp 0xff
+    jr z, do_random_collectables
+
+    ld a, (ix + 5)
+    ld (ix + 0), a                  ; reset room number
+    ld a, (ix + 6)
+    ld (ix + 3), a                  ; reset x
+    ld a, (ix + 7)
+    ld (ix + 4), a                  ; reset y
+
+    ld de, 8
+    add ix, de
+    jr init_coll1
+
+do_random_collectables
+    ld a, r
+    ld (random_seed), a
+
+    RANDOM_IN_A
+    and 0x07                        ; random 0 to 7
+    add a
+    ld l, a
+    ld h, 0
+    ld de, random_place_table
+    add hl, de
+    ld a, (hl)
+    inc hl
+    ld h, (hl)
+    ld l, a                         ; hl has address of random data
+    ld ix, col_acgkey1
+    
+    ld b, 6                         ; 6 items are randomly placed (3 key parts, 3 keys)
+    ld de, 8
+
+random_place_loop
+    ld a, (hl)
+    ld (ix + 0), a
+    inc hl
+    ld a, (hl)
+    ld (ix + 3), a
+    inc hl
+    ld a, (hl)
+    ld (ix + 4), a
+    inc hl
+    add ix, de
+    djnz random_place_loop
+    
+    ret
+
 draw_collectables
     ld a, (room_number)
     ld c, a
