@@ -72,11 +72,16 @@ no_food_removal
     SELECT_BANK item_bank_config
     BORDER_OFF
 
+    ld a, (game_over)
+    and a
+    jp nz, all_over
+
     ld a, (keyboard_state + 4)          ; m for menu
     bit 6, a
     ret nz
 
-    ld b, state_menu
+all_over
+    ld b, state_end
     jp switch_game_state
 
 do_sprites

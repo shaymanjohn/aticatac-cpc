@@ -120,3 +120,8 @@ room_frankenstein   equ 85
 room_dracula        equ 109
 room_hunchback      equ 86
 room_devil          equ 67
+
+; end room
+end_room            equ 0x8e
+game_finished       equ 1
+game_completed      equ 2

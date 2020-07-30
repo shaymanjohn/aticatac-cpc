@@ -76,7 +76,43 @@ score_text
     defb 0x32, 0x51
     defb 0xff
     defb "000000"
-    defb 0x00    
+    defb 0x00
+
+game_over_text
+    defb 0x0d, 0x30
+    defb 0xf3
+    defb "GAME OVER"
+    defb 0x00
+
+game_over_time_text
+    defb 0x0d, 0x40
+    defb 0x03
+    defb "TIME    xxxxxx"
+    defb 0x00
+
+game_over_score_text
+    defb 0x0d, 0x50
+    defb 0x03
+    defb "SCORE   xxxxxx"
+    defb 0x00        
+
+game_over_percentage_text
+    defb 0x0d, 0x60
+    defb 0x03
+    defb "PERCENT 00"
+    defb 0x00
+
+game_over_congrats_text
+    defb 0x0d, 0x20
+    defb 0xf3
+    defb "CONGRATULATIONT"
+    defb 0x00
+
+game_over_escaped_text
+    defb 0x0d, 0x30
+    defb 0xf3
+    defb "YOU HAVE ESCAPED"
+    defb 0x00
 
 
 ; 15 = 0xff, 14 = 0x3f, 13 = 0xf3, 12 = 0x33, 11 = 0xcf, 10 = 0x0f, 9 = 0xc3, 8 = 0x03

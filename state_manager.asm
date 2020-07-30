@@ -138,4 +138,21 @@ select_end
     ld hl, end_interrupts
     ld (current_interrupts), hl
 
+    ld a, (game_over)
+    cp game_completed
+    jr z, dont_clear_screens
+
+    call clear_room
+
+    ld a, (hidden_screen_base_address)
+    xor 0x40
+    call clear_room2
+    jr do_ending
+
+dont_clear_screens
+    SELECT_BANK sprite_bank_config
+    call erase_player
+
+do_ending
+    call init_endgame
     ret

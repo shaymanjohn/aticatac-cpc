@@ -55,6 +55,13 @@ not_gone_back
     call reset_food_collected
 
     call set_pens
+
+    ld a, (room_number)
+    cp end_room
+    ret nz
+
+    ld a, game_completed
+    ld (game_over), a
     ret
 
 draw_outline

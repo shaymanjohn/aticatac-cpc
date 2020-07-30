@@ -53,8 +53,8 @@ update_clock
     ret nz
 
 ; times up - finish game
-    ld b, state_menu
-    call switch_game_state
+    ld a, game_finished
+    ld (game_over), a
     ret
 
 show_clock
@@ -69,8 +69,6 @@ show_clock
     ld a, (game_time + 5)
     ld (seconds_time), a
     ld ix, seconds_text
-
-show_clock_now
     jp show_text_fast
 
 reset_clock
@@ -83,7 +81,7 @@ reset_clock
     ld (game_time + 5), a
 
     ld a, 2
-    ld (tell_time), a    
+    ld (tell_time), a
     ret
 
 tell_time

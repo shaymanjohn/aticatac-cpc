@@ -259,7 +259,7 @@ decrease_lives
     and a
     jr nz, still_alive
 
-    ld a, 1
+    ld a, game_finished
     ld (game_over), a
 
     ret        

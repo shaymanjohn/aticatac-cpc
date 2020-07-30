@@ -46,9 +46,6 @@ jump_table
     defw falling_tasks
     defw end_tasks
 
-end_tasks
-    ret
-
 current_game_state
     defb 0x00
 
