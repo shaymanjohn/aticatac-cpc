@@ -58,11 +58,12 @@ no_food_removal
 
     BORDER_ON hw_brightGreen
     SELECT_BANK room_bank_config
-	call check_doors
 
     ld a, (this_rooms_food_count)
     and a
     call nz, check_food_collision
+
+	call check_doors
 
 	ld a, (keys_pressed)
 	bit player_fire2_bit, a
@@ -79,8 +80,8 @@ no_food_removal
     jp switch_game_state
 
 do_sprites
-    ; ld ix, boss
-    ; call do_sprite
+    ld ix, boss
+    call do_sprite
 
     ld ix, sprite1
     call do_sprite
@@ -92,12 +93,9 @@ do_sprites
     jp do_sprite
 
 room_has_changed
-    ; di
     call draw_room
 
 	ld a, interrupt_notReady
-	ld (interrupt_index), a
-    ; ei
-    
+	ld (interrupt_index), a    
     ret
     

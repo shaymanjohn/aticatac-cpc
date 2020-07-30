@@ -53,6 +53,9 @@ random_place_loop
     inc hl
     add ix, de
     djnz random_place_loop
+
+    ld a, (col_key_red)
+    ld (mummy_room), a
     
     ret
 
@@ -382,6 +385,9 @@ pocket2
     defb 0xff
 pocket3
     defb 0xff
+
+mummy_room
+    defb 0x00
 
 save_collectable_screen_loc
     defw 0

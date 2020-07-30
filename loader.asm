@@ -35,7 +35,7 @@ drive
 	ld de, 0xc000
 	ld a, 200
 
-screen_copy_loop
+loader_screen_copy_loop
 	push af
 	push de
 
@@ -50,14 +50,14 @@ screen_copy_loop
 
 	pop af
 	dec a
-	jr nz, screen_copy_loop
+	jr nz, loader_screen_copy_loop
 
-	call set_pens
+	call loader_set_pens
 
 ;----------------------------------------
 
 	ld c, 0xc4					; set bank for sprites (0, 4, 2, 3)
-	call set_bank
+	call loader_set_bank
 
 	ld hl, file_heroes			; sprites in bank 4
 	ld de, 0x4000
@@ -66,7 +66,7 @@ screen_copy_loop
 ;----------------------------------------
 
 	ld c, 0xc7					; set bank for baddies (0, 7, 2, 3)
-	call set_bank
+	call loader_set_bank
 
 	ld hl, file_baddies			; baddies in bank 7
 	ld de, 0x4000
@@ -75,7 +75,7 @@ screen_copy_loop
 ;----------------------------------------
 
 	ld c, 0xc5					; set bank for rooms (0, 5, 2, 3)
-	call set_bank
+	call loader_set_bank
 
 	ld hl, file_room			; room data in bank 5
 	ld de, 0x4000
@@ -84,7 +84,7 @@ screen_copy_loop
 ;----------------------------------------
 
 	ld c, 0xc6					; set bank for sound (0, 6, 2, 3)
-	call set_bank
+	call loader_set_bank
 
 	ld hl, file_sounds			; sound data in bank 6
 	ld de, 0x4000
@@ -93,7 +93,7 @@ screen_copy_loop
 ;----------------------------------------
 
 	ld c, 0xc0					; set bank for items (0, 1, 2, 3)
-	call set_bank
+	call loader_set_bank
 
 	ld hl, file_items			; item data in bank 1
 	ld de, 0x4000
@@ -141,7 +141,7 @@ count_done
 	pop hl
 	ret
 
-set_bank
+loader_set_bank
 	ld b, 0x7f
 	out (c), c
 	ret
@@ -164,11 +164,11 @@ stb1
 	call scr_set_border			; set border colour
 	ret
 
-set_pens
+loader_set_pens
     ld hl, pens
     ld e, 16                    ; 16 pens for mode 0
     xor a					    ; initial pen index    
-set_pens_loop
+loader_set_pens_loop
     ld d, (hl)		            ; d = ink for pen
     inc hl
 	ld b, d
@@ -182,7 +182,7 @@ set_pens_loop
 	pop hl
     inc a					    ; increment pen index
     dec e
-    jr nz, set_pens_loop
+    jr nz, loader_set_pens_loop
     ret
 
 scr_next_line   	; hl = current screen address

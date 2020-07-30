@@ -114,3 +114,9 @@ state_dying     equ 3
 
 arrival_time    equ 46
 dying_time      equ 46
+
+; boss rooms
+room_frankenstein   equ 85
+room_dracula        equ 109
+room_hunchback      equ 86
+room_devil          equ 67

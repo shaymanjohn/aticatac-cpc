@@ -73,7 +73,6 @@ interrupt_switch_screens
 	ld a, (frame_ready)
 	and a
 	ret z
-
 	jp switch_screens
 
 interrupt_switch_screens_and_mode1
@@ -127,9 +126,8 @@ interrupt_keyboard
 interrupt_clock
 	ld a, (heartbeat)
 	cp 45
-	ret nz
-
-	jp update_clock
+	jp z, update_clock
+	ret
 
 interrupt_previous_stack
 	dw 0

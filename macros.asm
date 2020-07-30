@@ -1,4 +1,4 @@
-DEBUG=1
+DEBUG=0
 
 macro GET_NEXT_SCR_LINE
     ld a, h

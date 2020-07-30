@@ -1,4 +1,8 @@
 update_clock
+    ld a, (screen_transition_in_progress)
+    and a
+    ret nz
+
     ld a, 2
     ld (tell_time), a
     ld (second_only), a
@@ -60,7 +64,7 @@ show_clock
     ld ix, time_text
     ld a, (second_only)
     and a
-    jp z, show_clock_now
+    jp z, show_text_fast
 
     ld a, (game_time + 5)
     ld (seconds_time), a
@@ -85,4 +89,4 @@ reset_clock
 tell_time
     defb 0x00
 second_only
-    defb 0x00    
+    defb 0x00

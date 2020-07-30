@@ -207,6 +207,11 @@ update_sprite
     cp state_dying
     jp z, is_dying
 
+; is this a boss?
+    ld a, (ix + spr_boss)
+    and a
+    jp nz, anim_sprite
+
 ; sprite is active...
     ld a, (ix + spr_counter)
     dec a
@@ -271,6 +276,10 @@ change_direction
     jp random_sprite_action
 
 is_dead
+    ld a, (ix + spr_boss)
+    and a
+    ret nz
+    
     ld a, (ix + spr_counter)
     dec a
     ld (ix + spr_counter), a
@@ -487,10 +496,8 @@ reset_sprites
     add 5
     ld (sprite3 + spr_counter), a
 
-    ; RANDOM_IN_A
-    ; and 0x3f
-    ; add 12
-    ; ld (boss + spr_counter), a    
+; going to a boss room?
+    call init_boss
 
     ret
 
@@ -516,6 +523,7 @@ spr_wc0     equ 22  ; width of c0 frame
 spr_w80     equ 23  ; width of 80 frame
 spr_hc0     equ 24  ; height of c0 frame
 spr_h80     equ 25  ; height of 80 frame
+spr_boss    equ 26
 
 boss
     defb 0x00, 0x00             ; x, y
@@ -535,6 +543,7 @@ boss
     defb 0x00                   ; width 80
     defb 0x00                   ; height c0
     defb 0x00                   ; height c0
+    defb 0x01                   ; boss flag
 
 sprite1
     defb 0x00, 0x00             ; x, y
@@ -554,6 +563,7 @@ sprite1
     defb 0x00                   ; width 80
     defb 0x00                   ; height c0
     defb 0x00                   ; height c0
+    defb 0x00                   ; boss flag
 
 sprite2
     defb 0x00, 0x00             ; x, y
@@ -573,6 +583,7 @@ sprite2
     defb 0x00                   ; width 80
     defb 0x00                   ; height c0
     defb 0x00                   ; height c0
+    defb 0x00                   ; boss flag    
 
 sprite3
     defb 0x00, 0x00             ; x, y
@@ -592,6 +603,7 @@ sprite3
     defb 0x00                   ; width 80
     defb 0x00                   ; height c0
     defb 0x00                   ; height c0
+    defb 0x00                   ; boss flag    
 sprite_end
 
 boss_devil
@@ -601,6 +613,8 @@ boss_devil
     defb 0x00               ; faces direction of motion
     defw boss_devil_0_0, boss_devil_1_0
     defw boss_devil_2_0, boss_devil_0_0
+    defb 0                  ; killed?
+    defb 0, 0               ; start x and y
 
 boss_dracula
     defb 0x04               ; width
@@ -609,6 +623,8 @@ boss_dracula
     defb 0x00               ; faces direction of motion    
     defw boss_dracula_0_0, boss_dracula_1_0
     defw boss_dracula_2_0, boss_dracula_0_0
+    defb 0                  ; killed?
+    defb 0, 0               ; start x and y    
 
 boss_frankie
     defb 0x04               ; width
@@ -617,6 +633,8 @@ boss_frankie
     defb 0x00               ; faces direction of motion    
     defw boss_frankie_0_0, boss_frankie_1_0
     defw boss_frankie_2_0, boss_frankie_0_0
+    defb 0                  ; killed?
+    defb 0, 0               ; start x and y    
 
 boss_hunchback
     defb 0x05               ; width
@@ -625,6 +643,8 @@ boss_hunchback
     defb 0x00               ; faces direction of motion    
     defw boss_hunchback_0_0, boss_hunchback_1_0
     defw boss_hunchback_2_0, boss_hunchback_0_0
+    defb 0                  ; killed?
+    defb 0, 0               ; start x and y    
 
 boss_mummy
     defb 0x05               ; width
@@ -633,6 +653,8 @@ boss_mummy
     defb 0x00               ; faces direction of motion    
     defw boss_mummy_0_0, boss_mummy_1_0   ; 5, 7
     defw boss_mummy_2_0, boss_mummy_0_0   ; 9, 11
+    defb 0                  ; killed?
+    defb 0, 0               ; start x and y    
 
 sprite_birth
     defb 0x04               ; width
@@ -641,6 +663,8 @@ sprite_birth
     defb 0x00               ; faces direction of motion    
     defw birth_0, birth_1
     defw birth_2, birth_3
+    defb 0                  ; killed?
+    defb 0, 0               ; start x and y    
 
 sprite_death
     defb 0x04               ; width
@@ -649,6 +673,8 @@ sprite_death
     defb 0x00               ; faces direction of motion
     defw death_0, death_1
     defw death_2, death_3
+    defb 0                  ; killed?
+    defb 0, 0               ; start x and y    
 
 sprite_info                 ; some repeats to make random selection easier...
     defw spr_large_bat, spr_small_bat

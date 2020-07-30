@@ -55,7 +55,7 @@ select_game
     inc a
     ld (room_changed), a
 
-    ; ld a, 59
+    ; ld a, 85
     ; ld (room_number), a
 
     ld a, default_frame

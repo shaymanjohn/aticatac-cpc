@@ -122,12 +122,12 @@ random_place_table
     defw random_place_6, random_place_7
 
 random_place_0                  ; room, x, y
-    defb 129, 22, 64
-    defb 69, 22, 64
-    defb 124, 22, 64
-    defb 83, 22, 64
-    defb 5, 22, 64
-    defb 23, 22, 64
+    defb 129, 22, 64            ; acg key 1
+    defb 69, 22, 64             ; acg key 2
+    defb 124, 22, 64            ; acg key 3
+    defb 83, 22, 64             ; blue key
+    defb 5, 22, 64              ; green key
+    defb 23, 22, 64             ; red key
 
 random_place_1
     defb 133, 22, 64
