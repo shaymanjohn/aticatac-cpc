@@ -207,12 +207,13 @@ update_sprite
     cp state_dying
     jp z, is_dying
 
+; sprite is active...    
+
 ; is this a boss?
     ld a, (ix + spr_boss)
     and a
-    jp nz, anim_sprite
+    jp nz, update_boss
 
-; sprite is active...
     ld a, (ix + spr_counter)
     dec a
     ld (ix + spr_counter), a
@@ -270,7 +271,7 @@ bounce_sprite_y
 
 anim_sprite
     ANIMATE_SPRITE
-    ret    
+    ret  
 
 change_direction
     jp random_sprite_action
