@@ -615,7 +615,7 @@ boss_devil
     defw boss_devil_0_0, boss_devil_1_0
     defw boss_devil_2_0, boss_devil_0_0
     defb 0                  ; killed?
-    defb 0, 0               ; start x and y
+    defb 44, 84             ; start x and y
 
 boss_dracula
     defb 0x04               ; width
@@ -625,7 +625,7 @@ boss_dracula
     defw boss_dracula_0_0, boss_dracula_1_0
     defw boss_dracula_2_0, boss_dracula_0_0
     defb 0                  ; killed?
-    defb 0, 0               ; start x and y    
+    defb 44, 84             ; start x and y    
 
 boss_frankie
     defb 0x04               ; width
@@ -635,7 +635,7 @@ boss_frankie
     defw boss_frankie_0_0, boss_frankie_1_0
     defw boss_frankie_2_0, boss_frankie_0_0
     defb 0                  ; killed?
-    defb 0, 0               ; start x and y    
+    defb 44, 84             ; start x and y    
 
 boss_hunchback
     defb 0x05               ; width
@@ -645,7 +645,7 @@ boss_hunchback
     defw boss_hunchback_0_0, boss_hunchback_1_0
     defw boss_hunchback_2_0, boss_hunchback_0_0
     defb 0                  ; killed?
-    defb 0, 0               ; start x and y    
+    defb 44, 32             ; start x and y    
 
 boss_mummy
     defb 0x05               ; width
@@ -655,7 +655,7 @@ boss_mummy
     defw boss_mummy_0_0, boss_mummy_1_0   ; 5, 7
     defw boss_mummy_2_0, boss_mummy_0_0   ; 9, 11
     defb 0                  ; killed?
-    defb 0, 0               ; start x and y    
+    defb 60, 50             ; start x and y    
 
 sprite_birth
     defb 0x04               ; width

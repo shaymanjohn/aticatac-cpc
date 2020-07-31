@@ -19,104 +19,63 @@ init_boss
 
     ret
 
-init_frank
-    ld iy, boss_frankie
+common_boss_init
     ld ix, boss
-    call init_sprite
 
     ld a, state_active
     ld (ix + spr_state), a
 
-    ld a, 44
+    ld a, (iy + 14)
     ld (ix + spr_x), a
 
-    ld a, 84
+    ld a, (iy + 15)
     ld (ix + spr_y), a
 
+    jp init_sprite
+
+init_frank
     ld hl, move_frankie
     ld (boss_mover), hl
-    ret
+
+    ld iy, boss_frankie
+    jp common_boss_init
 
 init_dracula
-    ld iy, boss_dracula
-    ld ix, boss
-    call init_sprite
-
-    ld a, state_active
-    ld (ix + spr_state), a
-
-    ld a, 44
-    ld (ix + spr_x), a
-
-    ld a, 84
-    ld (ix + spr_y), a
-
     ld hl, move_dracula
     ld (boss_mover), hl
-    ret
+
+    ld iy, boss_dracula
+    jp common_boss_init
 
 init_mummy
-    ld iy, boss_mummy
-    ld ix, boss
-    call init_sprite
-
-    ld a, state_active
-    ld (ix + spr_state), a
-
-    ld a, 44
-    ld (ix + spr_x), a
-
-    ld a, 84
-    ld (ix + spr_y), a
-
     ld hl, move_mummy
-    ld (boss_mover), hl    
+    ld (boss_mover), hl
+
+    ld iy, boss_mummy
+    call common_boss_init
+
+    ld a, 1
+    ld (mummy_inc), a
+
+    ld a, mummy_count_max / 2
+    ld (mummy_count), a
     ret
 
 init_hunchback
-    ld iy, boss_hunchback
-    ld ix, boss    
-    call init_sprite
-
-    ld a, state_active
-    ld (ix + spr_state), a
-
-    ld a, 44
-    ld (ix + spr_x), a
-
-    ld a, 84
-    ld (ix + spr_y), a
-
     ld hl, move_hunchback
-    ld (boss_mover), hl    
-    ret
+    ld (boss_mover), hl
+
+    ld iy, boss_hunchback
+    jp common_boss_init
 
 init_devil
-    ld iy, boss_devil
-    ld ix, boss    
-    call init_sprite
-
-    ld a, state_active
-    ld (ix + spr_state), a
-
-    ld a, 44
-    ld (ix + spr_x), a
-
-    ld a, 84
-    ld (ix + spr_y), a
-
     ld hl, move_devil
-    ld (boss_mover), hl    
-    ret
+    ld (boss_mover), hl
+
+    ld iy, boss_devil
+    jp common_boss_init
 
 update_boss
-    ld a, (heartbeat)
-    and 0x01
-    jp z, skip_boss_anim
-
-    ANIMATE_SPRITE    
-
-skip_boss_anim
     ld hl, (boss_mover)
     jp (hl)
 
@@ -124,12 +83,44 @@ boss_mover
     defw 0x00
 
 move_frankie
+    ANIMATE_SPRITE
     ret
 
 move_dracula
+    ANIMATE_SPRITE
     ret
 
 move_mummy
+    ld a, (heartbeat)
+    bit 0, a
+    ret z
+
+    ld a, (mummy_inc)
+    ld b, a
+
+    ld a, (ix + spr_x)
+    add b
+    ld (ix + spr_x), a
+
+    ld a, (ix + spr_y)
+    add b
+    ld (ix + spr_y), a
+
+    ld a, (mummy_count)
+    inc a
+    ld (mummy_count), a
+
+    cp mummy_count_max
+    jp nz, no_bounce_mummy
+
+    ld a, b
+    neg
+    ld (mummy_inc), a
+    xor a
+    ld (mummy_count), a    
+
+no_bounce_mummy
+    ANIMATE_SPRITE
     ret
 
 move_hunchback
@@ -168,4 +159,10 @@ move_devil_now
     add e
     ld (ix + spr_y), a
 
+    ANIMATE_SPRITE
     ret
+
+mummy_inc
+    defb 0x00
+mummy_count
+    defb 0x00

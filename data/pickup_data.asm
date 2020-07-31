@@ -127,7 +127,7 @@ random_place_0                  ; room, x, y
     defb 124, 22, 64            ; acg key 3
     defb 83, 22, 64             ; blue key
     defb 5, 22, 64              ; green key
-    defb 23, 22, 64             ; red key
+    defb 23, redkey_x, redkey_y             ; red key
 
 random_place_1
     defb 133, 22, 64
@@ -135,7 +135,7 @@ random_place_1
     defb 43, 22, 64
     defb 148, 22, 64
     defb 6, 22, 64
-    defb 13, 22, 64
+    defb 13, redkey_x, redkey_y
 
 random_place_2
     defb 106, 22, 64
@@ -143,7 +143,7 @@ random_place_2
     defb 124, 22, 64
     defb 57, 22, 64
     defb 7, 22, 64
-    defb 128, 22, 64
+    defb 128, redkey_x, redkey_y
 
 random_place_3
     defb 105, 22, 64
@@ -151,7 +151,7 @@ random_place_3
     defb 43, 22, 64
     defb 143, 22, 64
     defb 34, 22, 64
-    defb 19, 22, 64
+    defb 19, redkey_x, redkey_y    
 
 random_place_4
     defb 103, 22, 64
@@ -159,7 +159,7 @@ random_place_4
     defb 124, 22, 64
     defb 51, 22, 64
     defb 36, 22, 64
-    defb 137, 22, 64
+    defb 137, redkey_x, redkey_y
 
 random_place_5
     defb 104, 22, 64
@@ -167,7 +167,7 @@ random_place_5
     defb 43, 22, 64
     defb 76, 22, 64
     defb 37, 22, 64
-    defb 133, 22, 64
+    defb 133, redkey_x, redkey_y
 
 random_place_6
     defb 77, 22, 64
@@ -175,7 +175,7 @@ random_place_6
     defb 124, 22, 64
     defb 65, 22, 64
     defb 35, 22, 64
-    defb 9, 22, 64
+    defb 9, redkey_x, redkey_y
 
 random_place_7
     defb 23, 22, 64
@@ -183,4 +183,4 @@ random_place_7
     defb 43, 22, 64
     defb 145, 22, 64
     defb 109, 22, 64
-    defb 135, 22, 64
+    defb 135, redkey_x, redkey_y

@@ -125,3 +125,9 @@ room_devil          equ 67
 end_room            equ 0x8e
 game_finished       equ 1
 game_completed      equ 2
+
+; start position for red key
+redkey_x            equ 34
+redkey_y            equ 36
+
+mummy_count_max     equ 22
