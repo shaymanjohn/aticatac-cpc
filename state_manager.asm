@@ -92,11 +92,24 @@ select_game
 
     call reset_clock
 
+; reset rooms visited flag
+    SELECT_BANK room_bank_config
+
+    ld hl, room_bank_RoomInfo
+    ld b, (end_room_bank - room_bank_RoomInfo) / 2
+reset_room_count_loop
+    res 7, (hl)
+    inc hl
+    inc hl
+    djnz reset_room_count_loop
+
+    SELECT_BANK item_bank_config    
+
     ld ix, time_text
-    call show_text_fast
+    call show_text
 
     ld ix, score_text
-    call show_text_fast
+    call show_text
 
     ld a, (hidden_screen_base_address)
     ld h, a

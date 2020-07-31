@@ -99,7 +99,7 @@ game_over_score_text
 game_over_percentage_text
     defb 0x0d, 0x60
     defb 0x03
-    defb "PERCENT 00"
+    defb "PERCENT xxx"
     defb 0x00
 
 game_over_congrats_text

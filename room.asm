@@ -73,6 +73,7 @@ draw_outline
     add hl, hl
     add hl, bc
     ld d, (hl)            ; room colour
+    set 7, (hl)
 
     push hl
 

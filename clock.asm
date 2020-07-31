@@ -3,7 +3,7 @@ update_clock
     and a
     ret nz
 
-    ld a, 2
+    ld a, 1
     ld (tell_time), a
     ld (second_only), a
 
@@ -58,18 +58,18 @@ update_clock
     ret
 
 show_clock
-    dec a
+    xor a
     ld (tell_time), a
 
     ld ix, time_text
     ld a, (second_only)
     and a
-    jp z, show_text_fast
+    jp z, show_text
 
     ld a, (game_time + 5)
     ld (seconds_time), a
     ld ix, seconds_text
-    jp show_text_fast
+    jp show_text
 
 reset_clock
     ld a, "0"
@@ -80,7 +80,7 @@ reset_clock
     ld (game_time + 4), a
     ld (game_time + 5), a
 
-    ld a, 2
+    ld a, 1
     ld (tell_time), a
     ret
 
