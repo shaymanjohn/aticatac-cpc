@@ -112,10 +112,11 @@ init_devil
 update_boss
     ld a, (heartbeat)
     and 0x01
-    ret z
+    jp z, skip_boss_anim
 
     ANIMATE_SPRITE    
 
+skip_boss_anim
     ld hl, (boss_mover)
     jp (hl)
 
@@ -135,8 +136,11 @@ move_hunchback
     ret
 
 move_devil
-    ld de, 0x0000           ; d = x motion, e = y motion
+    ld a, (heartbeat)
+    bit 0, a
+    ret z
 
+    ld de, 0x0000           ; d = x motion, e = y motion
     ld a, (player_x)
     ld b, (ix + spr_x)
     cp b
