@@ -5,15 +5,12 @@ game_tasks
 	and a
     jp nz, room_has_changed
     
-    BORDER_ON hw_orange
     ld a, (tell_time)
     and a
     call nz, show_clock
 
-    BORDER_ON hw_pink
     call update_chicken
 
-    BORDER_ON hw_brightWhite
     ld a, (do_pockets)
     and a
     jp z, no_pockets
@@ -30,15 +27,13 @@ no_pockets
     ld ixh, a
     ld a, (erase_food_with_index)
     ld ixl, a
-
-    SELECT_BANK room_bank_config    
+    SELECT_BANK room_bank_config 
     call draw_food_item2
 
     ld hl, 0
     ld (erase_food_with_index), hl
 
 no_food_removal
-    BORDER_ON hw_brightYellow
     SELECT_BANK sprite_bank_config    
     call move_player
 	call erase_player
@@ -51,7 +46,18 @@ no_food_removal
 
     BORDER_ON hw_brightBlue
     SELECT_BANK baddie_bank_config
-    call do_sprites
+    
+    ld ix, boss
+    DO_SPRITE
+
+    ld ix, sprite1
+    DO_SPRITE    
+
+    ld ix, sprite2
+    DO_SPRITE    
+
+    ld ix, sprite3
+    DO_SPRITE
 
     BORDER_ON hw_brightWhite
     call check_weapon_hit
@@ -83,19 +89,6 @@ no_food_removal
 all_over
     ld b, state_end
     jp switch_game_state
-
-do_sprites
-    ld ix, boss
-    call do_sprite
-
-    ld ix, sprite1
-    call do_sprite
-
-    ld ix, sprite2
-    call do_sprite
-
-    ld ix, sprite3
-    jp do_sprite
 
 room_has_changed
     call draw_room

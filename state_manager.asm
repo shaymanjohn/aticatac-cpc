@@ -41,9 +41,7 @@ select_game
     ld hl, game_interrupts
     ld (current_interrupts), hl
 
-	ld bc, 0x7f00 + 128 + 4 + 8 + 0		; mode 0
-	out (c), c    
-
+    SET_MODE 0
     call clear_screens
 
     xor a    
@@ -83,6 +81,8 @@ select_game
     ld (hunger_index), a
 
     call init_food
+
+    SELECT_BANK item_bank_config
     call init_collectables
 
     call draw_panel

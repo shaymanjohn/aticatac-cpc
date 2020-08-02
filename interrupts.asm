@@ -76,8 +76,7 @@ interrupt_switch_screens
 	jp switch_screens
 
 interrupt_switch_screens_and_mode1
-	ld bc, 0x7f00 + 128 + 4 + 8 + 1		; mode 1
-	out (c), c
+	SET_MODE 1
 
 	ld a, (frame_ready)
 	and a
@@ -93,8 +92,7 @@ delay_mode1
 	nop
 	djnz delay_mode1
 
-	ld bc, 0x7f00 + 128 + 4 + 8 + 1		; mode 1
-	out (c), c
+	SET_MODE 1
 
 	ld hl, logo_pens2
 	jp set_logo_pens2
@@ -108,9 +106,7 @@ delay_mode0
 	djnz delay_mode0
 
 	call set_pens
-
-	ld bc, 0x7f00 + 128 + 4 + 8 + 0		; mode 0
-	out (c), c
+	SET_MODE 0
 
 	ld hl, pens
 	jp set_logo_pens2

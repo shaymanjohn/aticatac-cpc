@@ -1,32 +1,39 @@
-DEBUG=0
+DEBUG=1
+
+macro SET_MODE screenmode
+    ld bc, 0x7f00 + 128 + 4 + 8 + {screenmode}
+	out (c), c
+mend
+
+macro DO_SPRITE
+    call erase_sprite
+    call update_sprite
+    call draw_sprite
+mend
 
 macro GET_NEXT_SCR_LINE
     ld a, h
     add a, 8
     ld h, a
     and 0x38
-    jp nz, $+11
+    jp nz, @got_next_line
     ld a, l
     add a, 0x40
     ld l, a
     ld a, h
     adc a, 0xc0
     ld h, a
-mend
-
-macro GET_NEXT_SCR_LINE_QUICK
-    ld a, h
-    add a, 8
-    ld h, a
+@got_next_line
 mend
 
 macro BORDER_ON hw_colour
 if DEBUG
-    ld d, {hw_colour}
     ld a, (show_vsync)
     and a
-    jp nz, $+6
+    jp nz, @no_show
+    ld d, {hw_colour}    
     call set_border
+@no_show
 endif
 mend
 

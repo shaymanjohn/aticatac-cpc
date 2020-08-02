@@ -1,8 +1,3 @@
-do_sprite                               ; ix points to sprite
-    call erase_sprite
-    call update_sprite
-    jp draw_sprite
-
 erase_sprite
     ld a, (hidden_screen_base_address)
     cp 0xc0

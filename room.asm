@@ -11,7 +11,6 @@ draw_room
     call draw_food
 
     SELECT_BANK item_bank_config
-
     call calc_dimensions
 
 ; Copy room to other screen 
