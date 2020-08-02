@@ -21,12 +21,10 @@ show_text_loop
     jp show_text_loop
 
 draw_letter             ; IN: a = character to draw, hl = screen address
-    ld de, (font_type)
-    ld b, h             ; bc saves screen address
-    ld c, l
+    ex de, hl
+    ld bc, (font_type)
 
     sub " "
-
     ld h, 0
     ld l, a
 
@@ -34,34 +32,33 @@ draw_letter             ; IN: a = character to draw, hl = screen address
     add hl, hl
     add hl, hl
     add hl, hl
-    add hl, de
+    add hl, bc
 
     ex de, hl
 
-    ld h, b             ; get screen address back in hl
-    ld l, c
-
-    push hl
-    push de
-    call draw_single_letter
-    pop de
-    pop hl
-
-    ld a, h             ; now draw same on other screen
-    xor 0x40
-    ld h, a
-
-draw_single_letter
 repeat 8
     ld a, (de)
-    and iyh 
-    ld (hl), a
+    and iyh
+    ld b, a
+
+    ld (hl), b
+
+    ld c, h
+    ld a, h
+    xor 0x40
+    ld h, a
+    ld (hl), b
+
     inc l
     inc de
 
     ld a, (de)
-    and iyh 
+    and iyh
     ld (hl), a
+
+    ld h, c
+    ld (hl), a
+
     inc de
     dec l
 
