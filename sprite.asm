@@ -29,7 +29,9 @@ erase_sprite_start
     ret z                               ; stop here if not yet set
     
     ld a, c
-    jp draw_sprite_entry3
+    cp 5
+    jp z, sprite_draw_loop_5
+    jp sprite_draw_loop_4
 
 draw_sprite
     ld a, (ix + spr_state)
@@ -115,7 +117,6 @@ draw_sprite_entry2
     ld b, (ix + spr_h)                  ; b has height
     ld a, (ix + spr_w)
 
-draw_sprite_entry3    
     cp 5
     jp z, sprite_draw_loop_5
 

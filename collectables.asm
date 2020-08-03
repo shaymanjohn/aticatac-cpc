@@ -199,20 +199,23 @@ draw_pockets
     ld a, (pocket1)
     call draw_this_pocket
     pop hl
-    ld bc, 4
-    add hl, bc
+    inc l
+    inc l
+    inc l
+    inc l
     push hl
     ld a, (pocket2)
     call draw_this_pocket
     pop hl
-    ld bc, 4
-    add hl, bc
+    inc l
+    inc l
+    inc l
+    inc l
     ld a, (pocket3)
 
 draw_this_pocket            ; hl = screen address, a = collectable item index
     cp 0xff
-    jp nz, draw_full_pocket
-    jp draw_empty_pocket
+    jp z, draw_empty_pocket
 
 draw_full_pocket
     push hl
@@ -308,8 +311,6 @@ draw_this_collectable_entry2
     ld b, 16
 
 collectable_draw_loop
-    push hl
-
     ld a, (de)
     xor (hl)
     ld (hl), a
@@ -332,8 +333,10 @@ collectable_draw_loop
     xor (hl)
     ld (hl), a
     inc de
+    dec l
+    dec l
+    dec l
 
-    pop hl
     GET_NEXT_SCR_LINE
     djnz collectable_draw_loop    
 
