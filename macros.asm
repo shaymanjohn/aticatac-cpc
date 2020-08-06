@@ -1,4 +1,4 @@
-DEBUG=1
+DEBUG=0
 
 macro SET_MODE screenmode
     ld bc, 0x7f00 + 128 + 4 + 8 + {screenmode}

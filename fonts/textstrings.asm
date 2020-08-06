@@ -105,7 +105,7 @@ game_over_percentage_text
 game_over_congrats_text
     defb 0x0d, 0x20
     defb 0xf3
-    defb "CONGRATULATIONT"
+    defb "CONGRATULATIONS"
     defb 0x00
 
 game_over_escaped_text

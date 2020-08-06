@@ -117,6 +117,7 @@ draw_sprite_entry2
     ld b, (ix + spr_h)                  ; b has height
     ld a, (ix + spr_w)
 
+draw_sprite_entry3
     cp 5
     jp z, sprite_draw_loop_5
 
@@ -400,7 +401,7 @@ become_active
     ; ld iy, spr_witch
     ; ld iy, spr_monk
     ; ld iy, spr_large_bat
-    ; ld iy, spr_ghost1
+    ; ld iy, spr_ghost2
     ; ld iy, boss_mummy
 
     call random_sprite_action
@@ -412,8 +413,8 @@ random_sprite_action
     add 20
     ld (ix + spr_counter), a
 
-    RANDOM_IN_A     ; a is random number between 0 and 7
-    and 0x07
+    RANDOM_IN_A
+    and 0x07                             ; a is random number between 0 and 7
 
     ld hl, sprite_direction_table
     add a    

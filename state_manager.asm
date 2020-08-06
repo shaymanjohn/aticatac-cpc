@@ -33,9 +33,7 @@ select_menu
     ld (pen_delay), a
 
     call clear_screens
-    call init_menu
-
-    ret
+    jp init_menu
 
 select_game
     ld hl, game_interrupts
@@ -143,9 +141,7 @@ select_falling
     ld (fall_index), a
 
     ld e, sound_menu
-    call play_sfx    
-
-    ret
+    jp play_sfx
 
 select_end
     ld hl, end_interrupts
@@ -167,5 +163,4 @@ dont_clear_screens
     call erase_player
 
 do_ending
-    call init_endgame
-    ret
+    jp init_endgame
