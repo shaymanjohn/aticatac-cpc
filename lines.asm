@@ -2,16 +2,13 @@
 ; Line drawing routine by fgbrain on cpcwiki.eu forum
 ; see http://www.cpcwiki.eu/forum/programming/fast-line-draw-in-assembly-(breseham-algorithm)/
 ;
-; modified to cope with different screen width
+; modified to cope with different screen width, and removed sp so don't need to disable interrupts...
 ;
 
 plot_line               ; IN: bc = start vertex, de = end vertex
-  di
-
   srl b
   srl d                   ; divide both x-coords by 2
 
-  ld (exith + 1), sp      ; save SP to restore at exit..
   ld h, 0
   ld a, c
 
@@ -75,9 +72,9 @@ skip1
   ld h, a              ;  ABS hl
 
 gnp1
-  ld sp, hl
+  ld (savedx), hl
   ld b, h
-  ld c, l              ; =ABS(DX) = BC = SP stack pointer !!!!!!
+  ld c, l              ; =ABS(DX) = BC
 
   ex de, hl
   ld de, (x2+1)
@@ -156,9 +153,11 @@ er
   ld hl, 0
   ld b, h
   ld c, l             ; HL=ER=E2=BC
+
+  ld de, (savedx)
+  add hl, de
 dy
-  ld de, 0            ; DE= DY
-  add hl, sp          ; SP=DX
+  ld de, 0            ; DE= DY  
   bit 7, h
   jp nz, nex2         ; IF  E2+DX > 0  THEN ER = ER - DY
   ld h, b
@@ -177,7 +176,8 @@ nex2
   sbc hl, de            ; IF E2 - DY < 0 THEN ER = ER + DX
   jp p, nex3
   ld hl, (er+1)
-  add hl, sp            ; SP=DX
+  ld de, (savedx)
+  add hl, de
   ld (er+1), hl         ; er = er+dx
   ld hl, y1+1
 
@@ -188,7 +188,7 @@ nex3
   jp drloop
 
 exith
-  ld sp, 0        ; modified in init
-
-  ei
   ret             ; finished OK
+
+savedx
+  defw 0
