@@ -3,8 +3,6 @@ switch_game_state
 	ld (interrupt_index), a    
 
     ld a, b
-    ld (current_game_state), a
-
     cp state_menu
     jp z, select_menu
 
@@ -20,6 +18,9 @@ switch_game_state
     ret
 
 select_menu
+    ld hl, menu_tasks
+    ld (current_game_state), hl
+
     ld hl, atic_title_Start
     call init_sound_system
 
@@ -36,6 +37,9 @@ select_menu
     jp init_menu
 
 select_game
+    ld hl, game_tasks
+    ld (current_game_state), hl
+
     ld hl, game_interrupts
     ld (current_interrupts), hl
 
@@ -79,6 +83,7 @@ select_game
     ld (hunger_index), a
 
     call init_food
+    call init_doors
 
     SELECT_BANK item_bank_config
     call init_collectables
@@ -121,6 +126,9 @@ reset_room_count_loop
     ret
 
 select_falling
+    ld hl, falling_tasks
+    ld (current_game_state), hl
+
     ld hl, falling_interrupts
     ld (current_interrupts), hl
 
@@ -144,7 +152,9 @@ select_falling
     jp play_sfx
 
 select_end
-    ld hl, end_interrupts
+    ld hl, end_tasks
+    ld (current_game_state), hl
+    ld hl, end_game_interrupts
     ld (current_interrupts), hl
 
     ld a, (game_over)

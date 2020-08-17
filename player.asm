@@ -432,6 +432,9 @@ hunger_index
 game_over
     defb 0
 
+magic_door
+    defb item_clock
+
 this_rooms_door_list
     defs max_doors * 8
 

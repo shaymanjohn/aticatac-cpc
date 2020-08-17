@@ -16,40 +16,33 @@ draw_items
     ex de, hl
 
 draw_item_loop
-    SELECT_BANK room_bank_config
-
     ld e, (hl)                  ; hl = pointer in items_per_room
     inc hl
     ld d, (hl)
-    inc hl
+    inc hl                      ; de = pointer in BackLocLists
 
     ld a, d
     or e
-    jr nz, continue_items       ; de = pointer in BackLocLists
+    ret z
 
-    SELECT_BANK item_bank_config
-    ret
-
-continue_items
     ld ixh, d
     ld ixl, e
 
     ld c, 0
     ld a, (room_number)
-    xor (ix + 1)
+    cp (ix + 1)
     jr z, skip_dil
 
     ld bc, 8
     add ix, bc
 
 skip_dil
-
     push hl
     call explode_item           ; c has offset in pair
     call draw_item              ; ix points to item in item_list
-
     pop hl
 
+    SELECT_BANK room_bank_config
     jr draw_item_loop
 
 draw_item                       ; ix + 0 = item, 3 = x, 4 = y, 5 = rotation
@@ -357,59 +350,37 @@ inc_list
     ld (bc), a
 
     ; Some doors depend on which character player is (clock, bookcase, barrel)...
-    ld a, iyl
-    cp item_clock
-    call z, check_clock_is_door
+    ld a, (magic_door)
+    ld b, a
     
-    cp item_bookcase
-    call z, check_bookcase_is_door
+    ld a, iyl
+    cp b
+    jr z, save_door_in_list
 
-    cp item_barrel    
-    call z, check_barrel_is_door
+    cp item_barrel
+    jr z, skip_save
+
+    cp item_bookcase
+    jr z, skip_save
+
+    cp item_clock
+    jr z, skip_save
+
+; and ignore tables in the door check for now
+    cp item_table
+    jr z, skip_save
 
     ld a, (item_is_door)        ; only save in list if it's a door...
     and a
     jr z, skip_save
 
+save_door_in_list
     ld hl, this_rooms_door_count
     inc (hl)
 
 skip_save
     SELECT_BANK room_bank_config
     ret
-
-check_clock_is_door
-    ld b, a
-    ld a, (player_character)
-    cp character_knight
-    jr z, player_is_knight
-    xor a
-    ld (item_is_door), a
-player_is_knight
-    ld a, b
-    ret
-
-check_bookcase_is_door
-    ld b, a
-    ld a, (player_character)
-    cp character_wizard
-    jr z, player_is_wizard
-    xor a
-    ld (item_is_door), a
-player_is_wizard
-    ld a, b
-    ret
-
-check_barrel_is_door
-    ld b, a
-    ld a, (player_character)
-    cp character_serf
-    jr z, player_is_serf
-    xor a
-    ld (item_is_door), a
-player_is_serf
-    ld a, b
-    ret    
         
 rotation
     defb 0x00

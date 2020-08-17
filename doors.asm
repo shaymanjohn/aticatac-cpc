@@ -1,11 +1,47 @@
-check_doors
-    ld a, (screen_transition_in_progress)
-    and a
-    ret nz
+init_doors
+    SELECT_BANK room_bank_config
 
-    ld a, (this_rooms_door_count)
+    ld bc, (end_room_bank_item_list - room_bank_item_list) / 16 ; (8 bytes per item, but they're in pairs so do both together)
+    ld ix, room_bank_item_list
+    ld de, 16
+    ld iyl, 0
+
+init_door_loop
+    ld a, (ix + 7)              ; is this item actually a type of door?
     and a
-    ret z
+    jr z, init_next_door
+
+    ld a, (ix + 0)              ; door type
+    
+    cp active_door_cave
+    jp z, door_open_default
+
+    cp active_door_normal
+    jp z, door_open_default
+
+    cp active_door_trapdoor
+    jp z, door_open_default
+
+    ld (ix + 2), 1              ; lock all doors that can be locked
+    ld (ix + 10), 1
+    jr z, init_next_door
+
+door_open_default
+    ld (ix + 2), 0
+    ld (ix + 10), 0
+
+init_next_door
+    add ix, de
+
+    dec bc
+    ld a, b
+    or c
+    jr nz, init_door_loop
+
+    ret
+
+check_doors
+    ld a, (this_rooms_door_count)
     ld b, a
 
 ; work out extended collision space based on key press    
@@ -75,11 +111,7 @@ end_key_check
 
 collision_loop
     ld a, (ix + 0)
-
-    cp item_table           ; ignore tables for now
-    jp z, next_collision_check
-
-    cp item_trapdoor
+    cp active_door_trapdoor
     jp z, trapdoor_collision     ; check middle of trap door with middle of player
 
 standard_collision
@@ -303,3 +335,36 @@ get_new_door_dimensions             ; hl is pointer to item in room_bank_item_li
     pop hl
     ret
     
+update_doors
+    ld a, (this_rooms_door_count)
+    ld b, a
+    ld ix, this_rooms_door_list
+
+update_doors_loop
+    ld a, (ix + 0)
+
+    cp active_door_cave
+    jp z, update_this_door
+
+    cp active_door_normal
+    jp z, update_this_door
+
+    cp active_door_trapdoor
+    jp z, update_this_door
+
+do_next_door
+    ld de, 8
+    add ix, de
+    djnz update_doors_loop
+    ret
+
+update_this_door
+    push bc
+
+    ld b, (ix + 3)
+    ld c, (ix + 4)
+    ld iyh, b
+    ld iyl, c
+
+    pop bc
+    jp do_next_door

@@ -1,8 +1,4 @@
 update_clock
-    ld a, (screen_transition_in_progress)
-    and a
-    ret nz
-
     ld a, 1
     ld (tell_time), a
     ld (second_only), a

@@ -7,6 +7,8 @@ start
     di
     ld sp, 0x4000
 
+    SELECT_BANK item_bank_config
+
     ld d, hw_black
     call set_border
 
@@ -28,26 +30,11 @@ main_loop
     jp main_loop
 
 perform_current_state
-    ld a, (current_game_state)
-    add a
-    ld e, a
-    ld d, 0
-    ld hl, jump_table
-    add hl, de
-    ld a, (hl)
-    inc hl
-    ld h, (hl)
-    ld l, a
+    ld hl, (current_game_state)
     jp (hl)
 
-jump_table
-    defw menu_tasks
-    defw game_tasks
-    defw falling_tasks
-    defw end_tasks
-
 current_game_state
-    defb 0x00
+    defw 0x00
 
 frame_ready
     defb 0x00

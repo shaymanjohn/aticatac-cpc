@@ -82,7 +82,6 @@ character_serf      equ 0x02
 item_clock          equ 0x10
 item_table          equ 0x12
 item_bookcase       equ 0x17
-item_trapdoor       equ 0x19
 item_barrel         equ 0x1a
 
 character_left      equ 20
@@ -131,3 +130,7 @@ redkey_x            equ 34
 redkey_y            equ 36
 
 mummy_count_max     equ 22
+
+active_door_cave        equ 0x01
+active_door_normal      equ 0x02
+active_door_trapdoor    equ 0x19

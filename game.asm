@@ -13,13 +13,13 @@ game_tasks
 
     ld a, (do_pockets)
     and a
-    jp z, no_pockets
+    jp z, no_pockets_to_update
     
     dec a
     ld (do_pockets), a
     call draw_pockets
 
-no_pockets
+no_pockets_to_update
     ld a, (erase_food_with_index + 1)
     and a
     jp z, no_food_removal
@@ -67,10 +67,19 @@ no_food_removal
 
     ld a, (this_rooms_food_count)
     and a
-    call nz, check_food_collision
+    call nz, check_food_collision    
+
+    ld a, (screen_transition_in_progress)
+    and a
+    jp nz, ignore_doors
 
 	call check_doors
 
+    ld a, (heartbeat)
+    cp 25
+    call z, update_doors
+
+ignore_doors
 	ld a, (keys_pressed)
 	bit player_fire2_bit, a
 	call nz, pickup_tapped

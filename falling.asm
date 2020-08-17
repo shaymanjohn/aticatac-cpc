@@ -16,19 +16,16 @@ falling_tasks
 	and a
 	ret nz
 
-    ; di
     call draw_room
 
-    ld a, state_game
-    ld (current_game_state), a
+    ld hl, game_tasks
+    ld (current_game_state), hl
 
     ld hl, game_interrupts
     ld (current_interrupts), hl	
 
 	ld a, interrupt_notReady
 	ld (interrupt_index), a
-    ; ei
-
     ret
 
 erase_previous_tunnels

@@ -8,9 +8,6 @@ install_interrupts
 	ret
 
 interrupt_callback
-	ld (interrupt_previous_stack), sp
-	ld sp, interrupt_stack_start
-
 	push af
 	push bc
 	push hl
@@ -18,10 +15,13 @@ interrupt_callback
 	push ix
 	push iy
 
+	ld a, (memory_bank)					; remember current memory bank
+	ld (previous_memory_bank), a	
+
 	ld b, 0xf5
 	in a, (c)
 	rrca
-	jr nc, skipInitFirst
+	jp nc, skipInitFirst
 	ld a, interrupt_firstValue
 	ld (interrupt_index), a
 
@@ -54,6 +54,11 @@ interrupt_call
 	call 0						; modified in line above to have correct address
 
 skipInterrupt
+	ld a, (previous_memory_bank)
+    ld b, 0x7f
+    out (c), a
+	ld (memory_bank), a
+
 	pop iy
 	pop ix
 	pop de
@@ -61,9 +66,7 @@ skipInterrupt
 	pop bc
 	pop af
 
-	ld sp, (interrupt_previous_stack)
 	ei
-
 	ret
 
 interrupt_empty
@@ -125,12 +128,12 @@ interrupt_clock
 	jp z, update_clock
 	ret
 
-interrupt_previous_stack
-	dw 0
+; interrupt_previous_stack
+; 	dw 0
 
-interrupt_stack
-	defs 256
-interrupt_stack_start
+; interrupt_stack
+; 	defs 256
+; interrupt_stack_start
 
 interrupt_index
 	db interrupt_notReady
@@ -162,7 +165,7 @@ falling_interrupts
 	dw interrupt_empty
 	dw service_sound_system
 
-end_interrupts
+end_game_interrupts
 	dw interrupt_switch_screens
 	dw interrupt_keyboard
 	dw interrupt_empty

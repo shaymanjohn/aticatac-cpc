@@ -11,30 +11,11 @@ draw_room
     call draw_food
 
     SELECT_BANK item_bank_config
-    call calc_dimensions
+    call calc_room_dimensions
 
-; Copy room to other screen 
-    ld a, (hidden_screen_base_address)
-    ld h, a
-    ld l, 0
-    
-    ld ixh, num_rows
-    ld ixl, 48
+    call copy_room_to_other_screen
 
-copy_loop    
-    push hl
-    ld a, h
-    xor 0x40
-    ld d, a
-    ld e, l
-    ld b, 0
-    ld c, ixl
-    ldir
-    pop hl
-    GET_NEXT_SCR_LINE
-    dec ixh
-    jr nz, copy_loop
-
+; Reset data for new room.
     xor a
     ld (room_changed), a
 
@@ -61,6 +42,29 @@ not_gone_back
 
     ld a, game_completed
     ld (game_over), a
+    ret
+
+copy_room_to_other_screen
+    ld a, (hidden_screen_base_address)
+    ld h, a
+    ld l, 0
+    
+    ld ixh, num_rows
+    ld ixl, 48
+
+copy_loop    
+    push hl
+    ld a, h
+    xor 0x40
+    ld d, a
+    ld e, l
+    ld b, 0
+    ld c, ixl
+    ldir
+    pop hl
+    GET_NEXT_SCR_LINE
+    dec ixh
+    jr nz, copy_loop
     ret
 
 draw_outline
@@ -143,14 +147,6 @@ draw1
     cp 0xff
     ret z
 
-    cp 0xfe                 ; change pen 
-    jr nz, draw3
-
-    ld a, (ix + 1)
-    ld (line_pen_number + 1), a
-    inc ix
-    jr draw1
-
 draw3
     ; convert a into a point address stored in bc
     call get_point
@@ -208,7 +204,7 @@ clear1
 
     ret
 
-calc_dimensions
+calc_room_dimensions
     ld hl, (room_size)
     srl h
 

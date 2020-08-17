@@ -1,4 +1,4 @@
-DEBUG=0
+DEBUG=1
 
 macro SET_MODE screenmode
     ld bc, 0x7f00 + 128 + 4 + 8 + {screenmode}
@@ -46,9 +46,9 @@ mend
 
 macro SELECT_BANK bank_num
     ld a, {bank_num}
+    ld (memory_bank), a    
     ld b, 0x7f
     out (c), a
-    ld (memory_bank), a
 mend
 
 macro RANDOM_IN_A       ; from http://www.z80.info/pseudo-random.txt

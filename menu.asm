@@ -173,6 +173,7 @@ character_selected
     ld hl, serf_frames_table
     ld a, serf_height
     ld b, character_serf
+    ld c, item_barrel
     jr save_selection
 
 selected_knight
@@ -185,6 +186,7 @@ selected_knight
     ld hl, knight_frames_table
     ld a, knight_height
     ld b, character_knight
+    ld c, item_clock
     jr save_selection
 
 selected_wizard
@@ -197,12 +199,15 @@ selected_wizard
     ld hl, wizard_frames_table
     ld a, wizard_height
     ld b, character_wizard
+    ld c, item_bookcase
 
 save_selection
     ld (selected_player), hl
     ld (selected_player_height), a
     ld a, b
     ld (player_character), a
+    ld a, c
+    ld (magic_door), a
     ret
 
 check_keys    
@@ -262,8 +267,7 @@ point_right
 
 play_menu_sound
     ld e, sound_menu                         ; sfx number
-    call play_sfx
-    ret
+    jp play_sfx
 
 clear_heroes
 	ld a, (player_select_x)

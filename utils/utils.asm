@@ -286,4 +286,7 @@ logo_pens2
     defb hw_brightWhite    
 
 memory_bank
-    defb item_bank_config
+    defb 0x00
+
+previous_memory_bank
+    defb 0x00

@@ -11,13 +11,14 @@ Joystick or cursor keys to move
 
 Joystick button 2 or G to pick up items
 
-V to toggle interrupt timings in border
-
 M return to menu
 
 Thanks to this site for the info on the data formats:
-
 http://icemark.com/dataformats/aticatac/index.html
+
+Sound and music (and playback) thanks to Arkos Tracker 2:
+http://www.julien-nevo.com/arkostracker/
+
 
 ![](githubimages/loading.png)
 ![](githubimages/menu.png)
