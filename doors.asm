@@ -1,4 +1,11 @@
 init_doors
+;
+;   ix + 2
+;   bit 7           0 = open, 1 = closed or locked
+;   bit 6           0 = keyed door, 1 = revolving door
+;   bit 5, 4, 3     open / close time (0 = 3, 1 = 4, 2 = 5, 3 = 6)
+;   bit 2, 1, 0     current time
+
     SELECT_BANK room_bank_config
 
     ld bc, (end_room_bank_item_list - room_bank_item_list) / 16 ; (8 bytes per item, but they're in pairs so do both together)
@@ -7,32 +14,55 @@ init_doors
     ld iyl, 0
 
 init_door_loop
+    push bc
+
     ld a, (ix + 7)              ; is this item actually a type of door?
     and a
     jr z, init_next_door
 
-    ld a, (ix + 0)              ; door type
+    set 7, (ix + 2)
+    set 7, (ix + 10)            ; lock and close all doors...
+
+    ld a, (ix + 0)              ; item type
     
     cp active_door_cave
-    jp z, door_open_default
+    jr z, revolving_door
 
     cp active_door_normal
-    jp z, door_open_default
+    jr z, revolving_door
 
     cp active_door_trapdoor
-    jp z, door_open_default
+    jr z, revolving_door
 
-    ld (ix + 2), 1              ; lock all doors that can be locked
-    ld (ix + 10), 1
-    jr z, init_next_door
+    res 6, (ix + 2)
+    res 6, (ix + 10)
+    jr init_next_door
 
-door_open_default
-    ld (ix + 2), 0
-    ld (ix + 10), 0
+revolving_door
+    set 6, (ix + 2)
+    set 6, (ix + 10)
+
+    f_IN_A
+    and 0x07
+    sla a
+    sla a
+    sla a
+
+    or iyl
+
+    or (ix + 2)
+    ld (ix + 2), a
+    ld (ix + 10), a
+
+    inc iyl
+    ld a, iyl
+    and 0x07
+    ld iyl, a
 
 init_next_door
     add ix, de
 
+    pop bc
     dec bc
     ld a, b
     or c
@@ -334,23 +364,68 @@ get_new_door_dimensions             ; hl is pointer to item in room_bank_item_li
     pop bc
     pop hl
     ret
+
+;
+;   ix + 2
+;
+;   bit 7           0 = open, 1 = closed or locked
+;   bit 6           0 = keyed door, 1 = revolving door
+;   bit 5, 4, 3     open / close time (0 = 3, 1 = 4, 2 = 5, 3 = 6)
+;   bit 2, 1, 0     current time    
     
 update_doors
     ld a, (this_rooms_door_count)
     ld b, a
-    ld ix, this_rooms_door_list
+    ld ix, this_rooms_door_list         ; list of items in 'exploded' format
 
 update_doors_loop
-    ld a, (ix + 0)
+    ld l, (ix + 3)
+    ld h, (ix + 4)              ; get real item pointer
+    inc hl
+    inc hl                      ; increment by 2 to get to door control byte (eg. ix + 2)
 
-    cp active_door_cave
-    jp z, update_this_door
+    ld a, (hl)
+    bit 6, a                   ; is door a revolving door
+    jp z, do_next_door
 
-    cp active_door_normal
-    jp z, update_this_door
+    ld e, a
+    ld c, a
 
+    inc a
+    and 0x07
+
+    ld d, a
+    ld a, c
+    and %00111000
+    srl a
+    srl a
+    srl a
+    cp d
+    jp nz, door_not_hit_counter
+
+    ld a, e
+    and %11111000               ; keep the original values, set count to 0
+    xor %10000000               ; and toggle the open/close status
+    ld (hl), a
+
+    ld e, (ix + 3)
+    ld d, (ix + 4)
+
+    ld ixh, d
+    ld ixl, e
+
+    ld a, (ix + 0)                  ; special case for trapdoor - have to xor the grill image
     cp active_door_trapdoor
-    jp z, update_this_door
+    jp z, xor_the_trapdoor_grill
+
+    ld (door_to_toggle), de    
+    jp draw_item
+
+door_not_hit_counter
+    ld a, e
+    and %11111000
+    or d
+    ld (hl), a
 
 do_next_door
     ld de, 8
@@ -358,13 +433,72 @@ do_next_door
     djnz update_doors_loop
     ret
 
-update_this_door
-    push bc
+xor_the_trapdoor_grill
+    ld a, (ix + 4)
+    sub 22
+    ld h, 0
+    ld l, a
+    add hl, hl
+    ld de, (scr_addr_table)
+    add hl, de
 
-    ld b, (ix + 3)
-    ld c, (ix + 4)
-    ld iyh, b
-    ld iyl, c
+    ld a, (hl)
+    inc hl
+    ld h, (hl)
+    ld l, a
 
-    pop bc
-    jp do_next_door
+    ld a, (ix + 3)
+    srl a
+    srl a
+    add 2
+    ld e, a
+    ld d, 0
+    add hl, de
+
+    SELECT_BANK item_bank_config    
+
+    push hl
+    call do_the_grill
+
+    pop hl
+    ld a, h
+    xor 0x40
+    ld h, a
+
+do_the_grill
+    ld de, trapdoor_grill
+    ld b, 14
+
+xor_grill_loop
+    ld a, (de)
+    xor (hl)
+    ld (hl), a
+    inc l
+    inc de
+
+    ld a, (de)
+    xor (hl)
+    ld (hl), a
+    inc l
+    inc de
+
+    ld a, (de)
+    xor (hl)
+    ld (hl), a
+    inc l
+    inc de
+
+    ld a, (de)
+    xor (hl)
+    ld (hl), a
+    inc de    
+
+    dec l
+    dec l
+    dec l
+    GET_NEXT_SCR_LINE
+    djnz xor_grill_loop        
+    ret
+
+door_to_toggle
+    defw 0x0000

@@ -28,6 +28,9 @@ draw_room
 not_gone_back
     ld a, r
     ld (random_seed), a
+
+    ld hl, 0
+    ld (door_to_toggle), hl    
     
     call reset_player
     call reset_sprites

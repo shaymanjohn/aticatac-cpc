@@ -47,6 +47,8 @@ skip_dil
 
 draw_item                       ; ix + 0 = item, 3 = x, 4 = y, 5 = rotation
     ld l, (ix + 0)
+    call convert_door_type      ; locked / unlocked / closed / open, etc
+
     ld h, 0
     add hl, hl
     ld de, item_bank_items      
@@ -381,7 +383,59 @@ save_door_in_list
 skip_save
     SELECT_BANK room_bank_config
     ret
-        
+
+convert_door_type
+    ld a, l
+    cp 1
+    jr z, check_cavedoor_is_closed
+    cp 2
+    jr z, check_normaldoor_is_closed
+    cp 25
+    jr z, check_trapdoor_is_closed
+    cp 8
+    jr z, check_keyed_door_is_locked
+    cp 9
+    jr z, check_keyed_door_is_locked
+    cp 10
+    jr z, check_keyed_door_is_locked
+    cp 11
+    jr z, check_keyed_door_is_locked
+    cp 12
+    jr z, check_keyedcave_door_is_locked
+    cp 13
+    jr z, check_keyedcave_door_is_locked
+    cp 14
+    jr z, check_keyedcave_door_is_locked
+    cp 15
+    ret nz
+
+check_keyedcave_door_is_locked
+    ret
+
+check_keyed_door_is_locked
+    ret    
+
+check_normaldoor_is_closed
+    bit 7, (ix + 2)                 ; open = 0, closed = 1
+    ret nz
+
+    ld l, 32
+    ret
+
+check_cavedoor_is_closed
+    bit 7, (ix + 2)
+    ret nz
+
+    ld l, 34
+    ret
+
+check_trapdoor_is_closed
+    bit 7, (ix + 2)                 ; open = 0, closed = 1
+    ret nz
+
+    ld l, 24
+    ret
+
 rotation
     defb 0x00
 

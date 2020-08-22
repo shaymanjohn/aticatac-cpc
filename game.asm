@@ -47,17 +47,17 @@ no_food_removal
     BORDER_ON hw_brightBlue
     SELECT_BANK baddie_bank_config
     
-    ld ix, boss
-    DO_SPRITE
+    ; ld ix, boss
+    ; DO_SPRITE
 
-    ld ix, sprite1
-    DO_SPRITE    
+    ; ld ix, sprite1
+    ; DO_SPRITE    
 
-    ld ix, sprite2
-    DO_SPRITE    
+    ; ld ix, sprite2
+    ; DO_SPRITE    
 
-    ld ix, sprite3
-    DO_SPRITE
+    ; ld ix, sprite3
+    ; DO_SPRITE
 
     BORDER_ON hw_brightWhite
     call check_weapon_hit
@@ -73,6 +73,19 @@ no_food_removal
     and a
     jp nz, ignore_doors
 
+    ld de, (door_to_toggle)
+    ld a, d
+    or e
+    jp z, skip_door_toggle
+
+    ld hl, 0
+    ld (door_to_toggle), hl
+
+    ld ixh, d
+    ld ixl, e
+    call draw_item
+
+skip_door_toggle
 	call check_doors
 
     ld a, (heartbeat)
