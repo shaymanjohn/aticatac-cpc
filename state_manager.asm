@@ -67,14 +67,13 @@ select_game
     ld a, 0x57
     ld (player_y), a
 
-    ld a, player_is_going_right
-    ld (player_orientation), a
-
     ld hl, (selected_player)
     ld (anim_frames_table), hl
 
     ld a, (selected_player_height)
     ld (actual_player_height), a
+
+    call init_player_appearing    
 
     ld a, 3
     ld (num_lives), a
@@ -88,6 +87,7 @@ select_game
     SELECT_BANK item_bank_config
     call init_collectables
 
+    ld a, (actual_player_height)
     call draw_panel
 
     ld hl, font_0 - 256

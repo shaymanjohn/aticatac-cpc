@@ -34,9 +34,15 @@ no_pockets_to_update
     ld (erase_food_with_index), hl
 
 no_food_removal
-    SELECT_BANK sprite_bank_config    
+    SELECT_BANK sprite_bank_config
+
+    ld a, (player_appearing)
+    and a
+    jp nz, make_player_appear
+
     call move_player
-	call erase_player
+
+    call erase_player
     call draw_player
 
     BORDER_ON hw_brightRed
@@ -47,17 +53,17 @@ no_food_removal
     BORDER_ON hw_brightBlue
     SELECT_BANK baddie_bank_config
     
-    ; ld ix, boss
-    ; DO_SPRITE
+    ld ix, boss
+    DO_SPRITE
 
-    ; ld ix, sprite1
-    ; DO_SPRITE    
+    ld ix, sprite1
+    DO_SPRITE    
 
-    ; ld ix, sprite2
-    ; DO_SPRITE    
+    ld ix, sprite2
+    DO_SPRITE    
 
-    ; ld ix, sprite3
-    ; DO_SPRITE
+    ld ix, sprite3
+    DO_SPRITE
 
     BORDER_ON hw_brightWhite
     call check_weapon_hit
@@ -73,6 +79,7 @@ no_food_removal
     and a
     jp nz, ignore_doors
 
+skip_all_others
     ld de, (door_to_toggle)
     ld a, d
     or e
@@ -90,7 +97,7 @@ skip_door_toggle
 
     ld a, (heartbeat)
     cp 25
-    call z, update_doors
+    call z, update_doors    
 
 ignore_doors
 	ld a, (keys_pressed)
@@ -118,4 +125,34 @@ room_has_changed
 	ld a, interrupt_notReady
 	ld (interrupt_index), a    
     ret
+
+make_player_appear
+    dec a
+    ld (player_appearing), a
+
+    call erase_small_player
+    call draw_small_player
+
+    ld a, (current_player_height)
+    ld b, a
+    ld a, (actual_player_height)
+    cp b
+    jp z, player_full
+
+    ld a, (heartbeat)
+    and 0x07
+    cp 0x07
+    jp nz, player_full
+
+    ld a, b
+    inc a
+    ld (current_player_height), a
+    ld hl, (current_height_gfx_offset)
+    ld bc, -5
+    add hl, bc
+    ld (current_height_gfx_offset), hl
+
+player_full
+    SELECT_BANK room_bank_config    
+    jp skip_all_others    
     

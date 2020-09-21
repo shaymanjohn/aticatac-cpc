@@ -1,5 +1,33 @@
+init_player_appearing
+    ld a, player_is_going_right
+    ld (player_orientation), a
+
+    ld a, (actual_player_height)
+    ld b, a
+    
+    sla a
+    sla a
+    sla a
+    ld (player_appearing), a
+
+    ld a, 1
+    ld (current_player_height), a
+
+    ld a, b
+    dec a
+
+    ld l, a
+    ld h, 0
+    add hl, hl
+    add hl, hl
+    ld c, a
+    ld b, 0
+    add hl, bc
+    ld (current_height_gfx_offset), hl
+    ret
+
 draw_player
-    ld a, (player_y)
+    ld a, (player_y)    
     ld l, a
     ld h, 0
     add hl, hl
@@ -108,6 +136,147 @@ dplay2
     djnz dplay2
 
     ret
+
+erase_small_player
+    ld a, (hidden_screen_base_address)
+    cp 0xc0
+    jp nz, erase_small_with_80
+
+    ld de, (save_player_frame_c0)
+    ld hl, (save_player_address_c0)
+    jp erasex_small
+
+erase_small_with_80
+    ld de, (save_player_frame_80)
+    ld hl, (save_player_address_80)
+    
+erasex_small
+    ld a, h
+    or l
+    ret z                       ; stop here if not yet set
+
+    jp draw_player_entry2_small
+
+draw_small_player
+    ld a, (player_y)
+    ld c, a
+    ld a, (current_player_height)    
+    ld b, a
+    ld a, (actual_player_height)
+    sub b
+    add c
+
+    ld l, a
+    ld h, 0
+    add hl, hl
+    ld de, (scr_addr_table)
+    add hl, de
+
+    ld a, (hl)
+    inc hl
+    ld h, (hl)
+    ld l, a
+
+    ld a, (player_x)
+    ld e, a
+    srl a
+    ld c, a
+    ld b, 0
+    add hl, bc
+
+    push hl                                ; save screen address
+
+    ld a, (hidden_screen_base_address)
+    cp 0xc0
+    jp z, save_small_address_c0
+    ld (save_player_address_80), hl        ; save this for erase later
+    jp saved_small_address
+
+save_small_address_c0
+    ld (save_player_address_c0), hl
+
+saved_small_address
+    ld b, 0
+    ld a, e
+    and 0x01
+    jp z, dplay1_small
+    ld b, num_player_frames
+
+dplay1_small
+    ld a, (player_frame)
+    srl a
+    srl a
+    add b
+
+    ld b, a
+    ld a, (player_orientation)
+    add b
+
+    ld l, a
+    ld h, 0
+    add hl, hl
+    ld de, (anim_frames_table)
+    add hl, de
+    ld e, (hl)
+    inc hl
+    ld d, (hl)
+
+    ld hl, (current_height_gfx_offset)
+    add hl, de
+    ex de, hl
+
+    pop hl                                  ; hl is screen, de is gfx
+
+    ld a, (hidden_screen_base_address)
+    cp 0xc0
+    jp z, save_frame_c0_small
+    ld (save_player_frame_80), de        ; save this for erase later
+    jp draw_player_entry2_small
+
+save_frame_c0_small
+    ld (save_player_frame_c0), de
+
+draw_player_entry2_small
+    ld a, (current_player_height)
+    ld b, a
+
+dplay2_small
+    push hl
+    
+    ld a, (de)              ; de is screen
+    xor (hl)                ; hl is gfx
+    ld (hl), a
+    inc l
+    inc de
+
+    ld a, (de)
+    xor (hl)
+    ld (hl), a
+    inc l
+    inc de
+
+    ld a, (de)
+    xor (hl)
+    ld (hl), a
+    inc l    
+    inc de
+
+    ld a, (de)
+    xor (hl)
+    ld (hl), a
+    inc l    
+    inc de
+
+    ld a, (de)
+    xor (hl)
+    ld (hl), a
+    inc de
+
+    pop hl
+    GET_NEXT_SCR_LINE
+
+    djnz dplay2_small
+    ret    
 
 erase_player
     ld a, (hidden_screen_base_address)
@@ -394,9 +563,12 @@ reset_player
     ld hl, 0
     ld (save_player_address_c0), hl
     ld (save_player_address_80), hl
-    ret    
+    ret
 
 player_character
+    defb 0
+
+player_appearing
     defb 0
 
 player_x
@@ -407,6 +579,12 @@ player_y
 
 actual_player_height
     defb serf_height
+
+current_player_height
+    defb 0
+
+current_height_gfx_offset
+    defw 0
 
 player_select_x
     defb 0

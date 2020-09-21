@@ -37,9 +37,7 @@ clear_lives_loop
     ld d, h
     ld e, l
     inc de
-    ; ld (hl), 0
     ld bc, (player_width + 1) * 3
-    ; ldir
     pop hl
     GET_NEXT_SCR_LINE
     pop bc

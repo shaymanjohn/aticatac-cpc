@@ -13,6 +13,9 @@ init_doors
     ld de, 16
     ld iyl, 0
 
+    ld a, r
+    ld (random_seed), a    
+
 init_door_loop
     push bc
 
@@ -24,16 +27,22 @@ init_door_loop
     set 7, (ix + 10)            ; lock and close all doors...
 
     ld a, (ix + 0)              ; item type
-    
+    cp active_door_trapdoor
+    jr z, revolving_door
+
+    ld c, a
+    RANDOM_IN_A
+    cp 179                                 ; randomly select roughly 70% of the automatic doors to work 
+    jp c, skip_revolving_door_this_time    
+
+    ld a, c
     cp active_door_cave
     jr z, revolving_door
 
     cp active_door_normal
     jr z, revolving_door
 
-    cp active_door_trapdoor
-    jr z, revolving_door
-
+skip_revolving_door_this_time
     res 6, (ix + 2)
     res 6, (ix + 10)
     jr init_next_door
@@ -42,7 +51,7 @@ revolving_door
     set 6, (ix + 2)
     set 6, (ix + 10)
 
-    f_IN_A
+    RANDOM_IN_A
     and 0x07
     sla a
     sla a
@@ -183,6 +192,19 @@ next_collision_check
     ret
 
 trapdoor_collision
+    ld e, (ix + 3)
+    ld d, (ix + 4)
+    inc de
+    inc de
+
+    ld c, b
+    SELECT_BANK room_bank_config
+    ld a, (de)
+
+    bit 7, a
+    ld b, c
+    jp nz, next_collision_check      ; only check if trapdoor is open
+
     ld a, (ix + 1)          ; get door x + width * 2
     add (ix + 5)
     add (ix + 5)
@@ -222,6 +244,7 @@ trapdoor_collision
 td1    
     add hl, bc              ; hl now points to item to move to 1 = room number, 3 = x, 4 = y, 5 = rotation, etc
     inc hl
+
     ld a, (hl)              ; move to room this item is in
     ld (room_number), a
     
@@ -455,7 +478,7 @@ xor_the_trapdoor_grill
     ld d, 0
     add hl, de
 
-    SELECT_BANK item_bank_config    
+    SELECT_BANK item_bank_config
 
     push hl
     call do_the_grill
