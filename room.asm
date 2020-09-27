@@ -15,6 +15,9 @@ draw_room
 
     call copy_room_to_other_screen
 
+    SELECT_BANK room_bank_config
+    call calculate_collision_grid
+
 ; Reset data for new room.
     xor a
     ld (room_changed), a
@@ -37,6 +40,8 @@ not_gone_back
     call reset_weapon
     call reset_food_collected
 
+    call map_doors
+
     call set_pens
 
     ld a, (room_number)
@@ -53,21 +58,19 @@ copy_room_to_other_screen
     ld l, 0
     
     ld ixh, num_rows
-    ld ixl, 48
 
-copy_loop    
+copy_room_loop    
     push hl
     ld a, h
     xor 0x40
     ld d, a
     ld e, l
-    ld b, 0
-    ld c, ixl
+    ld bc, 48
     ldir
     pop hl
     GET_NEXT_SCR_LINE
     dec ixh
-    jr nz, copy_loop
+    jr nz, copy_room_loop
     ret
 
 draw_outline
@@ -109,6 +112,7 @@ not_skeleton_room
 
     inc hl
     ld a, (hl)            ; a has room type
+    ld (room_type), a
 
     ld bc, room_bank_RoomTypes
     ld l, a
@@ -235,7 +239,142 @@ save_old_room_info
     ld de, old_room_sprites
     ld bc, sprite_end - sprite1
     ldir
-    ret    
+    ret
+
+calculate_collision_grid
+    ld hl, collision_grid
+    ld de, collision_grid + 1
+    ld bc, (collision_grid_size * collision_grid_size) - 1
+    ld (hl), 0xff
+    ldir
+
+    call block_items
+    call block_room
+    ; call draw_collision_grid
+    ret
+
+block_room
+    ld bc, 0                        ; set all collision tiles based on min-max x and y
+    ld hl, collision_grid
+
+set_grid                            ; b is y, c is x
+    ld a, (min_y)                   ; divide by 8
+    srl a
+    srl a
+    srl a
+    cp b
+    jr nc, skip_this_element
+
+    ld a, (max_y)                   ; divide by 8
+    srl a
+    srl a
+    srl a
+    inc a
+    inc a
+    cp b
+    jr c, skip_this_element    
+
+    ld a, (min_x)                   ; divide by 4
+    srl a
+    srl a
+    dec a
+    cp c
+    jr nc, skip_this_element    
+
+    ld a, (max_x)                   ; divide by 4
+    srl a
+    srl a
+    inc a
+    cp c
+    jr c, skip_this_element
+
+set_grid_element
+    ld a, (hl)
+    cp active_door_trapdoor
+    jr z, skip_this_element
+    cp item_table
+    jr z, skip_this_element
+
+    ld (hl), 0
+
+skip_this_element    
+    inc hl
+
+    inc c
+    ld a, c
+    cp collision_grid_size
+    jr nz, set_grid
+
+    ld c, 0 
+    inc b
+    ld a, b
+    cp collision_grid_size
+    jr nz, set_grid
+    ret
+
+block_items
+    ld a, (this_rooms_door_count)
+    ld b, a
+    ld ix, this_rooms_door_list
+
+collision_list_loop
+    ld l, (ix + 2)          ; y
+    srl l
+    srl l
+    srl l
+
+    ld h, 0
+    add hl, hl
+    add hl, hl
+    add hl, hl
+    ld d, h
+    ld e, l                 ; de = y * 8
+    add hl, hl
+    add hl, de              ; hl = (y * 16) + (y * 4) = y * 24
+
+    ld e, (ix + 1)
+    srl e
+    srl e
+    ld d, 0
+    add hl, de
+
+    ld de, collision_grid
+    add hl, de              ; hl is first char in collision grid for this item
+
+    push bc
+    call block_out_item
+    pop bc
+
+    ld de, 8
+    add ix, de
+    djnz collision_list_loop
+    ret
+
+block_out_item
+    ld c, (ix + 6)          ; height of item
+    srl c
+    srl c
+    srl c
+
+coll_item_loop2 
+    ld b, (ix + 5)
+    srl b
+    ld a, (ix + 0)
+
+    push hl
+
+coll_item_loop    
+    ld (hl), a
+    inc hl
+    djnz coll_item_loop
+
+    pop hl
+    ld de, 24
+    add hl, de
+
+    dec c    
+    jr nz, coll_item_loop2
+    ret
 
 point_address
     defw 0
@@ -257,6 +396,9 @@ last_room_number
     defb 0x00
 
 room_changed
+    defb 0
+
+room_type
     defb 0
 
 next_room_number

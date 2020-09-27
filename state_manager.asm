@@ -138,6 +138,9 @@ select_falling
     xor 0x40
     call clear_room2
 
+    call reset_sprites
+    call reset_weapon
+
     xor a
     ld (save_fall_data), a
     ld (save_fall_data + 1), a

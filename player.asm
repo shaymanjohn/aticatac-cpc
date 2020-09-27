@@ -298,130 +298,6 @@ erasex
 
     jp draw_player_entry2
 
-move_player
-    ld a, (screen_transition_in_progress)
-    and a
-    jp z, can_move
-
-    dec a
-    ld (screen_transition_in_progress), a
-    ret
-
-can_move    
-    ld a, (keys_pressed)
-    ld c, a
-    ld de, 0
-
-    bit player_up_bit, c
-    call nz, move_player_up
-
-    bit player_down_bit, c
-    call nz, move_player_down
-
-    bit player_left_bit, c
-    call nz, move_player_left
-
-    bit player_right_bit, c
-    call nz, move_player_right
-
-    bit player_fire1_bit, c
-    call nz, fire_weapon
-
-    ld a, d
-    or e
-    jp nz, inc_frame
-
-    ld a, 5
-    ld (player_frame), a
-    ret
-
-inc_frame
-    ld a, (player_frame)
-    inc a
-    and 0x0f
-    ld (player_frame), a    
-
-    ret
-
-move_player_left
-    ld a, d
-    xor 1
-    ld d, a
-
-    ld a, player_is_going_left
-    ld (player_orientation), a
-    ld a, (min_x)
-    ld h, a    
-    ld a, (player_x)
-    add -player_horiz_speed
-    cp h
-    jr nc, minx_ok
-    ld a, h
-
-minx_ok    
-    ld (player_x), a
-    ret    
-
-move_player_right
-    ld a, d
-    xor 1
-    ld d, a
-    
-    ld a, player_is_going_right
-    ld (player_orientation), a
-
-    ld a, (max_x)
-    ld h, a
-    ld a, (player_x)
-    add player_horiz_speed
-    cp h
-    jr c, maxx_ok
-    ld a, h
-
-maxx_ok    
-    ld (player_x), a
-    ret
-
-move_player_up
-    ld a, e
-    xor 1
-    ld e, a    
-
-    ld a, player_is_going_up
-    ld (player_orientation), a
-
-    ld a, (min_y)
-    ld h, a
-    ld a, (player_y)
-    add -player_vert_speed
-    cp h
-    jr nc, miny_ok
-    ld a, h
-
-miny_ok    
-    ld (player_y), a
-    ret
-
-move_player_down
-    ld a, e
-    xor 1
-    ld e, a
-
-    ld a, player_is_going_down
-    ld (player_orientation), a
-
-    ld a, (max_y)
-    ld h, a
-    ld a, (player_y)
-    add player_vert_speed
-    cp h
-    jr c, maxy_ok
-    ld a, h
-    
-maxy_ok    
-    ld (player_y), a
-    ret
-
 decrease_lives
     ld a, (num_lives)
     and a
@@ -577,6 +453,12 @@ player_x
 player_y
     defb 0
 
+updated_x
+    defb 0x00
+
+updated_y
+    defb 0x00
+
 actual_player_height
     defb serf_height
 
@@ -587,12 +469,6 @@ current_height_gfx_offset
     defw 0
 
 player_select_x
-    defb 0
-
-player_collision_x
-    defb 0
-
-player_collision_y
     defb 0
 
 player_orientation

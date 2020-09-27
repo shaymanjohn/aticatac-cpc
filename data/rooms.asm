@@ -407,3 +407,92 @@ percentage_lookup
 	defb 0x85, 0x85, 0x86, 0x87, 0x87, 0x88, 0x89, 0x90
 	defb 0x90, 0x91, 0x92, 0x92, 0x93, 0x94, 0x94, 0x95
 	defb 0x96, 0x97, 0x97, 0x98, 0x99, 0x99
+
+collision_grid
+    defs collision_grid_size * collision_grid_size
+
+collision_rows
+	defw collision_grid + (collision_grid_size * 0)
+	defw collision_grid + (collision_grid_size * 1)
+	defw collision_grid + (collision_grid_size * 2)
+	defw collision_grid + (collision_grid_size * 3)
+	defw collision_grid + (collision_grid_size * 4)
+	defw collision_grid + (collision_grid_size * 5)
+	defw collision_grid + (collision_grid_size * 6)
+	defw collision_grid + (collision_grid_size * 7)
+	defw collision_grid + (collision_grid_size * 8)
+	defw collision_grid + (collision_grid_size * 9)
+	defw collision_grid + (collision_grid_size * 10)
+	defw collision_grid + (collision_grid_size * 11)
+	defw collision_grid + (collision_grid_size * 12)
+	defw collision_grid + (collision_grid_size * 13)
+	defw collision_grid + (collision_grid_size * 14)
+	defw collision_grid + (collision_grid_size * 15)
+	defw collision_grid + (collision_grid_size * 16)
+	defw collision_grid + (collision_grid_size * 17)
+	defw collision_grid + (collision_grid_size * 18)
+	defw collision_grid + (collision_grid_size * 19)
+	defw collision_grid + (collision_grid_size * 20)
+	defw collision_grid + (collision_grid_size * 21)
+	defw collision_grid + (collision_grid_size * 22)
+	defw collision_grid + (collision_grid_size * 23)
+
+draw_collision_grid
+    ld ix, collision_grid
+    ld bc, 0
+
+show_grid_loop
+    call show_grid_element
+    inc ix
+
+    ld a, c
+    add 2
+    ld c, a
+    cp 48
+    jr nz, show_grid_loop
+
+    ld c, 0
+    ld a, b
+    add 8
+    ld b, a
+    cp 192
+    jr nz, show_grid_loop
+
+    ret
+
+show_grid_element               ; c has x, b has y
+    ld a, (ix + 0)
+    and a
+    ret z
+
+    push af
+    push bc
+
+    ld l, b
+    ld h, 0
+    add hl, hl
+    ld de, (scr_addr_table)
+    add hl, de
+    ld a, (hl)
+    inc hl
+    ld h, (hl)
+    ld l, a
+
+    ld b, 0
+    add hl, bc
+	ld c, (ix + 0)
+
+    ld b, 8
+
+grid_element_loop
+    push hl
+    ld (hl), c
+    inc l
+    ld (hl), c
+    pop hl
+    GET_NEXT_SCR_LINE
+    djnz grid_element_loop
+
+    pop bc
+    pop af
+	ret

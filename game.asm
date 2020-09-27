@@ -38,14 +38,18 @@ no_food_removal
 
     ld a, (player_appearing)
     and a
-    jp nz, make_player_appear
+    ; jp nz, make_player_appear
 
-    call move_player
-
+    SELECT_BANK sprite_bank_config
     call erase_player
     call draw_player
 
+    SELECT_BANK room_bank_config
+    call move_player    
+    call check_doors
+
     BORDER_ON hw_brightRed
+    SELECT_BANK sprite_bank_config
     call erase_weapon
     call move_weapon
     call draw_weapon
@@ -93,7 +97,7 @@ skip_all_others
     call draw_item
 
 skip_door_toggle
-	call check_doors
+	; call check_doors
 
     ld a, (heartbeat)
     cp 25

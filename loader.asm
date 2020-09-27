@@ -234,7 +234,7 @@ pens
     defb 7
     defb 8
     defb 15
-    defb 17
+    defb 16
     defb 24
 	defb 26
 

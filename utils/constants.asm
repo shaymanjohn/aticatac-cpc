@@ -3,9 +3,9 @@ rotation_bottom     equ 0x80        ; portrait  %10000000
 rotation_right      equ 0x60        ; landscape %01100000
 rotation_left       equ 0xe0        ; landscape %11100000
 
-max_doors           equ 8       ; per room
-max_food            equ 5       ; per room (includes mushrooms)
-player_width        equ 5       ; bytes
+max_doors           equ 16          ; per room
+max_food            equ 5           ; per room (includes mushrooms)
+player_width        equ 5           ; bytes
 
 knight_height       equ 20
 wizard_height       equ 21
@@ -134,3 +134,5 @@ mummy_count_max     equ 22
 active_door_cave        equ 0x01
 active_door_normal      equ 0x02
 active_door_trapdoor    equ 0x19
+
+collision_grid_size     equ 24

@@ -80,90 +80,41 @@ init_next_door
     ret
 
 check_doors
+    ld hl, (collision_info)          ; only check doors if all corners of player are touching same object.
+    ld a, l
+    and a
+    ret z
+
+    cp h
+    ret nz
+
+    ld hl, (collision_info + 2)
+    cp l
+    ret nz
+    cp h
+    ret nz
+
     ld a, (this_rooms_door_count)
     ld b, a
 
-; work out extended collision space based on key press    
-;
-; if min x and left, extend left
-; if min y and up, extend up
-; if max x and right, extend right
-; if max y and down, extend down
-
-    ld hl, keys_pressed
-    ld c, (hl)
-
-    ld a, (min_x)
-    ld d, a
-    ld a, (max_x)
-    ld e, a
-
-    ld a, (player_x)
-
-    bit player_left_bit, c
-    jp z, check_right_key
-    cp d
-    jp nz, check_right_key
-    sub 6
-
-check_right_key
-    bit player_right_bit, c
-    jp z, check_up_key
-    cp e
-    jp nz, check_up_key
-    add 5
-    
-check_up_key
-    ld (player_collision_x), a
-
-    ld a, (min_y)
-    ld d, a
-    ld a, (max_y)
-    ld e, a    
-
-    ld a, (player_y)
-
-    bit player_up_bit, c
-    jr z, check_down_key
-    cp d
-    jr nz, check_down_key
-    sub 8
-
-check_down_key
-    bit player_down_bit, c
-    jr z, end_key_check
-    cp e
-    jr nz, end_key_check
-    add 8
-
-end_key_check
-    ld (player_collision_y), a    
-
     ld ix, this_rooms_door_list
-
-;   collision if:
-;   player.x < door.x + door.width &&
-;   player.x + player.width > door.x &&
-;   player.y < door.y + door.height &&
-;   player.y + player.height > door.y
-;
 
 collision_loop
     ld a, (ix + 0)
+
+    ; cp item_table
+    ; jp z, next_collision_check
+
     cp active_door_trapdoor
     jp z, trapdoor_collision     ; check middle of trap door with middle of player
 
 standard_collision
-    ld a, (keys_pressed)
-    and a
-    jp z, next_collision_check
-
     ld a, (ix + 1)          ; get door x + width * 2
     add (ix + 5)
     add (ix + 5)
     sub 4                   ; tolerance
     ld d, a
-    ld a, (player_collision_x)
+    ld a, (player_x)
     cp d
     jp nc, next_collision_check
 
@@ -176,7 +127,7 @@ standard_collision
     add (ix + 6)
     sub 8
     ld d, a
-    ld a, (player_collision_y)
+    ld a, (player_y)
     cp d
     jp nc, next_collision_check
 

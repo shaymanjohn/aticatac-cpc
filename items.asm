@@ -368,10 +368,6 @@ inc_list
     cp item_clock
     jr z, skip_save
 
-; and ignore tables in the door check for now
-    cp item_table
-    jr z, skip_save
-
     ld a, (item_is_door)        ; only save in list if it's a door...
     and a
     jr z, skip_save
