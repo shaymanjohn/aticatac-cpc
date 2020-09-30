@@ -250,6 +250,7 @@ calculate_collision_grid
 
     call block_items
     call block_room
+
     ; call draw_collision_grid
     ret
 
@@ -290,11 +291,17 @@ set_grid                            ; b is y, c is x
 
 set_grid_element
     ld a, (hl)
+
+    call get_type_for_collision_index       ; is this element a table or trapdoor?
     cp active_door_trapdoor
     jr z, skip_this_element
-    cp item_table
-    jr z, skip_this_element
 
+    cp item_table
+    jr nz, clear_the_floor
+    ld (hl), 0xff
+    jr skip_this_element
+
+clear_the_floor
     ld (hl), 0
 
 skip_this_element    
@@ -310,6 +317,22 @@ skip_this_element
     ld a, b
     cp collision_grid_size
     jr nz, set_grid
+    ret
+
+get_type_for_collision_index    ;   IN: A = door index + 1
+    push de
+    push hl
+    dec a
+    ld l, a
+    ld h, 0
+    add hl, hl
+    add hl, hl
+    add hl, hl
+    ld de, this_rooms_door_list
+    add hl, de
+    ld a, (hl)
+    pop hl
+    pop de
     ret
 
 block_items
@@ -342,6 +365,12 @@ collision_list_loop
     add hl, de              ; hl is first char in collision grid for this item
 
     push bc
+
+    ld a, (this_rooms_door_count)
+    sub b
+    inc a
+    ld (this_doors_index), a
+
     call block_out_item
     pop bc
 
@@ -356,14 +385,14 @@ block_out_item
     srl c
     srl c
 
+    ld a, (this_doors_index)    
+
 coll_item_loop2 
     ld b, (ix + 5)
     srl b
-    ld a, (ix + 0)
-
     push hl
 
-coll_item_loop    
+coll_item_loop
     ld (hl), a
     inc hl
     djnz coll_item_loop
@@ -389,6 +418,9 @@ min_y
     defb 0
 max_y
     defb 0
+
+this_doors_index
+    defb 0x00
 
 room_number
     defb 0
