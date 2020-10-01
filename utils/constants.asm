@@ -136,3 +136,5 @@ active_door_normal      equ 0x02
 active_door_trapdoor    equ 0x19
 
 collision_grid_size     equ 24
+
+transition_time         equ 7

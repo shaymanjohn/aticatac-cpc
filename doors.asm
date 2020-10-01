@@ -80,7 +80,7 @@ init_next_door
     ret
 
 check_doors
-    ld hl, (collision_info)          ; only check doors if all corners of player are touching same object.
+    ld hl, (collision_info)          ; are all corners of player are touching same door?
     ld a, l
     and a
     ret z
@@ -95,23 +95,24 @@ check_doors
     cp h
     ret nz
 
-    dec a                           ; a is the door index in this_rooms_door_list we're fully stood on...
+    dec a                           ; If so, a has the door index in this_rooms_door_list we're fully stood on
     ld ixl, a
     ld ixh, 0
     add ix, ix
     add ix, ix
     add ix, ix
     ld de, this_rooms_door_list
-    add ix, de
+    add ix, de                      ; ix now pointing to correct door
 
     ld a, (ix + 0)
     cp active_door_trapdoor
-    jp z, trapdoor_collision
+    jp z, trapdoor_collision        ; special case for trapdoor - if open, go into falling state if open
 
-    ld a, (keys_pressed)            ; can't exit if not pressing any direction key...
-    ld c, a
+    ld a, (keys_pressed)            ; Even though we're on a door, only exit if pressing into door...
     and 0x0f
     ret z
+
+    ld c, a
 
     ld e, (ix + 3)                  ; get orientation of door
     ld d, (ix + 4)
@@ -119,39 +120,24 @@ check_doors
     add hl, de
 
     SELECT_BANK room_bank_config
+
     ld a, (hl)
+    and 0xc0                        ; mask off the rotation bits
 
-    cp rotation_right
-    jp z, check_left_down
+    or c                           ; merge in the key press
 
-    cp rotation_left
-    jp z, check_right_down
-
-    cp rotation_bottom
-    jp z, check_up_down
-
-    cp rotation_top
-    jp z, check_down_down
-    ret
-
-check_left_down
-    bit player_left_bit, c
+    cp 0x42                         ; rotation right + left pressed
     jp z, do_collision
-    ret
 
-check_right_down
-    bit player_right_bit, c
+    cp 0xc1                         ; rotation left + right pressed
     jp z, do_collision
-    ret
 
-check_up_down
-    bit player_up_bit, c
+    cp 0x88                         ; rotation bottom + up pressed
     jp z, do_collision
-    ret
 
-check_down_down
-    bit player_down_bit, c
-    jp z, do_collision
+    cp 0x04
+    jp z, do_collision              ; rotation top + down pressed
+
     ret
 
 trapdoor_collision
@@ -187,6 +173,9 @@ trapdoor_coll_1
     ret
 
 do_collision
+    ld a, c
+    ld (transition_keypress), a
+
     ld l, (ix + 3)
     ld h, (ix + 4)          ; hl is pointer to item in room_bank_item_list
 
@@ -210,6 +199,8 @@ collide1
     
     ld a, 1
     ld (room_changed), a
+
+    ld a, transition_time
     ld (screen_transition_in_progress), a
 
     inc hl

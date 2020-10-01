@@ -79,9 +79,9 @@ no_food_removal
     and a
     call nz, check_food_collision    
 
-    ld a, (screen_transition_in_progress)
-    and a
-    jp nz, ignore_doors
+    ; ld a, (screen_transition_in_progress)
+    ; and a
+    ; jp nz, ignore_doors
 
 skip_all_others
     ld de, (door_to_toggle)

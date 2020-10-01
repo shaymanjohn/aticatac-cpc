@@ -459,6 +459,9 @@ updated_x
 updated_y
     defb 0x00
 
+transition_keypress
+    defb 0x00    
+
 actual_player_height
     defb serf_height
 

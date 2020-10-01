@@ -250,7 +250,6 @@ calculate_collision_grid
 
     call block_items
     call block_room
-
     ; call draw_collision_grid
     ret
 
@@ -385,11 +384,18 @@ block_out_item
     srl c
     srl c
 
-    ld a, (this_doors_index)    
-
 coll_item_loop2 
     ld b, (ix + 5)
     srl b
+
+    ld a, (ix + 0)
+    cp item_clock
+    jr nz, not_a_clock
+    dec b
+
+not_a_clock
+    ld a, (this_doors_index)    
+
     push hl
 
 coll_item_loop

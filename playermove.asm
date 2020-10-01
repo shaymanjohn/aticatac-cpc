@@ -1,11 +1,19 @@
 move_player
-    ld a, (screen_transition_in_progress)
-    and a
-    jp nz, update_transition_time
-
     ld a, (keys_pressed)
     ld c, a
 
+    ld a, (screen_transition_in_progress)
+    and a
+    jp z, not_transitioning
+
+    dec a
+    ld (screen_transition_in_progress), a
+
+    ld a, (transition_keypress)
+    ld (keys_pressed), a
+    ld c, a
+
+not_transitioning
     ld a, (player_x)
     ld (updated_x), a    
 
@@ -28,12 +36,12 @@ move_player
     call nz, fire_weapon
 
 ; Finally store what we're stood on top of at current position
-    ld a, (player_x)
-    ld (updated_x), a
-    ld a, (player_y)
-    ld (updated_y), a
-    call check_collision
+    call check_collision_squares
 
+    ld a, (screen_transition_in_progress)
+    and a
+    jp nz, inc_frame
+    
     ld a, (keys_pressed)
     and 0x0f
     jp nz, inc_frame                    ; only animate if something pressed
@@ -47,11 +55,6 @@ inc_frame
     inc a
     and 0x0f
     ld (player_frame), a
-    ret    
-
-update_transition_time
-    dec a
-    ld (screen_transition_in_progress), a
     ret
 
 move_up
@@ -120,21 +123,34 @@ move_right
     ret
 
 check_collision
-    xor a
-    ld (any_collision), a
-
     ld a, (updated_x)
     ld b, a
     ld a, (updated_y)
     call check_corner_collision
-    ld (collision_info + 0), a
+
+    ld a, b
+    and a
+    ret nz
+
+    ld a, (updated_x)
+    add 3
+    ld b, a
+    ld a, (updated_y)
+    call check_corner_collision
+
+    ld a, b
+    and a
+    ret nz
 
     ld a, (updated_x)
     add player_width + 2
     ld b, a
     ld a, (updated_y)
     call check_corner_collision
-    ld (collision_info + 1), a
+
+    ld a, b
+    and a
+    ret nz
 
     ld a, (updated_x)
     ld b, a
@@ -142,25 +158,77 @@ check_collision
     sub 2
     ld e, a
     ld a, (updated_y)
+    add e
+    call check_corner_collision
+
+    ld a, b
+    and a
+    ret nz
+
+    ld a, (updated_x)
+    add 3
+    ld b, a
+    ld a, (actual_player_height)
+    sub 2
+    ld e, a
+    ld a, (updated_y)
+    add e
+    call check_corner_collision
+
+    ld a, b
+    and a
+    ret nz    
+
+    ld a, (updated_x)
+    add player_width + 2
+    ld b, a
+    ld a, (actual_player_height)
+    sub 2
+    ld e, a
+    ld a, (updated_y)
+    add e
+    call check_corner_collision
+
+    ld a, b
+    ret
+
+check_collision_squares
+    ld a, (player_x)
+    ld b, a
+    ld a, (player_y)
+    call check_corner_collision
+    ld (collision_info + 0), a
+
+    ld a, (player_x)
+    add player_width + 2
+    ld b, a
+    ld a, (player_y)
+    call check_corner_collision
+    ld (collision_info + 1), a
+
+    ld a, (player_x)
+    ld b, a
+    ld a, (actual_player_height)
+    sub 2
+    ld e, a
+    ld a, (player_y)
     add e
     call check_corner_collision
     ld (collision_info + 2), a    
 
-    ld a, (updated_x)
+    ld a, (player_x)
     add player_width + 2
     ld b, a
     ld a, (actual_player_height)
     sub 2
     ld e, a
-    ld a, (updated_y)
+    ld a, (player_y)
     add e
     call check_corner_collision
     ld (collision_info + 3), a
-
-    ld a, (any_collision)
     ret
 
-check_corner_collision
+check_corner_collision      ; IN: a = y, b = x
     srl a
     srl a
     srl a
@@ -181,22 +249,13 @@ check_corner_collision
     ld d, 0
     add hl, de
 
+    ld b, 0
     ld a, (hl)
-    cp item_table
-    jp z, solid_block
-
     cp 0xff
     ret nz
 
-solid_block
-    ld b, a
-    ld a, 1
-    ld (any_collision), a
-    ld a, b
+    ld b, 1
     ret
-
-any_collision
-    defb 0x00
 
 collision_info
     defs 4
