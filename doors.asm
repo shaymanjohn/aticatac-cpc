@@ -24,25 +24,32 @@ init_door_loop
     jr z, init_next_door
 
     set 7, (ix + 2)
-    set 7, (ix + 10)            ; lock and close the door and its twin
+    set 7, (ix + 10)            ; lock or close the door and its twin to begin with
 
-    ld a, (ix + 0)              ; item type
+    ld c, (ix + 0)              ; item type
+    ld a, c
+
     cp active_door_trapdoor
-    jr z, automatic_door
+    jr z, automatic_door        ; trapdoors are always automatic
 
-    ld c, a
+    cp active_door_big + 1      ; catches items 1, 2, and 3...
+    jr c, not_a_locked_door
+
+    res 6, (ix + 2)
+    res 6, (ix + 10)
+    jr init_next_door
+
+not_a_locked_door
+    cp (ix + 8)
+    jr nz, ignore_different_doors
 
     RANDOM_IN_A
     cp 179                                 ; randomly select roughly 70% of the automatic doors to work 
-    jp nc, skip_automatic_door_this_time    
-
-    ld a, c
-    cp active_door_big + 1                    ; catches items 1, 2, and 3...
     jr c, automatic_door
 
-skip_automatic_door_this_time
-    res 6, (ix + 2)
-    res 6, (ix + 10)
+ignore_different_doors
+    res 7, (ix + 2)
+    res 7, (ix + 10)
     jr init_next_door
 
 automatic_door
@@ -66,9 +73,6 @@ automatic_door
     and 0x07
     ld iyl, a
 
-    ; res 7, (ix + 2)             ; for now open everything that doesn't need a key...
-    ; res 7, (ix + 10)
-
 init_next_door
     add ix, de
 
@@ -76,7 +80,7 @@ init_next_door
     dec bc
     ld a, b
     or c
-    jr nz, init_door_loop
+    jp nz, init_door_loop
 
     ret
 
