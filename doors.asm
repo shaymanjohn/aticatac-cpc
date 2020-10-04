@@ -32,7 +32,7 @@ init_door_loop
     cp active_door_trapdoor
     jr z, automatic_door        ; trapdoors are always automatic
 
-    cp active_door_big + 1      ; catches items 1, 2, and 3...
+    cp active_door_big + 1      ; catches items 1 and 2 and 3
     jr c, not_a_locked_door
 
     res 6, (ix + 2)

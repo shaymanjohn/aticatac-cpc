@@ -38,7 +38,7 @@ no_food_removal
 
     ld a, (player_appearing)
     and a
-    ; jp nz, make_player_appear
+    jp nz, make_player_appear
 
     SELECT_BANK sprite_bank_config
     call erase_player
