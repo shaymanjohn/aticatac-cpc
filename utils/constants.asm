@@ -133,6 +133,7 @@ mummy_count_max     equ 22
 
 active_door_cave        equ 0x01
 active_door_normal      equ 0x02
+active_door_big         equ 0x03
 active_door_trapdoor    equ 0x19
 
 collision_grid_size     equ 24

@@ -2,7 +2,7 @@ init_doors
 ;
 ;   ix + 2
 ;   bit 7           0 = open, 1 = closed or locked
-;   bit 6           0 = keyed door, 1 = revolving door
+;   bit 6           0 = keyed door, 1 = automatic door
 ;   bit 5, 4, 3     open / close time (0 = 3, 1 = 4, 2 = 5, 3 = 6)
 ;   bit 2, 1, 0     current time
 
@@ -19,35 +19,33 @@ init_doors
 init_door_loop
     push bc
 
-    ld a, (ix + 7)              ; is this item actually a type of door?
+    ld a, (ix + 7)              ; is this actually a door?
     and a
     jr z, init_next_door
 
     set 7, (ix + 2)
-    set 7, (ix + 10)            ; lock and close all doors...
+    set 7, (ix + 10)            ; lock and close the door and its twin
 
     ld a, (ix + 0)              ; item type
     cp active_door_trapdoor
-    jr z, revolving_door
+    jr z, automatic_door
 
     ld c, a
+
     RANDOM_IN_A
     cp 179                                 ; randomly select roughly 70% of the automatic doors to work 
-    jp c, skip_revolving_door_this_time    
+    jp nc, skip_automatic_door_this_time    
 
     ld a, c
-    cp active_door_cave
-    jr z, revolving_door
+    cp active_door_big + 1                    ; catches items 1, 2, and 3...
+    jr c, automatic_door
 
-    cp active_door_normal
-    jr z, revolving_door
-
-skip_revolving_door_this_time
+skip_automatic_door_this_time
     res 6, (ix + 2)
     res 6, (ix + 10)
     jr init_next_door
 
-revolving_door
+automatic_door
     set 6, (ix + 2)
     set 6, (ix + 10)
 
@@ -67,6 +65,9 @@ revolving_door
     ld a, iyl
     and 0x07
     ld iyl, a
+
+    ; res 7, (ix + 2)             ; for now open everything that doesn't need a key...
+    ; res 7, (ix + 10)
 
 init_next_door
     add ix, de
@@ -124,7 +125,7 @@ check_doors
     ld a, (hl)
     and 0xc0                        ; mask off the rotation bits
 
-    or c                           ; merge in the key press
+    or c                            ; merge in the key press
 
     cp 0x42                         ; rotation right + left pressed
     jp z, do_collision
@@ -320,11 +321,11 @@ get_new_door_dimensions             ; hl is pointer to item in room_bank_item_li
 ;   ix + 2
 ;
 ;   bit 7           0 = open, 1 = closed or locked
-;   bit 6           0 = keyed door, 1 = revolving door
+;   bit 6           0 = keyed door, 1 = automatic door
 ;   bit 5, 4, 3     open / close time (0 = 3, 1 = 4, 2 = 5, 3 = 6)
 ;   bit 2, 1, 0     current time    
     
-update_doors
+update_doors    
     ld a, (this_rooms_door_count)
     ld b, a
     ld ix, this_rooms_door_list         ; list of items in 'exploded' format
@@ -336,7 +337,7 @@ update_doors_loop
     inc hl                      ; increment by 2 to get to door control byte (eg. ix + 2)
 
     ld a, (hl)
-    bit 6, a                   ; is door a revolving door
+    bit 6, a                   ; is door an automatic door?
     jp z, do_next_door
 
     ld e, a
@@ -358,6 +359,23 @@ update_doors_loop
     and %11111000               ; keep the original values, set count to 0
     xor %10000000               ; and toggle the open/close status
     ld (hl), a
+
+    ; and do this doors twin...
+
+    ld c, a
+    ld de, 8
+    ld a, (ix + 7)              ; offset of item pair
+    cp 8
+    jp nz, set_twin
+    ld de, -8
+
+set_twin
+    add hl, de
+    ld (hl), c
+
+    ld a, c
+
+    call update_collision_grid
 
     ld e, (ix + 3)
     ld d, (ix + 4)
@@ -449,6 +467,66 @@ xor_grill_loop
     dec l
     GET_NEXT_SCR_LINE
     djnz xor_grill_loop        
+    ret
+
+update_collision_grid
+    bit 7, a
+    jp nz, upcgrid_2
+
+    ld a, (this_rooms_door_count)
+    sub b
+    inc a
+    jp upcgrid_3
+
+upcgrid_2
+    ld a, 0xff
+    
+upcgrid_3
+    ld l, (ix + 2)          ; y
+    srl l
+    srl l
+    srl l
+
+    ld h, 0
+    add hl, hl
+    add hl, hl
+    add hl, hl
+    ld d, h
+    ld e, l                 ; de = y * 8
+    add hl, hl
+    add hl, de              ; hl = (y * 16) + (y * 4) = y * 24
+
+    ld e, (ix + 1)
+    srl e
+    srl e
+    ld d, 0
+    add hl, de
+
+    ld de, collision_grid
+    add hl, de              ; hl is first char in collision grid for this item
+
+    ld c, (ix + 6)          ; height of item
+    srl c
+    srl c
+    srl c
+
+update_coll_item_loop2 
+    ld b, (ix + 5)
+    srl b
+    push hl
+
+update_coll_item_loop
+    ld (hl), a
+    inc hl
+    djnz update_coll_item_loop
+
+    pop hl
+    ld de, 24
+    add hl, de
+
+    dec c    
+    jp nz, update_coll_item_loop2    
+
     ret
 
 door_to_toggle

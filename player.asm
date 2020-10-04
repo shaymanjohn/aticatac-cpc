@@ -492,11 +492,11 @@ game_over
 magic_door
     defb item_clock
 
+this_rooms_door_count
+    defb 0    
+
 this_rooms_door_list
     defs max_doors * 8
-
-this_rooms_door_count
-    defb 0
 
 this_rooms_food_list
     defs max_food * 2

@@ -413,14 +413,14 @@ check_keyed_door_is_locked
 
 check_normaldoor_is_closed
     bit 7, (ix + 2)                 ; open = 0, closed = 1
-    ret nz
+    ret z
 
     ld l, 32
     ret
 
 check_cavedoor_is_closed
     bit 7, (ix + 2)
-    ret nz
+    ret z
 
     ld l, 34
     ret

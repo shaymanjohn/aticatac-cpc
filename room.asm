@@ -379,6 +379,8 @@ collision_list_loop
     ret
 
 block_out_item
+    call is_door_locked_or_closed
+
     ld c, (ix + 6)          ; height of item
     srl c
     srl c
@@ -391,12 +393,11 @@ coll_item_loop2
     ld a, (ix + 0)
     cp item_clock
     jr nz, not_a_clock
-    dec b
+    dec b                   ; adjust width if a clock
 
 not_a_clock
-    ld a, (this_doors_index)    
-
-    push hl
+    push hl    
+    ld a, (this_doors_index)
 
 coll_item_loop
     ld (hl), a
@@ -409,6 +410,20 @@ coll_item_loop
 
     dec c    
     jr nz, coll_item_loop2
+    ret
+
+is_door_locked_or_closed    ; IN: ix = item, OUT: a=0xff if so, otherwise a unchanged
+    ld e, (ix + 3)
+    ld d, (ix + 4)
+    inc de
+    inc de
+
+    ld a, (de)
+    bit 7, a  
+    ret z
+
+    ld a, 0xff
+    ld (this_doors_index), a
     ret
 
 point_address
