@@ -1,4 +1,6 @@
 init_food
+    SELECT_BANK sprite_bank_config
+
     ld ix, food_items
     ld b, (food_items_end - food_items) / 8
     ld de, 8
@@ -103,7 +105,7 @@ reset_food_collected
 draw_food
     xor a
     ld (this_rooms_food_count), a
-    call create_food_list
+    ; call create_food_list
 
     ld a, (this_rooms_food_count)
     and a

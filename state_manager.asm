@@ -83,8 +83,6 @@ select_game
 
     call init_food
     call init_doors
-
-    SELECT_BANK item_bank_config
     call init_collectables
 
     ld a, (actual_player_height)

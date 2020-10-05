@@ -2,7 +2,7 @@ copyright_text
     defb 0x10, 0x08 * 8
     defb 0xff
     defb "COPYRIGHT A.C.G."
-    defb 0x00
+    defb 0x00               ; x, y, colour, message, terminator
 
 play_game_text
     defb 0x0d, 0x0d * 8

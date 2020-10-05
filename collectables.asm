@@ -1,4 +1,6 @@
 init_collectables
+    SELECT_BANK item_bank_config
+    
     ld a, 0xff                      ; empty the pockets
     ld (pocket1), a
     ld (pocket2), a
