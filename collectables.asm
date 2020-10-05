@@ -27,10 +27,10 @@ do_random_collectables
 
     RANDOM_IN_A
     and 0x07                        ; random 0 to 7
-    add a
 
     ld l, a
     ld h, 0
+    add hl, hl
     ld de, random_place_table
     add hl, de
     ld a, (hl)
