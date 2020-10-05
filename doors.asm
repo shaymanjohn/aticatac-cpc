@@ -50,6 +50,8 @@ not_a_locked_door
 ignore_different_doors
     res 7, (ix + 2)
     res 7, (ix + 10)
+    res 6, (ix + 2)
+    res 6, (ix + 10)
     jr init_next_door
 
 automatic_door
