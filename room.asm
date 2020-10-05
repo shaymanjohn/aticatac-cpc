@@ -17,6 +17,7 @@ draw_room
 
     SELECT_BANK room_bank_config
     call calculate_collision_grid
+    call update_collision_grid_for_items
 
 ; Reset data for new room.
     xor a
@@ -297,6 +298,7 @@ set_grid_element
 
     cp item_table
     jr nz, clear_the_floor
+
     ld (hl), 0xff
     jr skip_this_element
 
@@ -415,6 +417,11 @@ coll_item_loop
 is_door_locked_or_closed    ; IN: ix = item, OUT: a=0xff if so, otherwise a unchanged
     ld e, (ix + 3)
     ld d, (ix + 4)
+
+    ld a, (de)
+    cp item_table
+    ret z
+
     inc de
     inc de
 

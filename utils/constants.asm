@@ -136,6 +136,13 @@ active_door_normal      equ 0x02
 active_door_big         equ 0x03
 active_door_trapdoor    equ 0x19
 
+door_acg                equ 36
+
+door_red                equ 8
+door_green              equ 9
+door_blue               equ 10
+door_yellow             equ 11
+
 collision_grid_size     equ 24
 
 transition_time         equ 7

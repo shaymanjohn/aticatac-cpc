@@ -184,6 +184,10 @@ do_collision
     ld l, (ix + 3)
     ld h, (ix + 4)          ; hl is pointer to item in room_bank_item_list
 
+    inc hl
+    inc hl
+    res 7, (hl)             ; set door to unlocked - safe to do this for all door types
+
     ld bc, -8               ; We want this items twin now to work out new position of player
     ld a, (ix + 7)
     and a
@@ -192,6 +196,9 @@ do_collision
 
 collide1
     add hl, bc              ; hl now points to item to move to 1 = room number, 3 = x, 4 = y, 5 = rotation, etc
+    res 7, (hl)             ; also set twin door to unlocked...
+    dec hl
+    dec hl
 
     call get_new_door_dimensions
 
@@ -379,7 +386,7 @@ set_twin
 
     ld a, c
 
-    call update_collision_grid
+    call update_collision_grid_for_door
 
     ld e, (ix + 3)
     ld d, (ix + 4)
@@ -470,10 +477,107 @@ xor_grill_loop
     dec l
     dec l
     GET_NEXT_SCR_LINE
-    djnz xor_grill_loop        
+    djnz xor_grill_loop
     ret
 
-update_collision_grid
+update_collision_grid_for_items
+    ld a, (this_rooms_door_count)
+    ld b, a
+    ld ix, this_rooms_door_list
+
+next_door_loop                      ; we only need to consider if there are any doors that could be locked...
+    push bc
+    
+    ld a, (ix + 0)
+    cp door_acg
+    jr z, check_acg_open
+
+    ld e, (ix + 3)
+    ld d, (ix + 4)
+    inc de
+    inc de
+    ex de, hl                       ; get status of door
+
+    bit 6, (hl)
+    jr nz, next_door_loop2           ; ignore automatic doors
+
+    bit 7, (hl)                     ; ignore if already open
+    jr z, next_door_loop2
+
+    ; Only need to consider door numbers 8 to 15 (door number in a).
+    cp 16
+    jr nc, next_door_loop2
+
+    cp 7
+    jr c, next_door_loop2
+
+    ; got a locked door in the right range...
+    ; ignore bit 2, so can do only 4 check_keys
+    res 2, a
+
+    ld c, 3
+    cp door_blue
+    jr z, found_door_locked
+
+    ld c, 4
+    cp door_green
+    jr z, found_door_locked
+
+    ld c, 5
+    cp door_red
+    jr z, found_door_locked
+
+    ld c, 6
+    cp door_yellow
+    jr z, found_door_locked
+
+next_door_loop2
+    pop bc
+    ld de, 8
+    add ix, de
+    djnz next_door_loop
+
+    ret
+
+check_acg_open
+    set 7, e
+
+    ld hl, (pocket1)    
+    ld a, (pocket3)
+    cp 2
+    jr nz, not_got_acg
+    ld a, h
+    cp 1
+    jr nz, not_got_acg
+    ld a, l
+    and a
+    jr nz, not_got_acg
+    res 7, e
+
+not_got_acg
+    call update_collision_grid_for_door
+    jr next_door_loop2
+
+found_door_locked                   ; if any pocket contains value in c, remove collision for door, else set collision
+    res 7, e                        ; assume we've got the right key
+
+    ld a, (pocket1)
+    cp c
+    jr z, got_the_right_key
+    ld a, (pocket2)
+    cp c
+    jr z, got_the_right_key
+    ld a, (pocket3)
+    jr z, got_the_right_key
+
+    set 7, e                        ; not carrying the right key - collision close
+
+got_the_right_key
+    ld a, e
+    call update_collision_grid_for_door
+    jr next_door_loop2
+
+update_collision_grid_for_door
     bit 7, a
     jp nz, upcgrid_2
 

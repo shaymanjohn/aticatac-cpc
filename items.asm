@@ -406,29 +406,32 @@ convert_door_type
     ret nz
 
 check_keyedcave_door_is_locked
+    bit 7, (ix + 2)
+    ret nz
+    ld l, 1
     ret
 
 check_keyed_door_is_locked
+    bit 7, (ix + 2)
+    ret nz
+    ld l, 2
     ret    
 
 check_normaldoor_is_closed
     bit 7, (ix + 2)                 ; open = 0, closed = 1
     ret z
-
     ld l, 32
     ret
 
 check_cavedoor_is_closed
     bit 7, (ix + 2)
     ret z
-
     ld l, 34
     ret
 
 check_trapdoor_is_closed
     bit 7, (ix + 2)                 ; open = 0, closed = 1
     ret nz
-
     ld l, 24
     ret
 

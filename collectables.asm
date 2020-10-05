@@ -37,7 +37,7 @@ do_random_collectables
     inc hl
     ld h, (hl)
     ld l, a                         ; hl has address of random data
-    ld ix, col_acgkey1
+    ld ix, collectable_items
     
     ld b, 6                         ; 6 items are randomly placed (3 key parts, 3 keys)
     ld de, 8
@@ -179,6 +179,8 @@ pockets_done
 no_drop
     ld a, 2
     ld (do_pockets), a
+
+    call update_collision_grid_for_items
     ret
 
 draw_pockets

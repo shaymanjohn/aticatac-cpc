@@ -4,43 +4,43 @@ collectable_items
 ; x, y
 ; 3 bytes: original room, x, y
 
-col_acgkey1
+col_acgkey1                     ; 0
     defb 0x00
     defw item_acgkey1
     defb 0x10, 0x30
     defb 0x00, 0x00, 0x00
 
-col_acgkey2
+col_acgkey2                     ; 1
     defb 0x00
     defw item_acgkey2
     defb 0x15, 0x30
     defb 0x00, 0x00, 0x00
 
-col_acgkey3
+col_acgkey3                     ; 2
     defb 0x00
     defw item_acgkey3
     defb 0x1a, 0x30
     defb 0x00, 0x00, 0x00
 
-col_key_blue
+col_key_blue                    ; 3
     defb 0x07
     defw key_blue
     defb 0x10, 0x60
     defb 0x00, 0x00, 0x00
 
-col_key_green
+col_key_green                   ; 4
     defb 0x00
     defw key_green
     defb 0x18, 0x62
     defb 0x00, 0x00, 0x00
 
-col_key_red
+col_key_red                     ; 5
     defb 0x00
     defw key_red
     defb 0x0a, 0x76
     defb 0x00, 0x00, 0x00
 
-col_key_yellow
+col_key_yellow                  ; 6
     defb 102
     defw key_yellow
     defb 48 / 4, 122

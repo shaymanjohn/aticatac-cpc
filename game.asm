@@ -97,8 +97,6 @@ skip_all_others
     call draw_item
 
 skip_door_toggle
-	; call check_doors
-
     ld a, (heartbeat)
     cp 25
     call z, update_doors    
