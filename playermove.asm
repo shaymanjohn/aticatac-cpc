@@ -155,7 +155,6 @@ check_collision
     ld a, (updated_x)
     ld b, a
     ld a, (actual_player_height)
-    sub 2
     ld e, a
     ld a, (updated_y)
     add e
@@ -169,7 +168,6 @@ check_collision
     add 3
     ld b, a
     ld a, (actual_player_height)
-    sub 2
     ld e, a
     ld a, (updated_y)
     add e
@@ -183,7 +181,6 @@ check_collision
     add player_width + 2
     ld b, a
     ld a, (actual_player_height)
-    sub 2
     ld e, a
     ld a, (updated_y)
     add e
@@ -209,7 +206,6 @@ check_collision_squares
     ld a, (player_x)
     ld b, a
     ld a, (actual_player_height)
-    sub 2
     ld e, a
     ld a, (player_y)
     add e
@@ -220,7 +216,6 @@ check_collision_squares
     add player_width + 2
     ld b, a
     ld a, (actual_player_height)
-    sub 2
     ld e, a
     ld a, (player_y)
     add e

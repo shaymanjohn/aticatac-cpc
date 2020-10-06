@@ -338,7 +338,27 @@ get_new_door_dimensions             ; hl is pointer to item in room_bank_item_li
 ;   bit 5, 4, 3     open / close time (0 = 3, 1 = 4, 2 = 5, 3 = 6)
 ;   bit 2, 1, 0     current time    
     
-update_doors    
+update_doors
+    ld a, (player_x)                    ; Don't do anything if player is stood in a doorway...
+    ld b, a
+    ld a, (min_x)
+    inc b
+    cp b
+    ret nc
+    ld a, (max_x)
+    dec b
+    cp b
+    ret c
+
+    ld a, (player_y)
+    ld b, a
+    ld a, (min_y)
+    cp b
+    ret nc
+    ld a, (max_y)
+    cp b
+    ret c
+
     ld a, (this_rooms_door_count)
     ld b, a
     ld ix, this_rooms_door_list         ; list of items in 'exploded' format
@@ -558,6 +578,7 @@ check_acg_open
 
 not_got_acg
     call update_collision_grid_for_door
+    call correction_for_acg
     jr next_door_loop2
 
 found_door_locked                   ; if any pocket contains value in c, remove collision for door, else set collision
@@ -638,6 +659,17 @@ update_coll_item_loop
     dec c    
     jp nz, update_coll_item_loop2    
 
+    ret
+
+correction_for_acg
+    ld hl, collision_grid + (24 * 8) + 19
+    ld b, 8
+    ld de, 24
+
+correct_acg    
+    ld (hl), 0x00
+    add hl, de
+    djnz correct_acg
     ret
 
 door_to_toggle

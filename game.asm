@@ -27,7 +27,7 @@ no_pockets_to_update
     ld ixh, a
     ld a, (erase_food_with_index)
     ld ixl, a
-    SELECT_BANK room_bank_config 
+    SELECT_BANK sprite_bank_config 
     call draw_food_item2
 
     ld hl, 0
@@ -72,12 +72,11 @@ no_food_removal
     BORDER_ON hw_brightWhite
     call check_weapon_hit
 
-    BORDER_ON hw_brightGreen
-    SELECT_BANK room_bank_config
-
     ld a, (this_rooms_food_count)
     and a
     call nz, check_food_collision    
+
+    SELECT_BANK room_bank_config    
 
     ; ld a, (screen_transition_in_progress)
     ; and a

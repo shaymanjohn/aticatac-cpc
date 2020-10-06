@@ -12,7 +12,10 @@ food_init_loop
     ret
 
 check_food_collision
-    ld b, a
+    ld c, a
+    SELECT_BANK sprite_bank_config
+
+    ld b, c
     ld hl, this_rooms_food_list
     ld iyh, 0
 
@@ -31,7 +34,6 @@ check_next_food_item_collision
     and a
     ret nz
 
-ignore_mushrooms
     inc hl
     djnz check_next_food_item_collision
     ret
@@ -83,6 +85,7 @@ food_not_neg_y
 remove_food
     call draw_food_item2
 
+    SELECT_BANK sprite_bank_config
     ld a, 1
     ld (ix + 2), a
     ld (erase_food_with_index), ix
@@ -105,7 +108,10 @@ reset_food_collected
 draw_food
     xor a
     ld (this_rooms_food_count), a
-    ; call create_food_list
+
+    call create_food_list
+
+    SELECT_BANK room_bank_config
 
     ld a, (this_rooms_food_count)
     and a
@@ -127,6 +133,8 @@ draw_food_loop
     ret
 
 draw_food_item              ; hl pointer in food_items
+    SELECT_BANK sprite_bank_config
+
     ld a, (hl)
     ld ixl, a
     inc hl
@@ -168,7 +176,10 @@ draw_food_item2
 
     ex de, hl
 
-    ld b, (ix + 7)
+    ld c, (ix + 7)
+    SELECT_BANK room_bank_config
+    ld b, c
+
 draw_food_item_loop
     ld a, (de)
     xor (hl)
@@ -203,6 +214,8 @@ draw_food_item_loop
     ret
 
 create_food_list
+    SELECT_BANK sprite_bank_config
+
     ld a, (room_number)
     ld c, a
     ld ix, food_items
