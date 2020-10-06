@@ -91,7 +91,9 @@ remove_food
     ld (erase_food_with_index), ix
 
     ld e, sound_collect
-    call play_sfx    
+    call play_sfx
+
+    call health_up
 
     ld iyh, 1
 

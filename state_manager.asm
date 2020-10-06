@@ -78,9 +78,7 @@ select_game
     ld a, 3
     ld (num_lives), a
 
-    xor a
-    ld (hunger_index), a
-
+    call init_health
     call init_food
     call init_doors
     call init_collectables

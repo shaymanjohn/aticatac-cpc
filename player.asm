@@ -483,7 +483,10 @@ player_frame
 num_lives
     defb 0
 
-hunger_index
+health
+    defb 0
+
+drawn_health
     defb 0
 
 game_over

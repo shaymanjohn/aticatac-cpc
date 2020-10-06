@@ -40,6 +40,8 @@ no_food_removal
     and a
     jp nz, make_player_appear
 
+    call health_decay
+
     SELECT_BANK sprite_bank_config
     call erase_player
     call draw_player

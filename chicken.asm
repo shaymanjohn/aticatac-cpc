@@ -1,28 +1,117 @@
-update_chicken
-	ld a, (hunger_index)
-	inc a
-	cp max_hunger
-	jp z, update_carcass
+init_health
+	ld a, max_health
+    ld (health), a
 
-	ld (hunger_index), a
-	; set death flag here
+	ld a, max_health / 2
+    ld (drawn_health), a
+	ret
 
-update_carcass
-	srl a
-	srl a
-	srl a					; divide by 8
-
+health_decay
+	ld a, (heartbeat)
+	cp 25
+	ret nz
+	ld a, (health)
 	and a
 	ret z
+	dec a
+	ld (health), a
+	ret
 
-	ld hl, carcass + 1
-	ld (hl), a
+health_up
+	ld a, (health)
+	add 12
+	cp max_health
+	jp c, maximus
+	ld a, max_health
 
-    ; draw carcass here
+maximus
+	ld (health), a
+	ret
+
+update_chicken
+	ld a, (health)
+	srl a					; divide by 2
+
+	ld b, a
+	ld a, (drawn_health)
+	cp b
+	ret z
+
+	jp nc, health_going_down
+
+	inc a
+	ld (drawn_health), a
+
+	ld b, a
+	ld a, 30
+	sub b
+	inc a
+	cp 30
+	ret z
+
+	ld bc, chicken_full
+	jp update_carcass
+
+health_going_down
+	dec a
+	ld (drawn_health), a
+
+	ld b, a
+	ld a, 30
+	sub b
+	cp 30
+	ret z
+
+	ld bc, chicken_empty
+
+update_carcass				; multiply a by 12 (width of chicken) and draw 1 line only...
+	ld l, a
+	ld h, 0
+	add hl, hl				; x2
+	add hl, hl				; x4
+
+	ld d, h
+	ld e, l					; de = hl * 4
+
+	add hl, hl				; x8
+	add hl, de				; x12
+
+	add hl, bc				; hl = address of image data for this row
+	ex hl, de				; now in de
+
+	; calculate line to draw on
+	add 0x53
+    ld l, a
+    ld h, 0
+    add hl, hl
+    ld bc, (scr_addr_table)
+    add hl, bc
+
+    ld a, (hl)
+    inc hl
+    ld h, (hl)
+    ld l, a
+
+	ld c, 0x72
+	ld b, 0
+	add hl, bc				; hl has screen address, de has gfx address
+	ex de, hl				; swapped
+
+	push hl
+	push de
+
+repeat 12
+	ldi
+rend
+
+	pop de
+	pop hl
+		
+	ld a, d
+	xor 0x40
+	ld d, a
+repeat 12
+	ldi
+rend
 
     ret
-
-hunger_c0
-	defb 0x00
-hunger_80
-	defb 0x00	
