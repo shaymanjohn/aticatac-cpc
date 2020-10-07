@@ -2,14 +2,11 @@ init_health
 	ld a, max_health
     ld (health), a
 
-	ld a, max_health / 2
+	ld a, max_health / 4
     ld (drawn_health), a
 	ret
 
 health_decay
-	ld a, (heartbeat)
-	cp 25
-	ret nz
 	ld a, (health)
 	and a
 	ret z
@@ -19,7 +16,7 @@ health_decay
 
 health_up
 	ld a, (health)
-	add 12
+	add 16
 	cp max_health
 	jp c, maximus
 	ld a, max_health
@@ -30,7 +27,8 @@ maximus
 
 update_chicken
 	ld a, (health)
-	srl a					; divide by 2
+	srl	a
+	srl a					; divide by 4
 
 	ld b, a
 	ld a, (drawn_health)

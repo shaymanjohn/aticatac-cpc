@@ -36,11 +36,13 @@ no_pockets_to_update
 no_food_removal
     SELECT_BANK sprite_bank_config
 
-    ld a, (player_appearing)
+    ld a, (player_growing)
     and a
-    jp nz, make_player_appear
+    jp nz, make_player_transition
 
-    call health_decay
+    ld a, (heartbeat)
+    cp 31
+    call z, health_decay
 
     SELECT_BANK sprite_bank_config
     call erase_player
@@ -129,10 +131,7 @@ room_has_changed
 	ld (interrupt_index), a    
     ret
 
-make_player_appear
-    dec a
-    ld (player_appearing), a
-
+make_player_transition
     call erase_small_player
     call draw_small_player
 
@@ -145,7 +144,7 @@ make_player_appear
     ld a, (heartbeat)
     and 0x07
     cp 0x07
-    jp nz, player_full
+    jp nz, player_full2
 
     ld a, b
     inc a
@@ -154,8 +153,13 @@ make_player_appear
     ld bc, -5
     add hl, bc
     ld (current_height_gfx_offset), hl
+    jp player_full2
 
 player_full
+    xor a
+    ld (player_growing), a
+
+player_full2
     SELECT_BANK room_bank_config    
     jp skip_all_others    
     

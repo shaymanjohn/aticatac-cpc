@@ -55,35 +55,16 @@ select_game
     inc a
     ld (room_changed), a
 
-    ; ld a, 24
+    ; ld a, 23
     ; ld (room_number), a
 
-    ld a, default_frame
-    ld (player_frame), a
-
-    ld a, 0x2c
-    ld (player_x), a
-
-    ld a, 0x57
-    ld (player_y), a
-
-    ld hl, (selected_player)
-    ld (anim_frames_table), hl
-
-    ld a, (selected_player_height)
-    ld (actual_player_height), a
-
-    call init_player_appearing    
-
-    ld a, 3
-    ld (num_lives), a
-
+    call init_player
     call init_health
     call init_food
     call init_doors
     call init_collectables
+    call init_score
 
-    ld a, (actual_player_height)
     call draw_panel
 
     ld hl, font_0 - 256
@@ -107,8 +88,8 @@ reset_room_count_loop
     ld ix, time_text
     call show_text
 
-    ld ix, score_text
-    call show_text
+    ld bc, 0
+    call add_to_score
 
     ld a, (hidden_screen_base_address)
     ld h, a

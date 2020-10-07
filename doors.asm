@@ -16,6 +16,8 @@ init_doors
     ld a, r
     ld (random_seed), a    
 
+    ld hl, magic_door    
+
 init_door_loop
     push bc
 
@@ -34,6 +36,9 @@ init_door_loop
 
     cp active_door_big + 1      ; catches items 1 and 2 and 3
     jr c, not_a_locked_door
+
+    cp (hl)
+    jr z, ignore_different_doors
 
     res 6, (ix + 2)
     res 6, (ix + 10)

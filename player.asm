@@ -1,21 +1,49 @@
-init_player_appearing
+init_player
+    ld a, default_frame
+    ld (player_frame), a
+
+    ld a, 0x2c
+    ld (player_x), a
+
+    ld a, 0x57
+    ld (player_y), a
+
+    ld hl, (selected_player)
+    ld (anim_frames_table), hl
+
+    ld a, (selected_player_height)
+    ld (actual_player_height), a
+
+    ld a, 3
+    ld (num_lives), a
+
+    ld d, 1
+    call player_appearing
+    
+    ret
+
+player_appearing                    ; IN: d = 1 = appearing, -1 = disappearing
     ld a, player_is_going_right
     ld (player_orientation), a
 
-    ld a, (actual_player_height)
-    ld b, a
-    
-    sla a
-    sla a
-    sla a
-    ld (player_appearing), a
+    ld a, d
+    ld (player_growing), a
 
+    cp 1
+    jr z, is_appearing
+
+    ld a, (actual_player_height)
+    ld (current_player_height), a
+    jr set_player_offset
+
+is_appearing
     ld a, 1
     ld (current_player_height), a
 
-    ld a, b
+    ld a, (actual_player_height)
     dec a
 
+set_player_offset
     ld l, a
     ld h, 0
     add hl, hl
@@ -444,7 +472,7 @@ reset_player
 player_character
     defb 0
 
-player_appearing
+player_growing
     defb 0
 
 player_x
@@ -467,6 +495,9 @@ actual_player_height
 
 current_player_height
     defb 0
+
+score
+    defs 3
 
 current_height_gfx_offset
     defw 0

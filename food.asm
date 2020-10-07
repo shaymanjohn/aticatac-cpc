@@ -79,7 +79,7 @@ food_not_neg_y
     cp type_mushroom
     jp nz, remove_food
 
-    ; decrease health only, don't remove mushrooms...
+    call health_decay
     jp cant_find_food
 
 remove_food
