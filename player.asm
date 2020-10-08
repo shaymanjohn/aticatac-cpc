@@ -481,37 +481,38 @@ reset_player
     ld (save_player_address_80), hl
     ret
 
+    ; if (rect1.x < rect2.x + rect2.width &&
+    ;     rect1.x + rect1.width > rect2.x &&
+    ;     rect1.y < rect2.y + rect2.height &&
+    ;     rect1.y + rect1.height > rect2.y) {
+    ;     // collision detected!
+    ;     }
+
 check_player_hit_baddie
     ld ix, boss
-    ld a, (ix + spr_state)
-    cp state_active
-    call z, player_vs_baddie 
+    call player_vs_baddie 
 
     ld iyh, 0
 
     ld ix, sprite1
-    ld a, (ix + spr_state)
-    cp state_active
-    call z, player_vs_baddie
+    call player_vs_baddie
     ld a, iyh
     and a
     ret nz
 
     ld ix, sprite2
-    ld a, (ix + spr_state)
-    cp state_active
-    call z, player_vs_baddie
+    call player_vs_baddie
     ld a, iyh
     and a
     ret nz    
 
     ld ix, sprite3
-    ld b, 0    
+
+player_vs_baddie
     ld a, (ix + spr_state)
     cp state_active
     ret nz
 
-player_vs_baddie
     ld a, (ix + 0)
     add (ix + 5)
     ld b, a                 

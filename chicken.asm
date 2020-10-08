@@ -18,7 +18,7 @@ health_down
 	ld a, (health)
 	and a
 	ret z
-	sub 12
+	sub 8
 	jp nc, hd1
 
 	xor a
