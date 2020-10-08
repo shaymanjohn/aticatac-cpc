@@ -58,8 +58,16 @@ health_going_down
 	ld a, 30
 	sub b
 	cp 30
-	ret z
+	jp nz, not_dead_yet
 
+	call decrease_lives
+
+	ld a, (game_over)
+	and a
+	call z, make_player_disappear
+	ret
+	
+not_dead_yet
 	ld bc, chicken_empty
 
 update_carcass				; multiply a by 12 (width of chicken) and draw 1 line only...

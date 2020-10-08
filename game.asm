@@ -38,7 +38,7 @@ no_food_removal
 
     ld a, (player_growing)
     and a
-    jp nz, make_player_transition
+    jp nz, continue_player_transition
 
     ld a, (heartbeat)
     cp 31
@@ -58,7 +58,8 @@ no_food_removal
     call move_weapon
     call draw_weapon
 
-    BORDER_ON hw_brightBlue
+skip_some_others
+    BORDER_ON hw_brightBlue    
     SELECT_BANK baddie_bank_config
     
     ld ix, boss
@@ -80,11 +81,7 @@ no_food_removal
     and a
     call nz, check_food_collision    
 
-    SELECT_BANK room_bank_config    
-
-    ; ld a, (screen_transition_in_progress)
-    ; and a
-    ; jp nz, ignore_doors
+    SELECT_BANK room_bank_config
 
 skip_all_others
     ld de, (door_to_toggle)
@@ -131,20 +128,24 @@ room_has_changed
 	ld (interrupt_index), a    
     ret
 
-make_player_transition
+continue_player_transition
     call erase_small_player
     call draw_small_player
+
+    ld a, (player_growing)
+    cp player_disappearing
+    jp z, player_shrinking
+
+    ld a, (heartbeat)
+    and 0x03
+    cp 0x03
+    jp nz, continue_game    
 
     ld a, (current_player_height)
     ld b, a
     ld a, (actual_player_height)
     cp b
-    jp z, player_full
-
-    ld a, (heartbeat)
-    and 0x07
-    cp 0x07
-    jp nz, player_full2
+    jp z, transition_complete    
 
     ld a, b
     inc a
@@ -153,13 +154,37 @@ make_player_transition
     ld bc, -5
     add hl, bc
     ld (current_height_gfx_offset), hl
-    jp player_full2
+    jp continue_game
 
-player_full
+player_shrinking
+    ld a, (current_player_height)
+    dec a
+    jp nz, still_shrinking
+
+    call add_tombstone
+    call make_player_appear
+    jp continue_game
+
+still_shrinking
+    ld a, (heartbeat)
+    and 0x03
+    cp 0x03
+    jp nz, continue_game
+
+    ld a, (current_player_height)
+    dec a
+    ld (current_player_height), a
+    ld hl, (current_height_gfx_offset)
+    ld bc, 5
+    add hl, bc
+    ld (current_height_gfx_offset), hl
+    jp continue_game
+
+transition_complete
     xor a
     ld (player_growing), a
 
-player_full2
+continue_game
     SELECT_BANK room_bank_config    
-    jp skip_all_others    
+    jp skip_some_others    
     

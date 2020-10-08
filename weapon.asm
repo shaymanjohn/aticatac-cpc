@@ -416,9 +416,6 @@ not_neg_y_weapon
     ld a, 1
     ld (weapon_active), a
 
-    ld bc, 0x155
-    call add_to_score
-
 end_weapon_hit_check
     pop de
     pop hl

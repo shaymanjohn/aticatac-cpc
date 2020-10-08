@@ -1,13 +1,4 @@
 init_player
-    ld a, default_frame
-    ld (player_frame), a
-
-    ld a, 0x2c
-    ld (player_x), a
-
-    ld a, 0x57
-    ld (player_y), a
-
     ld hl, (selected_player)
     ld (anim_frames_table), hl
 
@@ -17,33 +8,28 @@ init_player
     ld a, 3
     ld (num_lives), a
 
-    ld d, 1
-    call player_appearing
-    
-    ret
+make_player_appear
+    ld a, default_frame
+    ld (player_frame), a
 
-player_appearing                    ; IN: d = 1 = appearing, -1 = disappearing
+    ld a, 0x2c
+    ld (player_x), a
+
+    ld a, 0x57
+    ld (player_y), a
+
     ld a, player_is_going_right
     ld (player_orientation), a
 
-    ld a, d
+    ld a, player_appearing
     ld (player_growing), a
 
-    cp 1
-    jr z, is_appearing
-
-    ld a, (actual_player_height)
-    ld (current_player_height), a
-    jr set_player_offset
-
-is_appearing
     ld a, 1
     ld (current_player_height), a
 
     ld a, (actual_player_height)
     dec a
 
-set_player_offset
     ld l, a
     ld h, 0
     add hl, hl
@@ -52,7 +38,41 @@ set_player_offset
     ld b, 0
     add hl, bc
     ld (current_height_gfx_offset), hl
+
+	ld a, max_health
+    ld (health), a    
+
     ret
+
+make_player_disappear
+    ld a, player_disappearing
+    ld (player_growing), a
+
+    ld a, (actual_player_height)
+    ld (current_player_height), a
+
+    ld hl, 0
+    ld (current_height_gfx_offset), hl
+
+    ld ix, sprite1
+    ld a, (ix + spr_state)
+    cp state_dead
+    jr z, kill_2
+    call kill_sprite
+
+kill_2
+    ld ix, sprite2
+    ld a, (ix + spr_state)
+    cp state_dead
+    jr z, kill_3
+    call kill_sprite
+
+kill_3
+    ld ix, sprite3
+    ld a, (ix + spr_state)
+    cp state_dead
+    ret z
+    jp kill_sprite
 
 draw_player
     ld a, (player_y)    
@@ -333,20 +353,12 @@ decrease_lives
 
     ld a, game_finished
     ld (game_over), a
-
     ret        
 
 still_alive
     dec a
     ld (num_lives), a
-
-    push hl
-    push ix
-    call show_lives
-    pop ix
-    pop hl
-
-    ret
+    jp remove_life
 
 erase_player_select
     ld l, character_select_y

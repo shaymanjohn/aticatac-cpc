@@ -277,6 +277,10 @@ is_dead
     ld a, (ix + spr_boss)
     and a
     ret nz
+
+    ld a, (player_growing)
+    and a
+    ret nz
     
     ld a, (ix + spr_counter)
     dec a
@@ -438,7 +442,9 @@ kill_sprite
 
     ld iy, sprite_death
     call init_sprite
-    ret
+
+    ld bc, 0x155
+    jp add_to_score
 
 is_dying
     ld a, (ix + spr_counter)

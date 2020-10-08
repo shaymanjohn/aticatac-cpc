@@ -22,38 +22,10 @@ show_lives
     ld h, (hl)
     ld l, a
 
-    ld bc, 0x0030               ; col 
+    ld bc, 0x0032               ; col 
     add hl, bc
 
-    push hl                     ; hl is screen address, save it
-
-; clear all lives first
-    ld b, max_player_height
-
-clear_lives_loop
-    push bc
-    push hl    
-
-    ld d, h
-    ld e, l
-    inc de
-    ld bc, (player_width + 1) * 3
-    pop hl
-    GET_NEXT_SCR_LINE
-    pop bc
-    djnz clear_lives_loop
-
-    pop hl
-
-; now draw how many are left...    
-
-    ld a, (num_lives)
-    and a
-    ret z               ; stop here if 0.
-
-    ld b, a
-    inc hl
-    inc hl
+    ld b, 3
 lives_loop
     push hl
     push bc
@@ -64,7 +36,70 @@ lives_loop
     ld de, player_width - 1
     add hl, de
     djnz lives_loop
+
     ret
+
+remove_life
+    ld hl, 246
+    ld de, (scr_addr_table)
+    add hl, de
+
+    ld a, (hl)
+    inc hl
+    ld h, (hl)
+    ld l, a
+
+    ex de, hl
+
+    ld a, (num_lives)
+    ld l, a
+    ld h, 0
+    add hl, hl
+    ld bc, life_table
+    add hl, bc
+
+    ld a, (hl)
+    inc hl
+    ld h, (hl)
+    ld l, a
+    add hl, de
+
+    ld a, (actual_player_height)
+    ld b, a
+
+clear_life_loop
+    push hl
+
+    push hl
+    ld (hl), 0
+    inc hl
+    ld (hl), 0
+    inc hl
+    ld (hl), 0
+    inc hl
+    ld (hl), 0
+
+    pop hl
+    ld a, h
+    xor 0x40
+    ld h, a
+
+    ld (hl), 0
+    inc hl
+    ld (hl), 0
+    inc hl
+    ld (hl), 0
+    inc hl
+    ld (hl), 0
+
+    pop hl
+    GET_NEXT_SCR_LINE
+    djnz clear_life_loop
+
+    ret
+
+life_table
+    defw 50, 54, 58
 
 chicken_item    
 ;        item                x     y    rot

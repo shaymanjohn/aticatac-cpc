@@ -9,7 +9,38 @@ food_init_loop
     ld (ix + 2), 0
     add ix, de
     djnz food_init_loop
+
+    ld ix, tombstones
+    ld (ix + 1), 0xff
+    ld (ix + 9), 0xff
+    ld (ix + 17), 0xff
     ret
+
+add_tombstone
+    ld ix, tombstones
+    ld a, (num_lives)
+    sla a
+    sla a
+    sla a
+    ld e, a
+    ld d, 0
+    add ix, de
+
+    ld a, (room_number)
+    ld (ix + 1), a
+
+    ld a, (player_x)
+    srl a
+    ld (ix + 3), a
+
+    ld a, (player_y)
+    ld b, a
+    ld a, (actual_player_height)
+    add b
+    ld (ix + 4), a
+
+    ld (erase_food_with_index), ix
+    jp draw_food_item2
 
 check_food_collision
     ld c, a
@@ -76,6 +107,9 @@ food_not_neg_y
     jp nc, cant_find_food
 
     ld a, (ix + 0)
+    cp type_tombstone
+    jp z, cant_find_food
+
     cp type_mushroom
     jp nz, remove_food
 
@@ -263,7 +297,7 @@ food_table
     defw item_ham, item_lolly
     defw item_icecream, item_bowl
     defw item_apple, item_milk
-    defw item_mushroom
+    defw item_mushroom, item_tombstone
 
 erase_food_with_index
     defw 0x00

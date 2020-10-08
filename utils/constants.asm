@@ -17,6 +17,9 @@ average_player_height   equ 20
 player_horiz_speed  equ 1
 player_vert_speed   equ 2
 
+player_appearing    equ 1
+player_disappearing equ 2
+
 fire_horizontal_speed equ 2
 fire_vertical_speed   equ 4
 fire_decay            equ 50
@@ -97,6 +100,7 @@ skeleton_room3      equ 0x33
 skeleton_room4      equ 0x55
 
 type_mushroom       equ 0x58
+type_tombstone      equ 0x59
 
 interrupt_notReady		equ -2
 interrupt_firstValue	equ -1
