@@ -22,7 +22,7 @@ game_tasks
 no_pockets_to_update
     ld a, (erase_food_with_index + 1)
     and a
-    jp z, no_food_removal
+    jp z, tombstone_draw
 
     ld ixh, a
     ld a, (erase_food_with_index)
@@ -32,6 +32,20 @@ no_pockets_to_update
 
     ld hl, 0
     ld (erase_food_with_index), hl
+
+tombstone_draw
+    ld a, (draw_tombstone_with_index + 1)
+    and a
+    jp z, no_food_removal
+
+    ld ixh, a
+    ld a, (draw_tombstone_with_index)
+    ld ixl, a
+    SELECT_BANK sprite_bank_config 
+    call draw_food_item2
+
+    ld hl, 0
+    ld (draw_tombstone_with_index), hl    
 
 no_food_removal
     SELECT_BANK sprite_bank_config
@@ -52,13 +66,13 @@ no_food_removal
     call move_player    
     call check_doors
 
+skip_some_others
     BORDER_ON hw_brightRed
     SELECT_BANK sprite_bank_config
     call erase_weapon
     call move_weapon
     call draw_weapon
 
-skip_some_others
     BORDER_ON hw_brightBlue    
     SELECT_BANK baddie_bank_config
     
@@ -77,13 +91,14 @@ skip_some_others
     BORDER_ON hw_brightWhite
     call check_weapon_hit
 
+    call check_player_hit_baddie
+
     ld a, (this_rooms_food_count)
     and a
     call nz, check_food_collision    
 
     SELECT_BANK room_bank_config
 
-skip_all_others
     ld de, (door_to_toggle)
     ld a, d
     or e

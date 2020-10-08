@@ -481,6 +481,77 @@ reset_player
     ld (save_player_address_80), hl
     ret
 
+check_player_hit_baddie
+    ld ix, boss
+    ld a, (ix + spr_state)
+    cp state_active
+    call z, player_vs_baddie 
+
+    ld iyh, 0
+
+    ld ix, sprite1
+    ld a, (ix + spr_state)
+    cp state_active
+    call z, player_vs_baddie
+    ld a, iyh
+    and a
+    ret nz
+
+    ld ix, sprite2
+    ld a, (ix + spr_state)
+    cp state_active
+    call z, player_vs_baddie
+    ld a, iyh
+    and a
+    ret nz    
+
+    ld ix, sprite3
+    ld b, 0    
+    ld a, (ix + spr_state)
+    cp state_active
+    ret nz
+
+player_vs_baddie
+    ld a, (ix + 0)
+    add (ix + 5)
+    ld b, a                 
+
+    ld a, (player_x)        
+    cp b
+    ret nc                  
+
+    add player_width
+    cp (ix + 0)
+    ret c
+
+    ld a, (ix + 1)
+    add (ix + 6)
+    ld b, a
+
+    ld a, (player_y)
+    cp b
+    ret nc
+
+    ld b, a
+    ld a, (actual_player_height)
+    add b
+    cp (ix + 1)
+    ret c
+
+    ld a, (ix + 26)                 ; is this a boss?
+    and a
+    jp nz, touching_boss
+
+    call kill_sprite
+    call health_down
+
+    ld iyh, 1
+    ret
+
+touching_boss
+    call health_decay
+    ret
+
 player_character
     defb 0
 

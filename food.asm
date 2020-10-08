@@ -39,7 +39,7 @@ add_tombstone
     add b
     ld (ix + 4), a
 
-    ld (erase_food_with_index), ix
+    ld (draw_tombstone_with_index), ix
     jp draw_food_item2
 
 check_food_collision
@@ -139,6 +139,7 @@ cant_find_food
 reset_food_collected
     ld hl, 0
     ld (erase_food_with_index), hl
+    ld (draw_tombstone_with_index), hl
     ret
 
 draw_food
@@ -300,4 +301,7 @@ food_table
     defw item_mushroom, item_tombstone
 
 erase_food_with_index
+    defw 0x00
+
+draw_tombstone_with_index
     defw 0x00

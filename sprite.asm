@@ -443,6 +443,9 @@ kill_sprite
     ld iy, sprite_death
     call init_sprite
 
+    ld e, sound_explosion
+    call play_sfx    
+
     ld bc, 0x155
     jp add_to_score
 

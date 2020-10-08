@@ -408,9 +408,6 @@ not_neg_y_weapon
     cp 8
     jp nc, end_weapon_hit_check
 
-    ld e, sound_explosion
-    call play_sfx
-
     call kill_sprite
 
     ld a, 1

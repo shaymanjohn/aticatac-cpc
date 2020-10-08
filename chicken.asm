@@ -14,6 +14,18 @@ health_decay
 	ld (health), a
 	ret
 
+health_down
+	ld a, (health)
+	and a
+	ret z
+	sub 12
+	jp nc, hd1
+
+	xor a
+
+hd1	ld (health), a
+	ret
+
 health_up
 	ld a, (health)
 	add 16
