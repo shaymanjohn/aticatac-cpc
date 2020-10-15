@@ -219,6 +219,10 @@ collide1
     ld a, 1
     ld (room_changed), a
 
+    push hl
+    call reset_sprites
+    pop hl
+
     ld a, transition_time
     ld (screen_transition_in_progress), a
 

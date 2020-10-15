@@ -1,7 +1,7 @@
 DEBUG=0
 
 macro SET_MODE screenmode
-    ld bc, 0x7f00 + 128 + 4 + 8 + {screenmode}
+    ld bc, 0x7f00 + 128 + 8 + 4 + {screenmode}
 	out (c), c
 mend
 
@@ -21,7 +21,7 @@ macro GET_NEXT_SCR_LINE
     add a, 0x40
     ld l, a
     ld a, h
-    adc a, 0xc0
+    adc 0xc0
     ld h, a
 @got_next_line
 mend

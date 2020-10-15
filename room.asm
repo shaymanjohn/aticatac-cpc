@@ -19,6 +19,8 @@ draw_room
     call calculate_collision_grid
     call update_collision_grid_for_items
 
+    call teleport_dracula
+
 ; Reset data for new room.
     xor a
     ld (room_changed), a
@@ -37,7 +39,7 @@ not_gone_back
     ld (door_to_toggle), hl    
     
     call reset_player
-    call reset_sprites
+    call init_boss    
     call reset_weapon
     call reset_food_collected
 

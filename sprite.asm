@@ -503,9 +503,6 @@ reset_sprites
     add 5
     ld (sprite3 + spr_counter), a
 
-; going to a boss room?
-    call init_boss
-
     ret
 
 ; sprite struct

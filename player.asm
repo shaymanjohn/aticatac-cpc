@@ -550,8 +550,34 @@ player_vs_baddie
     ret
 
 touching_boss
+    ld a, (room_number)
+    cp 0x55
+    jp nz, not_frank
+
+    ld a, 0x11
+    ld hl, pocket1    
+    cp (hl)
+    jp z, kill_frank
+
+    inc hl
+    cp (hl)
+    jp z, kill_frank
+
+    inc hl
+    cp (hl)
+    jp z, kill_frank    
+
+not_frank
     call health_decay
     ret
+
+kill_frank
+    call kill_sprite
+    ld a, 1
+    ld (frank_dead), a
+
+    ld bc, 0x845
+    jp add_to_score
 
 player_character
     defb 0

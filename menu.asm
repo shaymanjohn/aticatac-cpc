@@ -159,12 +159,12 @@ character_selected
     ld (player_frame), a
 
     ld a, c
-    cp 0
+    and a
     jr z, selected_knight
     cp 1
     jr z, selected_wizard
 
-    ld hl, sprite_bank_player_sl_1_1
+    ld hl, sprite_bank_player_sl_0_0
     ld (selected_sprite_frame), hl
 
     ld hl, axe_data
@@ -177,7 +177,7 @@ character_selected
     jr save_selection
 
 selected_knight
-    ld hl, sprite_bank_player_kl_1_1
+    ld hl, sprite_bank_player_kl_0_0
     ld (selected_sprite_frame), hl
 
     ld hl, sword_data
@@ -190,7 +190,7 @@ selected_knight
     jr save_selection
 
 selected_wizard
-    ld hl, sprite_bank_player_wl_1_1
+    ld hl, sprite_bank_player_wl_0_0
     ld (selected_sprite_frame), hl    
 
     ld hl, spell_data

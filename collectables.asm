@@ -59,6 +59,9 @@ random_place_loop
 
     ld a, (col_key_red)
     ld (mummy_room), a
+
+    ld a, room_dracula
+    ld (dracula_room), a
     
     ret
 
@@ -395,6 +398,9 @@ pocket3
     defb 0xff
 
 mummy_room
+    defb 0x00
+
+dracula_room
     defb 0x00
 
 save_collectable_screen_loc

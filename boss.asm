@@ -4,9 +4,6 @@ init_boss
     cp room_frankenstein
     jp z, init_frank
 
-    cp room_dracula
-    jp z, init_dracula
-
     ld hl, mummy_room
     cp (hl)
     jp z, init_mummy
@@ -16,6 +13,10 @@ init_boss
 
     cp room_devil
     jp z, init_devil
+
+    ld hl, dracula_room
+    cp (hl)
+    jp z, init_dracula    
 
     ret
 
@@ -34,7 +35,11 @@ common_boss_init
     jp init_sprite
 
 init_frank
-    ld hl, move_frankie
+    ld a, (frank_dead)
+    and a
+    ret nz
+
+    ld hl, move_devil
     ld (boss_mover), hl
 
     ld iy, boss_frankie
@@ -46,6 +51,27 @@ init_dracula
 
     ld iy, boss_dracula
     jp common_boss_init
+
+teleport_dracula
+    RANDOM_IN_A
+    and 0x7f
+    ld c, a
+    call get_room_type
+    cp 3
+    ret z
+
+    ld a, c
+    ld (dracula_room), a
+    ret
+
+get_room_type
+    ld l, a
+    ld h, 0
+    ld de, room_bank_RoomInfo
+    add hl, de
+    inc hl
+    ld a, (hl)
+    ret
 
 init_mummy
     ld hl, move_mummy
@@ -71,6 +97,9 @@ init_hunchback
 init_devil
     ld hl, move_devil
     ld (boss_mover), hl
+
+    xor a
+    ld (devil_timer), a
 
     ld iy, boss_devil
     jp common_boss_init
@@ -127,19 +156,25 @@ move_hunchback
     ret
 
 move_devil
-    ld a, (heartbeat)
-    bit 0, a
-    ret z
+    ld a, (devil_timer)
+    inc a
+    ld (devil_timer), a
+    cp 3
+    ret nz
 
-    ld de, 0x0000           ; d = x motion, e = y motion
+    xor a
+    ld (devil_timer), a
+
+    ld de, 0x0000                   ; d = x motion, e = y motion
+
     ld a, (player_x)
     ld b, (ix + spr_x)
     cp b
     jp z, check_devil_y
 
-    ld d, 1
-    jp nc, check_devil_y
     ld d, -1
+    jp c, check_devil_y
+    ld d, 1
     
 check_devil_y
     ld a, (player_y)
@@ -147,21 +182,72 @@ check_devil_y
     cp b
     jp z, move_devil_now
 
-    ld e, 1
-    jp nc, move_devil_now
     ld e, -1
+    jp c, move_devil_now
+    ld e, 1
 
 move_devil_now
+    ld a, (player_growing)
+    and a
+    jp z, update_boss_within_bounds
+
+    ld a, d
+    neg 
+    ld d, a
+    ld a, e
+    neg
+    ld e, a
+    jp update_boss_within_bounds
+
+update_boss_within_bounds
+    ld a, (player_growing)
+    and a
+    jp z, ubwb1
+
+    ld de, 0xff01               ; move to corner if player growing
+
+ubwb1
+    ld a, (min_x)
+    ld b, a
+    ld a, (max_x)
+    ld c, a
+
     ld a, (ix + spr_x)
     add d
+
+    cp b
+    jp c, move_boss_y
+
+    cp c
+    jp nc, move_boss_y
+
     ld (ix + spr_x), a
+
+move_boss_y
+    ld a, (min_y)
+    ld b, a
+    ld a, (max_y)
+    ld c, a
+
     ld a, (ix + spr_y)
     add e
+
+    cp b
+    jp c, do_boss_anim
+
+    cp c
+    jp nc, do_boss_anim
+
     ld (ix + spr_y), a
 
+do_boss_anim
     ANIMATE_SPRITE
     ret
 
+frank_dead
+    defb 0x00
+devil_timer
+    defb 0x00
 mummy_inc
     defb 0x00
 mummy_count

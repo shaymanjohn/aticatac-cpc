@@ -6,7 +6,6 @@ draw_panel
     call draw_item
 
     SELECT_BANK sprite_bank_config
-
     call show_lives
 
     SELECT_BANK item_bank_config

@@ -51,11 +51,12 @@ select_game
     ld (player_orientation), a
     ld (game_over), a
     ld (heartbeat), a
+    ld (frank_dead), a
 
     inc a
     ld (room_changed), a
 
-    ; ld a, 23
+    ; ld a, room_dracula
     ; ld (room_number), a
 
     call init_player
@@ -64,6 +65,7 @@ select_game
     call init_doors
     call init_collectables
     call init_score
+    call reset_sprites
 
     call draw_panel
 
