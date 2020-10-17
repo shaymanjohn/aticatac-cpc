@@ -150,3 +150,6 @@ door_yellow             equ 11
 collision_grid_size     equ 24
 
 transition_time         equ 7
+
+crucifix                equ 0x09
+wrench                  equ 0x11

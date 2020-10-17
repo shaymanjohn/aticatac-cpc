@@ -554,7 +554,7 @@ touching_boss
     cp 0x55
     jp nz, not_frank
 
-    ld a, 0x11
+    ld a, wrench
     ld hl, pocket1    
     cp (hl)
     jp z, kill_frank
@@ -568,8 +568,27 @@ touching_boss
     jp z, kill_frank    
 
 not_frank
-    call health_decay
-    ret
+    ld a, (dracula_room)
+    ld b, a
+    ld a, (room_number)
+    cp b
+    jp nz, not_drac
+
+    ld a, crucifix
+    ld hl, pocket1    
+    cp (hl)
+    ret z
+
+    inc hl
+    cp (hl)
+    ret z
+
+    inc hl
+    cp (hl)
+    ret z
+
+not_drac
+    jp health_decay
 
 kill_frank
     call kill_sprite

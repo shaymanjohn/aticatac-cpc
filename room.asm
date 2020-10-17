@@ -19,7 +19,7 @@ draw_room
     call calculate_collision_grid
     call update_collision_grid_for_items
 
-    call teleport_dracula
+    call try_teleport_dracula
 
 ; Reset data for new room.
     xor a
