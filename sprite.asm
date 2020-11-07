@@ -1,7 +1,7 @@
 erase_sprite
     ld a, (hidden_screen_base_address)
     cp 0xc0
-    jp nz, sprite_erase_with_80
+    jr nz, sprite_erase_with_80
 
     ld hl, (ix + spr_scrc0)
 
@@ -11,7 +11,7 @@ erase_sprite
     ld de, (ix + spr_gfxc0)
     ld b, (ix + spr_hc0)
     ld c, (ix + spr_wc0)
-    jp erase_sprite_start
+    jr erase_sprite_start
 
 sprite_erase_with_80
     ld hl, (ix + spr_scr80)
@@ -68,11 +68,11 @@ draw_sprite
 
     ld a, (ix + spr_fdom)
     and a
-    jp z, calc_frame
+    jr z, calc_frame
 
     ld a, (ix + spr_xinc)
     bit 7, a
-    jp z, calc_frame
+    jr z, calc_frame
 
     ld bc, (ix + spr_alt)
 
@@ -85,7 +85,7 @@ calc_frame
 
     ld a, (ix + spr_x)          ; use pixel shifted version?
     and 0x01
-    jp z, not_shifted
+    jr z, not_shifted
 
     ld bc, end_of_baddies - start_of_baddies
     add hl, bc
@@ -95,7 +95,7 @@ not_shifted
 
     ld a, (hidden_screen_base_address)
     cp 0xc0
-    jp nz, sprite_save_with_80
+    jr nz, sprite_save_with_80
 
     ld (ix + spr_scrc0), hl
     ld (ix + spr_gfxc0), de
@@ -103,7 +103,7 @@ not_shifted
     ld (ix + spr_hc0), a
     ld a, (ix + spr_w)
     ld (ix + spr_wc0), a    
-    jp draw_sprite_entry2
+    jr draw_sprite_entry2
 
 sprite_save_with_80
     ld (ix + spr_scr80), hl
@@ -119,7 +119,7 @@ draw_sprite_entry2
 
 draw_sprite_entry3
     cp 5
-    jp z, sprite_draw_loop_5
+    jr z, sprite_draw_loop_5
 
 sprite_draw_loop_4
     ld a, (de)
@@ -196,7 +196,7 @@ update_sprite
     ld a, (ix + spr_state)
 
     cp state_dead
-    jp z, is_dead
+    jr z, is_dead
 
     cp state_arriving
     jp z, is_arriving
@@ -215,7 +215,7 @@ update_sprite
     dec a
     ld (ix + spr_counter), a
     and a
-    jp z, change_direction
+    jr z, change_direction
 
     ld a, (heartbeat)
     and 0x01
@@ -229,12 +229,12 @@ update_sprite
     ld a, (min_x)
     ld d, a
     cp b
-    jp nc, bounce_sprite_x
+    jr nc, bounce_sprite_x
 
     ld a, (max_x)
     ld d, a
     cp b
-    jp nc, check_bounce_y
+    jr nc, check_bounce_y
 
 bounce_sprite_x
     ld a, (ix + spr_xinc)
@@ -252,12 +252,12 @@ check_bounce_y
     ld a, (min_y)
     ld d, a
     cp b
-    jp nc, bounce_sprite_y
+    jr nc, bounce_sprite_y
 
     ld a, (max_y)
     ld d, a
     cp b
-    jp nc, anim_sprite
+    jr nc, anim_sprite
 
 bounce_sprite_y
     ld a, (ix + spr_yinc)
@@ -306,19 +306,19 @@ is_dead
     RANDOM_IN_A
 
     cp c
-    jp c, random_y_pos
+    jr c, random_y_pos
     srl a
 
     cp c
-    jp c, random_y_pos
+    jr c, random_y_pos
     srl a
 
     cp c
-    jp c, random_y_pos
+    jr c, random_y_pos
     srl a
 
     cp c
-    jp c, random_y_pos
+    jr c, random_y_pos
     srl a    
 
 random_y_pos
@@ -335,15 +335,15 @@ random_y_pos
     RANDOM_IN_A
 
     cp c
-    jp c, random_pos_done
+    jr c, random_pos_done
     srl a
 
     cp c
-    jp c, random_pos_done
+    jr c, random_pos_done
     srl a
 
     cp c
-    jp c, random_pos_done
+    jr c, random_pos_done
     srl a
 
 random_pos_done
@@ -380,7 +380,7 @@ is_arriving
     dec a
     ld (ix + spr_counter), a
     and a
-    jp z, become_active
+    jr z, become_active
 
     ANIMATE_SPRITE
     ret
@@ -454,7 +454,7 @@ is_dying
     dec a
     ld (ix + spr_counter), a
     and a
-    jp z, become_dead
+    jr z, become_dead
     ANIMATE_SPRITE
     ret
 

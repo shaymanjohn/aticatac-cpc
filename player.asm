@@ -98,9 +98,9 @@ draw_player
 
     ld a, (hidden_screen_base_address)
     cp 0xc0
-    jp z, save_address_c0
+    jr z, save_address_c0
     ld (save_player_address_80), hl        ; save this for erase later
-    jp saved_address
+    jr saved_address
 
 save_address_c0
     ld (save_player_address_c0), hl
@@ -109,7 +109,7 @@ saved_address
     ld b, 0
     ld a, e
     and 0x01
-    jp z, dplay1
+    jr z, dplay1
     ld b, num_player_frames
 
 dplay1
@@ -135,9 +135,9 @@ dplay1
 
     ld a, (hidden_screen_base_address)
     cp 0xc0
-    jp z, save_frame_c0
+    jr z, save_frame_c0
     ld (save_player_frame_80), de        ; save this for erase later
-    jp draw_player_entry2
+    jr draw_player_entry2
 
 save_frame_c0
     ld (save_player_frame_c0), de
@@ -188,11 +188,11 @@ dplay2
 erase_small_player
     ld a, (hidden_screen_base_address)
     cp 0xc0
-    jp nz, erase_small_with_80
+    jr nz, erase_small_with_80
 
     ld de, (save_player_frame_c0)
     ld hl, (save_player_address_c0)
-    jp erasex_small
+    jr erasex_small
 
 erase_small_with_80
     ld de, (save_player_frame_80)
@@ -203,7 +203,7 @@ erasex_small
     or l
     ret z                       ; stop here if not yet set
 
-    jp draw_player_entry2_small
+    jr draw_player_entry2_small
 
 draw_small_player
     ld a, (player_y)
@@ -236,9 +236,9 @@ draw_small_player
 
     ld a, (hidden_screen_base_address)
     cp 0xc0
-    jp z, save_small_address_c0
+    jr z, save_small_address_c0
     ld (save_player_address_80), hl        ; save this for erase later
-    jp saved_small_address
+    jr saved_small_address
 
 save_small_address_c0
     ld (save_player_address_c0), hl
@@ -247,7 +247,7 @@ saved_small_address
     ld b, 0
     ld a, e
     and 0x01
-    jp z, dplay1_small
+    jr z, dplay1_small
     ld b, num_player_frames
 
 dplay1_small
@@ -277,9 +277,9 @@ dplay1_small
 
     ld a, (hidden_screen_base_address)
     cp 0xc0
-    jp z, save_frame_c0_small
+    jr z, save_frame_c0_small
     ld (save_player_frame_80), de        ; save this for erase later
-    jp draw_player_entry2_small
+    jr draw_player_entry2_small
 
 save_frame_c0_small
     ld (save_player_frame_c0), de
@@ -329,11 +329,11 @@ dplay2_small
 erase_player
     ld a, (hidden_screen_base_address)
     cp 0xc0
-    jp nz, erase_with_80
+    jr nz, erase_with_80
 
     ld de, (save_player_frame_c0)
     ld hl, (save_player_address_c0)
-    jp erasex
+    jr erasex
 
 erase_with_80
     ld de, (save_player_frame_80)
@@ -431,7 +431,7 @@ draw_player_select              ; don't save background or mask here
     ld b, 0
     ld a, e
     and 1
-    jp z, dplay_fast1
+    jr z, dplay_fast1
     ld b, num_player_frames
 
 dplay_fast1
@@ -541,7 +541,7 @@ player_vs_baddie
 
     ld a, (ix + 26)                 ; is this a boss?
     and a
-    jp nz, touching_boss
+    jr nz, touching_boss
 
     call kill_sprite
     call health_down
@@ -552,27 +552,27 @@ player_vs_baddie
 touching_boss
     ld a, (room_number)
     cp 0x55
-    jp nz, not_frank
+    jr nz, not_frank
 
     ld a, wrench
     ld hl, pocket1    
     cp (hl)
-    jp z, kill_frank
+    jr z, kill_frank
 
     inc hl
     cp (hl)
-    jp z, kill_frank
+    jr z, kill_frank
 
     inc hl
     cp (hl)
-    jp z, kill_frank    
+    jr z, kill_frank    
 
 not_frank
     ld a, (dracula_room)
     ld b, a
     ld a, (room_number)
     cp b
-    jp nz, not_drac
+    jr nz, not_drac
 
     ld a, crucifix
     ld hl, pocket1    

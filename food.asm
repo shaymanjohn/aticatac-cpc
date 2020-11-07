@@ -82,12 +82,12 @@ check_food
     sub e
 
     bit 7, a
-    jp z, food_not_neg_x
+    jr z, food_not_neg_x
     neg
 
 food_not_neg_x
     cp 4
-    jp nc, cant_find_food
+    jr nc, cant_find_food
 
     ld a, (player_y)
     add average_player_height / 2    
@@ -99,22 +99,22 @@ food_not_neg_x
     sub e
 
     bit 7, a
-    jp z, food_not_neg_y
+    jr z, food_not_neg_y
     neg
 
 food_not_neg_y
     cp 12
-    jp nc, cant_find_food
+    jr nc, cant_find_food
 
     ld a, (ix + 0)
     cp type_tombstone
-    jp z, cant_find_food
+    jr z, cant_find_food
 
     cp type_mushroom
-    jp nz, remove_food
+    jr nz, remove_food
 
     call health_decay
-    jp cant_find_food
+    jr cant_find_food
 
 remove_food
     call draw_food_item2
@@ -263,11 +263,11 @@ list_food_loop
 
     ld a, (ix + 1)
     cp c
-    jp nz, skip_food_item
+    jr nz, skip_food_item
 
     ld a, (ix + 2)
     and a
-    jp nz, skip_food_item
+    jr nz, skip_food_item
 
     ld a, (this_rooms_food_count)
     add a

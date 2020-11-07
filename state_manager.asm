@@ -4,13 +4,13 @@ switch_game_state
 
     ld a, b
     cp state_menu
-    jp z, select_menu
+    jr z, select_menu
 
     cp state_game
-    jp z, select_game
+    jr z, select_game
 
     cp state_falling
-    jp z, select_falling
+    jr z, select_falling
 
     cp state_end
     jp z, select_end
@@ -35,6 +35,35 @@ select_menu
 
     call clear_screens
     jp init_menu
+
+select_falling
+    ld hl, falling_tasks
+    ld (current_game_state), hl
+
+    ld hl, falling_interrupts
+    ld (current_interrupts), hl
+
+    call clear_room
+
+    ld a, (hidden_screen_base_address)
+    xor 0x40
+    call clear_room2
+
+    call reset_sprites
+    call reset_weapon
+
+    xor a
+    ld (save_fall_data), a
+    ld (save_fall_data + 1), a
+
+    ld a, 1
+    ld (still_falling), a
+
+    ld a, -1
+    ld (fall_index), a
+
+    ld e, sound_menu
+    jp play_sfx    
 
 select_game
     ld hl, game_tasks
@@ -103,35 +132,6 @@ reset_room_count_loop
     ldir
 
     ret
-
-select_falling
-    ld hl, falling_tasks
-    ld (current_game_state), hl
-
-    ld hl, falling_interrupts
-    ld (current_interrupts), hl
-
-    call clear_room
-
-    ld a, (hidden_screen_base_address)
-    xor 0x40
-    call clear_room2
-
-    call reset_sprites
-    call reset_weapon
-
-    xor a
-    ld (save_fall_data), a
-    ld (save_fall_data + 1), a
-
-    ld a, 1
-    ld (still_falling), a
-
-    ld a, -1
-    ld (fall_index), a
-
-    ld e, sound_menu
-    jp play_sfx
 
 select_end
     ld hl, end_tasks

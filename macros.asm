@@ -16,7 +16,7 @@ macro GET_NEXT_SCR_LINE
     add a, 8
     ld h, a
     and 0x38
-    jp nz, @got_next_line
+    jr nz, @got_next_line
     ld a, l
     add a, 0x40
     ld l, a
@@ -30,7 +30,7 @@ macro BORDER_ON hw_colour
 if DEBUG
     ld a, (show_vsync)
     and a
-    jp nz, @no_show
+    jr nz, @no_show
     ld d, {hw_colour}    
     call set_border
 @no_show

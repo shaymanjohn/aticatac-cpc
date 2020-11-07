@@ -20,14 +20,13 @@ start
 main_loop
     ld a, (frame_ready)
     and a
-    jp nz, main_loop
+    jr nz, main_loop
 
     call perform_current_state
 
     ld a, 1
     ld (frame_ready), a
-
-    jp main_loop
+    jr main_loop
 
 perform_current_state
     ld hl, (current_game_state)

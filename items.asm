@@ -124,7 +124,7 @@ li2
     srl b
     srl b
 
-    jp draw_item_flip
+    jr draw_item_flip
 
 li3
     ld c, (ix + 0)              ; height
@@ -135,7 +135,7 @@ li3
     srl b
     srl b
 
-    jp draw_item_noflip
+    jr draw_item_noflip
 
 portrait_item
     ld a, c                     ; x, y is bottom left of object so
@@ -168,7 +168,7 @@ portrait_item
     ld c, (ix + 1)              ; height
     ld b, (ix + 0)              ; width
 
-    jp draw_item_noflip
+    jr draw_item_noflip
 
 port_item    
     ld b, h
@@ -215,7 +215,7 @@ flip_pixels           ; swap left and right pixels
     GET_NEXT_SCR_LINE
     pop bc
     dec c
-    jp nz, draw_item_flip
+    jr nz, draw_item_flip
 
     ret
 
@@ -233,7 +233,7 @@ dinf1
     GET_NEXT_SCR_LINE
     pop bc
     dec c
-    jp nz, draw_item_noflip
+    jr nz, draw_item_noflip
 
     ret
 

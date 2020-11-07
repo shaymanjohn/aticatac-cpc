@@ -118,7 +118,7 @@ check_doors
 
     ld a, (ix + 0)
     cp active_door_trapdoor
-    jp z, trapdoor_collision        ; special case for trapdoor - if open, go into falling state if open
+    jr z, trapdoor_collision        ; special case for trapdoor - if open, go into falling state if open
 
     ld a, (keys_pressed)            ; Even though we're on a door, only exit if pressing into door...
     and 0x0f
@@ -139,16 +139,16 @@ check_doors
     or c                            ; merge in the key press
 
     cp 0x42                         ; rotation right + left pressed
-    jp z, do_collision
+    jr z, do_collision
 
     cp 0xc1                         ; rotation left + right pressed
-    jp z, do_collision
+    jr z, do_collision
 
     cp 0x88                         ; rotation bottom + up pressed
-    jp z, do_collision
+    jr z, do_collision
 
     cp 0x04
-    jp z, do_collision              ; rotation top + down pressed
+    jr z, do_collision              ; rotation top + down pressed
 
     ret
 
@@ -170,7 +170,7 @@ trapdoor_collision
     ld bc, -8               ; We want this items twin now to work out new position of player
     ld a, (ix + 7)
     and a
-    jp nz, trapdoor_coll_1
+    jr nz, trapdoor_coll_1
     ld bc, 8
 
 trapdoor_coll_1    
@@ -198,7 +198,7 @@ do_collision
     ld bc, -8               ; We want this items twin now to work out new position of player
     ld a, (ix + 7)
     and a
-    jp nz, collide1
+    jr nz, collide1
     ld bc, 8
 
 collide1
@@ -244,11 +244,11 @@ collide1
 
 ; b has new door x, c has new door bottom y, a has new door rotation, hl pointer to new door
     cp rotation_top
-    jp z, portrait_coll_top
+    jr z, portrait_coll_top
     cp rotation_bottom
-    jp z, portrait_coll_bot
+    jr z, portrait_coll_bot
     cp rotation_left    
-    jp z, landscape_coll_left
+    jr z, landscape_coll_left
 
 landscape_coll_right
     ld a, b
@@ -380,7 +380,7 @@ update_doors_loop
 
     ld a, (hl)
     bit 6, a                   ; is door an automatic door?
-    jp z, do_next_door
+    jr z, do_next_door
 
     ld e, a
     ld c, a
@@ -395,7 +395,7 @@ update_doors_loop
     srl a
     srl a
     cp d
-    jp nz, door_not_hit_counter
+    jr nz, door_not_hit_counter
 
     ld a, e
     and %11111000               ; keep the original values, set count to 0
@@ -408,7 +408,7 @@ update_doors_loop
     ld de, 8
     ld a, (ix + 7)              ; offset of item pair
     cp 8
-    jp nz, set_twin
+    jr nz, set_twin
     ld de, -8
 
 set_twin
@@ -427,7 +427,7 @@ set_twin
 
     ld a, (ix + 0)                  ; special case for trapdoor - have to xor the grill image
     cp active_door_trapdoor
-    jp z, xor_the_trapdoor_grill
+    jr z, xor_the_trapdoor_grill
 
     ld (door_to_toggle), de    
     jp draw_item
@@ -612,12 +612,12 @@ got_the_right_key
 
 update_collision_grid_for_door
     bit 7, a
-    jp nz, upcgrid_2
+    jr nz, upcgrid_2
 
     ld a, (this_rooms_door_count)
     sub b
     inc a
-    jp upcgrid_3
+    jr upcgrid_3
 
 upcgrid_2
     ld a, 0xff
@@ -666,7 +666,7 @@ update_coll_item_loop
     add hl, de
 
     dec c    
-    jp nz, update_coll_item_loop2    
+    jr nz, update_coll_item_loop2    
 
     ret
 

@@ -2,7 +2,7 @@ switch_screens
 	ld a, (heartbeat)
 	inc a
 	cp 50
-	jp nz, save_heartbeat
+	jr nz, save_heartbeat
 	xor a
 
 save_heartbeat
@@ -10,7 +10,7 @@ save_heartbeat
 
     ld a, (pen_delay)
     and a
-    jp z, switch_em
+    jr z, switch_em
     dec a
     ld (pen_delay), a
 
@@ -39,7 +39,7 @@ switch_em
 
     ld a, e                     ; e holds base address of hidden screen
     cp 0xc0        
-    jp z, backbuffer_is_c0
+    jr z, backbuffer_is_c0
 
     ld hl, scr_addr_table_80
     ld (scr_addr_table), hl
@@ -197,7 +197,7 @@ mst1
     add a, 8
     ld h, a
     and 0x38
-    jp nz, skipx
+    jr nz, skipx
     ld a, l
     add a, 0x40
     ld l, a

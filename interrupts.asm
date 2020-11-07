@@ -21,18 +21,18 @@ interrupt_callback
 	ld b, 0xf5
 	in a, (c)
 	rrca
-	jp nc, skipInitFirst
+	jr nc, skipInitFirst
 	ld a, interrupt_firstValue
 	ld (interrupt_index), a
 
 skipInitFirst
 	ld a, (interrupt_index)
 	cp interrupt_notReady
-	jp z, skipInterrupt
+	jr z, skipInterrupt
 
 	inc a
 	cp 6
-	jp nz, no_interrupt_reset
+	jr nz, no_interrupt_reset
 	xor a
 
 no_interrupt_reset

@@ -174,6 +174,7 @@ character_selected
     ld a, serf_height
     ld b, character_serf
     ld c, item_barrel
+    ld d, 0
     jr save_selection
 
 selected_knight
@@ -187,6 +188,7 @@ selected_knight
     ld a, knight_height
     ld b, character_knight
     ld c, item_clock
+    ld d, 1
     jr save_selection
 
 selected_wizard
@@ -200,6 +202,7 @@ selected_wizard
     ld a, wizard_height
     ld b, character_wizard
     ld c, item_bookcase
+    ld d, 0
 
 save_selection
     ld (selected_player), hl
@@ -208,6 +211,8 @@ save_selection
     ld (player_character), a
     ld a, c
     ld (magic_door), a
+    ld a, d
+    ld (weapon_rotates), a
     ret
 
 check_keys    

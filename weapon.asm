@@ -47,11 +47,11 @@ draw_weapon
     ; save ix and hl here so we don't need to calc again when erasing
     ld a, (hidden_screen_base_address)
     cp 0xc0
-    jp nz, store_weapon_with_80
+    jr nz, store_weapon_with_80
 
     ld (save_weapon_address_c0), hl
     ld (save_weapon_pointer_c0), ix
-    jp draw_weapon_entry2
+    jr draw_weapon_entry2
 
 store_weapon_with_80
     ld (save_weapon_address_80), hl
@@ -70,11 +70,11 @@ draw_weapon_entry2
 erase_weapon
     ld a, (hidden_screen_base_address)
     cp 0xc0
-    jp nz, erase_weapon_with_80
+    jr nz, erase_weapon_with_80
 
     ld hl, (save_weapon_address_c0)
     ld de, (save_weapon_pointer_c0)
-    jp eraseweaponx
+    jr eraseweaponx
 
 erase_weapon_with_80
     ld hl, (save_weapon_address_80)
@@ -94,7 +94,7 @@ eraseweaponx
     and a
     ret nz
 
-    jp reset_weapon2
+    jr reset_weapon2
 
 kill_weapon_with_80
     ld (save_weapon_address_80), hl
@@ -117,10 +117,9 @@ fire_weapon
 
     ld a, (fire_delay)
     and a    
-    jp z, can_fire
+    jr z, can_fire
     dec a
     ld (fire_delay), a
-
     ret
 
 can_fire
@@ -140,28 +139,28 @@ can_fire
     ld de, 0x0000
 
     bit player_left_bit, a
-    jp z, fire_right
+    jr z, fire_right
     ld d, -fire_horizontal_speed
 
 fire_right
     bit player_right_bit, a
-    jp z, fire_down
+    jr z, fire_down
     ld d, fire_horizontal_speed
 
 fire_down
     bit player_down_bit, a
-    jp z, fire_up
+    jr z, fire_up
     ld e, fire_vertical_speed
 
 fire_up
     bit player_up_bit, a
-    jp z, fire_checked
+    jr z, fire_checked
     ld e, -fire_vertical_speed
 
 fire_checked
     ld a, d
     or e
-    jp nz, something_fired
+    jr nz, something_fired
     ld d, fire_horizontal_speed
 
 something_fired 
@@ -169,7 +168,6 @@ something_fired
     ld (weapon_x_inc), a
     ld a, e
     ld (weapon_y_inc), a
-
     ret
 
 move_weapon
@@ -181,17 +179,75 @@ move_weapon
     ld (weapon_active), a
 
     and a
-    jp nz, move_weapon_2
+    jr nz, move_weapon_2
 
     ld a, 2
     ld (fire_delay), a
 
 move_weapon_2
-    ld a, (weapon_frame_inc)
-    ld b, a
+    ld a, (weapon_rotates)
+    and a
+    jr z, rotate_weapon
+
+    ld a, (weapon_x_inc)       ; knights weapon faces direction of motion
+    and a
+    jr z, weapon_vertical
+
+    cp fire_horizontal_speed
+    jr z, weapon_moving_right
+
+    ld a, (weapon_y_inc)        ; weapon moving left
+    and a
+    jr z, wml
+    cp fire_vertical_speed
+    jr z, wmdl
+        
+    xor a
+    jr now_move_weapon
+
+wml
+    ld a, 1 * 4
+    jr now_move_weapon
+
+wmdl
+    ld a, 2 * 4
+    jr now_move_weapon
+
+weapon_vertical
+    ld a, (weapon_y_inc)
+    cp fire_vertical_speed
+    jr z, wv1
+    ld a, 7 * 4
+    jr now_move_weapon
+
+wv1
+    ld a, 3 * 4
+    jr now_move_weapon
+
+weapon_moving_right
+    ld a, (weapon_y_inc)        ; weapon moving left
+    and a
+    jr z, wmr
+    cp fire_vertical_speed
+    jr z, wmdr
+        
+    ld a, 6 * 4
+    jr now_move_weapon
+
+wmr
+    ld a, 5 * 4
+    jr now_move_weapon
+
+wmdr
+    ld a, 4 * 4
+    jr now_move_weapon
+
+rotate_weapon
     ld a, (weapon_frame)
-    add b
+    inc a
     and 0x1f                     ; valid frames: 0 -> 31
+
+now_move_weapon    
     ld (weapon_frame), a
 
     ld a, (weapon_x_inc)
@@ -211,12 +267,12 @@ move_weapon_2
     ld a, (min_x)
     ld d, a
     cp b
-    jp nc, bounce_weapon_x
+    jr nc, bounce_weapon_x
 
     ld a, (max_x)
     ld d, a
     cp b
-    jp nc, check_weapon_y
+    jr nc, check_weapon_y
 
 bounce_weapon_x
     ld a, (weapon_x_inc)
@@ -230,7 +286,7 @@ check_weapon_y
     ld a, (min_y)
     ld d, a
     cp c
-    jp nc, bounce_weapon_y
+    jr nc, bounce_weapon_y
 
     ld a, (max_y)
     ld d, a
@@ -384,12 +440,12 @@ check_weapon_hitting_sprite     ; h = weapon x, l = weapon y, d = weapon width, 
     add b
     sub c
     bit 7, a
-    jp z, not_neg_x_weapon
+    jr z, not_neg_x_weapon
     neg
 
 not_neg_x_weapon
     cp 4
-    jp nc, end_weapon_hit_check
+    jr nc, end_weapon_hit_check
 
     ld a, l
     srl e
@@ -401,12 +457,12 @@ not_neg_x_weapon
     add b
     sub c
     bit 7, a
-    jp z, not_neg_y_weapon
+    jr z, not_neg_y_weapon
     neg
 
 not_neg_y_weapon
     cp 8
-    jp nc, end_weapon_hit_check
+    jr nc, end_weapon_hit_check
 
     call kill_sprite
 
@@ -439,8 +495,8 @@ weapon_y_inc
 weapon_frame
     defb 0x00
 
-weapon_frame_inc
-    defb 0x01
+weapon_rotates
+    defb 0x00
 
 fire_delay
     defb 0x00
@@ -463,12 +519,6 @@ sword_data
     defw sword_frame3, sword_frame2
     defw sword_frame1, sword_frame0
 
-sword_datax
-    defw sword_frame0, sword_frame1
-    defw sword_frame2, sword_frame3
-    defw sword_frame4, sword_frame5
-    defw sword_frame6, sword_frame7
-
 spell_data
     defw spell_frame3, spell_frame2
     defw spell_frame1, spell_frame0
@@ -479,13 +529,7 @@ axe_data
     defw axe_frame7, axe_frame6
     defw axe_frame5, axe_frame4
     defw axe_frame3, axe_frame2
-    defw axe_frame1, axe_frame0    
-
-axe_datax
-    defw axe_frame0, axe_frame1
-    defw axe_frame2, axe_frame3
-    defw axe_frame4, axe_frame5
-    defw axe_frame6, axe_frame7
+    defw axe_frame1, axe_frame0
 
 sword_frame0
     defb 0x02, 0x10                     ; x, y

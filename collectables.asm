@@ -81,7 +81,7 @@ collectable_loop
 
     ld de, 8
     add ix, de
-    jp collectable_loop
+    jr collectable_loop
 
 pickup_tapped
     ld e, sound_collect
@@ -96,7 +96,7 @@ pickup_tapped
 pickup_loop
     ld a, (ix + 0)
     cp 0xff
-    jp z, shuffle_pockets
+    jr z, shuffle_pockets
 
     ld d, 0
     cp c                        ; can only pick things up that are in this room
@@ -104,12 +104,12 @@ pickup_loop
     
     ld a, d
     and a                       ; stop now if colllected something
-    jp nz, shuffle_pockets
+    jr nz, shuffle_pockets
 
     inc b                       ; b holds collectable item index
     ld de, 8
     add ix, de
-    jp pickup_loop
+    jr pickup_loop
 
 shuffle_pockets                 ; if nothing collected, a is 0xff, else b has collected item index
     ld c, a
@@ -125,7 +125,7 @@ shuffle_pockets                 ; if nothing collected, a is 0xff, else b has co
 
     ld a, c
     cp 0xff
-    jp z, pockets_done
+    jr z, pockets_done
 
     ld a, b
     ld (pocket1), a
@@ -146,7 +146,7 @@ shuffle_pockets                 ; if nothing collected, a is 0xff, else b has co
 pockets_done
     ld a, e                     ; drop an item?
     cp 0xff
-    jp z, no_drop
+    jr z, no_drop
 
     ; move item with this index into current room and draw it on both screens...
     ld l, a
@@ -222,7 +222,7 @@ draw_pockets
 
 draw_this_pocket            ; hl = screen address, a = collectable item index
     cp 0xff
-    jp z, draw_empty_pocket
+    jr z, draw_empty_pocket
 
 draw_full_pocket
     push hl
@@ -360,12 +360,12 @@ collect_this_collectable        ; compare centers and a tolerance
     sub e
 
     bit 7, a
-    jp z, not_neg_x
+    jr z, not_neg_x
     neg
 
 not_neg_x
     cp 4
-    jp nc, cant_collect
+    jr nc, cant_collect
 
     ld a, (player_y)
     add average_player_height / 2    
@@ -375,12 +375,12 @@ not_neg_x
     sub e
 
     bit 7, a
-    jp z, not_neg_y
+    jr z, not_neg_y
     neg
 
 not_neg_y
     cp 8
-    jp nc, cant_collect
+    ret nc
 
     ld d, 1
 

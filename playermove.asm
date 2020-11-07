@@ -4,7 +4,7 @@ move_player
 
     ld a, (screen_transition_in_progress)
     and a
-    jp z, not_transitioning
+    jr z, not_transitioning
 
     dec a
     ld (screen_transition_in_progress), a
@@ -40,11 +40,11 @@ not_transitioning
 
     ld a, (screen_transition_in_progress)
     and a
-    jp nz, inc_frame
+    jr nz, inc_frame
     
     ld a, (keys_pressed)
     and 0x0f
-    jp nz, inc_frame                    ; only animate if something pressed
+    jr nz, inc_frame                    ; only animate if something pressed
 
     ld a, default_frame
     ld (player_frame), a

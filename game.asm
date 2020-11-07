@@ -13,7 +13,7 @@ game_tasks
 
     ld a, (do_pockets)
     and a
-    jp z, no_pockets_to_update
+    jr z, no_pockets_to_update
     
     dec a
     ld (do_pockets), a
@@ -22,7 +22,7 @@ game_tasks
 no_pockets_to_update
     ld a, (erase_food_with_index + 1)
     and a
-    jp z, tombstone_draw
+    jr z, tombstone_draw
 
     ld ixh, a
     ld a, (erase_food_with_index)
@@ -36,7 +36,7 @@ no_pockets_to_update
 tombstone_draw
     ld a, (draw_tombstone_with_index + 1)
     and a
-    jp z, no_food_removal
+    jr z, no_food_removal
 
     ld ixh, a
     ld a, (draw_tombstone_with_index)
@@ -102,7 +102,7 @@ skip_some_others
     ld de, (door_to_toggle)
     ld a, d
     or e
-    jp z, skip_door_toggle
+    jr z, skip_door_toggle
 
     ld hl, 0
     ld (door_to_toggle), hl
@@ -126,7 +126,7 @@ ignore_doors
 
     ld a, (game_over)
     and a
-    jp nz, all_over
+    jr nz, all_over
 
     ld a, (keyboard_state + 4)          ; m for menu
     bit 6, a
@@ -149,18 +149,18 @@ continue_player_transition
 
     ld a, (player_growing)
     cp player_disappearing
-    jp z, player_shrinking
+    jr z, player_shrinking
 
     ld a, (heartbeat)
     and 0x03
     cp 0x03
-    jp nz, continue_game    
+    jr nz, continue_game    
 
     ld a, (current_player_height)
     ld b, a
     ld a, (actual_player_height)
     cp b
-    jp z, transition_complete    
+    jr z, transition_complete    
 
     ld a, b
     inc a
@@ -169,22 +169,22 @@ continue_player_transition
     ld bc, -5
     add hl, bc
     ld (current_height_gfx_offset), hl
-    jp continue_game
+    jr continue_game
 
 player_shrinking
     ld a, (current_player_height)
     dec a
-    jp nz, still_shrinking
+    jr nz, still_shrinking
 
     call add_tombstone
     call make_player_appear
-    jp continue_game
+    jr continue_game
 
 still_shrinking
     ld a, (heartbeat)
     and 0x03
     cp 0x03
-    jp nz, continue_game
+    jr nz, continue_game
 
     ld a, (current_player_height)
     dec a
@@ -193,7 +193,7 @@ still_shrinking
     ld bc, 5
     add hl, bc
     ld (current_height_gfx_offset), hl
-    jp continue_game
+    jr continue_game
 
 transition_complete
     xor a

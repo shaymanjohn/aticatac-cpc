@@ -121,7 +121,7 @@ y1
   ld e, iyl
   srl e               ;calculate X\2, because 2 pixel per byte, Carry is X MOD 2
   ld c, %10101010     ;Bitmask for MODE 0
-  jp nc, NSHIFT       ;-> = 0, no shift
+  jr nc, NSHIFT       ;-> = 0, no shift
 
 SHIFT
   ld c, %01010101            ;other bitmask for right pixel
@@ -140,13 +140,13 @@ x2
   ld de,0
   or a
   sbc hl, de
-  jp nz, nex1         ; CHECK if we reach the end???
+  jr nz, nex1         ; CHECK if we reach the end???
   ld hl, (y1+1)
 y2
   ld de, 0
   or a
   sbc hl, de
-  jp z, exith         ; if x1=x2 and y1=y2 then exit!!
+  jr z, exith         ; if x1=x2 and y1=y2 then exit!!
 
 nex1
 er
@@ -159,7 +159,7 @@ er
 dy
   ld de, 0            ; DE= DY  
   bit 7, h
-  jp nz, nex2         ; IF  E2+DX > 0  THEN ER = ER - DY
+  jr nz, nex2         ; IF  E2+DX > 0  THEN ER = ER - DY
   ld h, b
   ld l, c
   or a
@@ -185,7 +185,7 @@ sy
   db 0             ; Y1 = Y1 + SY
 
 nex3
-  jp drloop
+  jr drloop
 
 exith
   ret             ; finished OK
