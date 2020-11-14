@@ -67,13 +67,11 @@ no_food_removal
     call check_doors
 
 skip_some_others
-    BORDER_ON hw_brightRed
     SELECT_BANK sprite_bank_config
     call erase_weapon
     call move_weapon
     call draw_weapon
 
-    BORDER_ON hw_brightBlue    
     SELECT_BANK baddie_bank_config
     
     ld ix, boss
@@ -88,9 +86,7 @@ skip_some_others
     ld ix, sprite3
     DO_SPRITE
 
-    BORDER_ON hw_brightWhite
     call check_weapon_hit
-
     call check_player_hit_baddie
 
     ld a, (this_rooms_food_count)
@@ -122,7 +118,6 @@ ignore_doors
 	call nz, pickup_tapped
 
     SELECT_BANK item_bank_config
-    BORDER_OFF
 
     ld a, (game_over)
     and a

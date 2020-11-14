@@ -43,8 +43,6 @@ not_gone_back
     call reset_weapon
     call reset_food_collected
 
-    call map_doors
-
     call set_pens
 
     ld a, (room_number)

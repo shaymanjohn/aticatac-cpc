@@ -55,7 +55,7 @@ not_got_em_all
 show_rest_of_end
     ld a, (game_over)
     cp game_completed                       ; did player finish the game?
-    jp nz, not_completed_end
+    jr nz, not_completed_end
 
     ld ix, game_over_congrats_text          ; if so, show congrats message
     call show_text

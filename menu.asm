@@ -3,13 +3,8 @@ menu_tasks
 
     SELECT_BANK sprite_bank_config
 
-    BORDER_ON hw_brightRed
     call update_heroes
-
-    BORDER_ON hw_skyBlue
     call update_menu
-
-    BORDER_OFF
 
     SELECT_BANK item_bank_config
 

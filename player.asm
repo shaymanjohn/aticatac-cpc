@@ -671,10 +671,7 @@ this_item_width
     defb 0
 
 this_item_height
-    defb 0        
-
-show_vsync
-    defb 1
+    defb 0
 
 screen_transition_in_progress
     defb 0

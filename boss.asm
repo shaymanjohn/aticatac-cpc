@@ -2,11 +2,11 @@ init_boss
     ld a, (room_number)
 
     cp room_frankenstein
-    jp z, init_frank
+    jr z, init_frank
 
     ld hl, mummy_room
     cp (hl)
-    jp z, init_mummy
+    jr z, init_mummy
 
     cp room_hunchback
     jp z, init_hunchback
@@ -16,7 +16,7 @@ init_boss
 
     ld hl, dracula_room
     cp (hl)
-    jp z, init_dracula    
+    jr z, init_dracula    
 
     ret
 
@@ -43,14 +43,14 @@ init_frank
     ld (boss_mover), hl
 
     ld iy, boss_frankie
-    jp common_boss_init
+    jr common_boss_init
 
 init_dracula
     ld hl, move_dracula
     ld (boss_mover), hl
 
     ld iy, boss_dracula
-    jp common_boss_init
+    jr common_boss_init
 
 try_teleport_dracula
     RANDOM_IN_A
@@ -92,7 +92,7 @@ init_hunchback
     ld (boss_mover), hl
 
     ld iy, boss_hunchback
-    jp common_boss_init
+    jr common_boss_init
 
 init_devil
     ld hl, move_devil_and_frank
@@ -134,14 +134,14 @@ move_dracula
 
     ld hl, (pocket1)
     cp h
-    jp z, dracula_avoid_player
+    jr z, dracula_avoid_player
     cp l
-    jp z, dracula_avoid_player
+    jr z, dracula_avoid_player
     ld a, (pocket3)
     cp crucifix
-    jp z, dracula_avoid_player
+    jr z, dracula_avoid_player
 
-    jp normal_boss_move_towards
+    jr normal_boss_move_towards
 
 dracula_avoid_player
     ld de, 0x0000
@@ -150,7 +150,7 @@ dracula_avoid_player
     cp (ix + spr_x)
 
     ld d, 1
-    jp c, check_dracula_y
+    jr c, check_dracula_y
     ld d, -1
     
 check_dracula_y
@@ -158,9 +158,9 @@ check_dracula_y
     cp (ix + spr_y)
 
     ld e, 1
-    jp c, update_boss_within_bounds
+    jr c, update_boss_within_bounds
     ld e, -1
-    jp update_boss_within_bounds
+    jr update_boss_within_bounds
 
 move_mummy
     ld a, (heartbeat)
@@ -183,7 +183,7 @@ move_mummy
     ld (mummy_count), a
 
     cp mummy_count_max
-    jp nz, no_bounce_mummy
+    jr nz, no_bounce_mummy
 
     ld a, b
     neg
@@ -209,26 +209,26 @@ move_devil_and_frank
     ld de, 0xff01
     ld a, (player_growing)              ; move boss to bottom left corner if player not active
     and a
-    jp nz, update_boss_within_bounds
+    jr nz, update_boss_within_bounds
 
 normal_boss_move_towards
     ld de, 0x0000
 
     ld a, (player_x)
     cp (ix + spr_x)
-    jp z, check_devil_and_frank_y
+    jr z, check_devil_and_frank_y
 
     ld d, -1
-    jp c, check_devil_and_frank_y
+    jr c, check_devil_and_frank_y
     ld d, 1
     
 check_devil_and_frank_y
     ld a, (player_y)
     cp (ix + spr_y)
-    jp z, update_boss_within_bounds
+    jr z, update_boss_within_bounds
 
     ld e, -1
-    jp c, update_boss_within_bounds
+    jr c, update_boss_within_bounds
     ld e, 1
 
 update_boss_within_bounds
@@ -238,10 +238,10 @@ update_boss_within_bounds
     add d
 
     cp c
-    jp c, move_boss_y
+    jr c, move_boss_y
 
     cp b
-    jp nc, move_boss_y
+    jr nc, move_boss_y
 
     ld (ix + spr_x), a
 
@@ -252,10 +252,10 @@ move_boss_y
     add e
 
     cp c
-    jp c, do_boss_anim
+    jr c, do_boss_anim
 
     cp b
-    jp nc, do_boss_anim
+    jr nc, do_boss_anim
 
     ld (ix + spr_y), a
 

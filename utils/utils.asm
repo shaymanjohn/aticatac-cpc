@@ -117,7 +117,7 @@ clear_screens
 
 set_pens_off
     ld hl, pens
-    ld e, 16                    ; 16 pens for mode 0
+    ld e, 17                    ; 16 pens for mode 0 + extra pen for border
     xor a					    ; initial pen index    
     ld d, hw_black              ; hardware black
 

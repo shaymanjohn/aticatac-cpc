@@ -1,16 +1,10 @@
 falling_tasks
-    BORDER_ON hw_pastelCyan
     call erase_previous_tunnels
-
-    BORDER_ON hw_pink
     call draw_new_tunnels
 
-    BORDER_ON hw_orange
     ld a, (tell_time)
     and a
     call nz, show_clock
-
-    BORDER_OFF
 
 	ld a, (still_falling)
 	and a
@@ -19,7 +13,7 @@ falling_tasks
     call draw_room
 
     ld hl, game_tasks
-    ld (current_game_state), hl
+    ld (current_game_state + 1), hl
 
     ld hl, game_interrupts
     ld (current_interrupts), hl	
@@ -35,7 +29,7 @@ erase_previous_tunnels
     ld hl, save_fall_data
     ld a, (hidden_screen_base_address)
     cp 0xc0
-    jp nz, erase_pt2
+    jr nz, erase_pt2
     inc hl
 
 erase_pt2
@@ -60,7 +54,7 @@ draw_new_tunnels
     ld a, (fall_index)
     inc a
     cp (end_falling_sequence - falling_sequence) * 2
-    jp z, falling_done
+    jr z, falling_done
 
     ld (fall_index), a
 
@@ -104,9 +98,9 @@ draw_tunnels
 
     ld a, b
     cp 6
-    jp nz, draw_normal_tunnel
+    jr nz, draw_normal_tunnel
     call draw_smallest_tunnel
-    jp tunnel_loop
+    jr tunnel_loop
 
 draw_normal_tunnel    
     call nz, draw_single_tunnel
@@ -197,9 +191,7 @@ draw_smallest_tunnel
 
     ret
 
-draw_single_tunnel           ; ix = tunnel data, a = colour
-
-; start with top line
+draw_single_tunnel              ; ix = tunnel data (x, y, w, h)
     ld l, (ix + 1)              ; get y
     ld h, 0
     add hl, hl
@@ -218,24 +210,13 @@ draw_single_tunnel           ; ix = tunnel data, a = colour
     push hl                     ; save screen address for left side top
     push hl                     ; and for right side top
 
-    ex de, hl
-
-    ld l, (ix + 2)
-    ld h, 0
-    add hl, hl
-
-    ld c, l
-    ld b, h
-    ld hl, end_fast_plot_line - 1
-    ccf
-    sbc hl, bc
-
-    ld (line_plot_addr_top + 1), hl
-    ex de, hl
-
+    ld b, (ix + 2)
     ld a, (tunnel_pen)
-line_plot_addr_top
-    call 0
+
+dst2
+    ld (hl), a
+    inc l
+    djnz dst2
 
 ; left side
     pop hl
@@ -280,25 +261,16 @@ rend
     ld c, (ix + 0)
     ld b, 0
     add hl, bc                  ; add x
+    inc hl
 
-    ex de, hl
-
-    ld l, (ix + 2)
-    ld h, 0
-    add hl, hl
-
-    ld c, l
-    ld b, h
-    ld hl, end_fast_plot_line - 1
-    ccf
-    sbc hl, bc
-
-    ld (line_plot_addr_bot + 1), hl
-    ex de, hl
-
+    ld b, (ix + 2)
+    dec b
     ld a, (tunnel_pen)
-line_plot_addr_bot
-    call 0    
+
+dst3
+    ld (hl), a
+    inc l
+    djnz dst3
 
 ; right side
     ld c, (ix + 2)
@@ -314,7 +286,7 @@ line_plot_addr_bot
     srl b
     srl b
     
-right_side_loop    
+right_side_loop
     push hl
     ld de, 0x800
 
@@ -331,14 +303,6 @@ rend
     ld (hl), c
 
     ret
-
-fast_plot_line
-repeat 64
-    ld (hl), a
-    inc l
-rend
-    ret
-end_fast_plot_line
 
 falling_sequence            ; each bit set represents a tunnel 
     defb %00000001

@@ -19,7 +19,7 @@ switch_game_state
 
 select_menu
     ld hl, menu_tasks
-    ld (current_game_state), hl
+    ld (current_game_state + 1), hl
 
     ld hl, atic_title_Start
     call init_sound_system
@@ -38,7 +38,7 @@ select_menu
 
 select_falling
     ld hl, falling_tasks
-    ld (current_game_state), hl
+    ld (current_game_state + 1), hl
 
     ld hl, falling_interrupts
     ld (current_interrupts), hl
@@ -67,7 +67,7 @@ select_falling
 
 select_game
     ld hl, game_tasks
-    ld (current_game_state), hl
+    ld (current_game_state + 1), hl
 
     ld hl, game_interrupts
     ld (current_interrupts), hl
@@ -135,7 +135,7 @@ reset_room_count_loop
 
 select_end
     ld hl, end_tasks
-    ld (current_game_state), hl
+    ld (current_game_state + 1), hl
     ld hl, end_game_interrupts
     ld (current_interrupts), hl
 

@@ -1,5 +1,3 @@
-DEBUG=0
-
 macro SET_MODE screenmode
     ld bc, 0x7f00 + 128 + 8 + 4 + {screenmode}
 	out (c), c
@@ -24,24 +22,6 @@ macro GET_NEXT_SCR_LINE
     adc 0xc0
     ld h, a
 @got_next_line
-mend
-
-macro BORDER_ON hw_colour
-if DEBUG
-    ld a, (show_vsync)
-    and a
-    jr nz, @no_show
-    ld d, {hw_colour}    
-    call set_border
-@no_show
-endif
-mend
-
-macro BORDER_OFF
-if DEBUG
-    ld d, hw_black
-	call set_border
-endif
 mend
 
 macro SELECT_BANK bank_num

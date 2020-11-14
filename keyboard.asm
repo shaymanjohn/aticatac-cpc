@@ -112,23 +112,14 @@ handle_fire
     ld a, b
     and 1 << player_fire2_bit       ; current fire2
     ld (keys_fire2), a
-    jr z, poll_master_keys
+    ret z
 
     cp c
-    jr nz, poll_master_keys
+    ret nz
 
     ld a, b
     res player_fire2_bit, a
     ld (keys_pressed), a
-
-poll_master_keys
-    ld a, (keyboard_state + 6)          ; v for timing bars
-    bit 7, a
-    ret nz
-
-    ld a, (show_vsync)
-    xor 1
-    ld (show_vsync), a
 	ret
 
 keyboard_state

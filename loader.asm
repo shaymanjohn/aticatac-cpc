@@ -253,4 +253,4 @@ mc_start_program	equ 0xbd16
 kl_rom_walk			equ 0xbccb
 amsdos_reserved		equ 0xbe7d
 
-save"atic.bin",0x8000,loader_end-loader_start,DSK,"aticatac.dsk"
+save "atic.bin", 0x8000, loader_end-loader_start, DSK, "aticatac.dsk"

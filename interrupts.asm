@@ -115,25 +115,13 @@ delay_mode0
 	jp set_logo_pens2
 
 interrupt_keyboard
-	BORDER_ON hw_brightMagenta
-
-	call read_keys
-
-	BORDER_OFF
-	ret
+	jp read_keys
 
 interrupt_clock
 	ld a, (heartbeat)
 	cp 45
 	jp z, update_clock
 	ret
-
-; interrupt_previous_stack
-; 	dw 0
-
-; interrupt_stack
-; 	defs 256
-; interrupt_stack_start
 
 interrupt_index
 	db interrupt_notReady

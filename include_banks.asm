@@ -4,7 +4,7 @@ item_bank_start
 include "data/items.asm"
 include "graphics/item_gfx.asm"
 item_bank_end
-save"items.bin",0x4000,item_bank_end-item_bank_start,DSK,"aticatac.dsk"
+save "items.bin", 0x4000, item_bank_end-item_bank_start, DSK, "aticatac.dsk"
 
 BANK
 org 0x4000
@@ -13,14 +13,14 @@ include "graphics/player_sprites_gfx.asm"
 include "graphics/weapon_gfx.asm"
 include "data/food_data.asm"
 sprite_bank_end
-save"heroes.bin",0x4000,sprite_bank_end-sprite_bank_start,DSK,"aticatac.dsk"
+save "heroes.bin", 0x4000, sprite_bank_end-sprite_bank_start, DSK, "aticatac.dsk"
 
 BANK
 org 0x4000
 baddie_bank_start
 include "graphics/baddies_gfx.asm"
 baddie_bank_end
-save"baddies.bin",0x4000,baddie_bank_end-baddie_bank_start,DSK,"aticatac.dsk"
+save "baddies.bin", 0x4000, baddie_bank_end-baddie_bank_start, DSK, "aticatac.dsk"
 
 BANK
 org 0x4000
@@ -34,12 +34,12 @@ include "graphics/pickup_gfx.asm"
 include "fonts/fontdata.asm"
 include "fonts/fontdata_mode1.asm"
 rooms_bank_end
-save"rooms.bin",0x4000,rooms_bank_end-rooms_bank_start,DSK,"aticatac.dsk"
+save "rooms.bin", 0x4000, rooms_bank_end-rooms_bank_start, DSK, "aticatac.dsk"
 
 BANK
 org 0x4000
 include "graphics/titlescreen_gfx.asm"
-save"loading.bin",0x4000,16000,DSK,"aticatac.dsk"
+save "loading.bin", 0x4000, 16000, DSK, "aticatac.dsk"
 
 BANK
 org 0x4000
@@ -54,4 +54,4 @@ SoundEffects
 include "sound/SoundEffects.asm"
 include "sound/PlayerAkg.asm"
 sound_bank_end
-save"sounds.bin",0x4000,sound_bank_end-sound_bank_start,DSK,"aticatac.dsk"
+save "sounds.bin", 0x4000, sound_bank_end-sound_bank_start, DSK, "aticatac.dsk"

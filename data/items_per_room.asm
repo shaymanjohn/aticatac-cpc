@@ -2,7 +2,7 @@ room_bank_items_per_room          ; 0x757d
 ;
 ;   1 word per room - links to lists in item_pointers.asm 
 ;
-; start entry was 0x76a9
+; start entry was 0x76a9 in original spectrum code
 ;
 	defw 0x76A9 - 0x76A9 + room_bank_BackLocLists, 0x76C3 - 0x76A9 + room_bank_BackLocLists, 0x76CD - 0x76A9 + room_bank_BackLocLists, 0x76D7 - 0x76A9 + room_bank_BackLocLists
 	defw 0x76E5 - 0x76A9 + room_bank_BackLocLists, 0x76F1 - 0x76A9 + room_bank_BackLocLists, 0x76FB - 0x76A9 + room_bank_BackLocLists, 0x770D - 0x76A9 + room_bank_BackLocLists
