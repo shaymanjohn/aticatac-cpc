@@ -153,3 +153,4 @@ transition_time         equ 7
 
 crucifix                equ 0x09
 wrench                  equ 0x11
+the_red_key             equ 0x05

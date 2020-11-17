@@ -1,7 +1,7 @@
 setup_game_data
     call make_scr_table
 
-; Create copy of hero sprites, rotated a mode 0 pixel to the left
+; Create copy of hero sprites and baddies, rotated a mode 0 pixel to the left
 
     SELECT_BANK sprite_bank_config
 

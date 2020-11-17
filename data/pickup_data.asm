@@ -46,61 +46,61 @@ col_key_yellow                  ; 6
     defb 48 / 4, 122
     defb 102, 48 / 4, 122
 
-col_money
+col_money                       ; 7
     defb 31
     defw item_bagofmoney
     defb 112 / 4, 112 - 16
     defb 31, 112 / 4, 112 - 16
 
-col_coin
+col_coin                        ; 8
     defb 72
     defw item_coin
     defb 112 / 4, 112 - 16
     defb 72, 112 / 4, 112 - 16
 
-col_crucifix
+col_crucifix                    ; 9
     defb 5
     defw item_cross
     defb 64 / 4, 112 - 16
     defb 5, 64 / 4, 112 - 16
 
-col_diamond
+col_diamond                     ; 10
     defb 132
     defw item_diamond
     defb 96 / 4, 64 - 16
     defb 132, 96 / 4, 64 - 16
 
-col_frogleg
+col_frogleg                     ; 11
     defb 19
     defw item_frogsleg
     defb 80 / 4, 80 - 16
     defb 19, 80 / 4, 80 - 16
 
-col_leaf
+col_leaf                        ; 12
     defb 9
     defw item_leaf
     defb 64 / 4, 64 - 16
     defb 9, 64 / 4, 64 - 16
 
-col_skull
+col_skull                       ; 13
     defb 73
     defw item_skull
     defb 80 / 4, 64 - 16
     defb 73, 80 / 4, 64 - 16
 
-col_whip
+col_whip                        ; 14
     defb 107
     defw item_whip
     defb 64 / 4, 64 - 16
     defb 107, 64 / 4, 64 - 16
 
-col_wine
+col_wine                        ; 15
     defb 59
     defw item_wine
     defb 96 / 4, 96 - 16
     defb 59, 96 / 4, 96 - 16
 
-col_wing
+col_wing                        ; 16
     defb 100
     defw item_wing
     defb 128 / 4, 128 - 16

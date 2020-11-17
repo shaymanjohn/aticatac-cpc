@@ -81,6 +81,7 @@ select_game
     ld (game_over), a
     ld (heartbeat), a
     ld (frank_dead), a
+    ld (mummy_angry), a
 
     inc a
     ld (room_changed), a
@@ -131,6 +132,14 @@ reset_room_count_loop
     ld bc, 0x4000
     ldir
 
+; hunchback should be moved back to doorway
+    ld ix, boss
+    ld iy, boss_hunchback
+    ld a, (iy + 14)
+    ld (ix + spr_x), a
+
+    ld a, (iy + 15)
+    ld (ix + spr_y), a
     ret
 
 select_end

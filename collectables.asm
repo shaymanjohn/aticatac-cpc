@@ -131,6 +131,22 @@ shuffle_pockets                 ; if nothing collected, a is 0xff, else b has co
     ld (pocket1), a
     ld (ix + 0), 0xfe           ; take out of current room
 
+    cp the_red_key
+    jr nz, not_collected_red
+
+    ld a, (mummy_room)
+    ld c, a
+    ld a, (room_number)
+    cp c
+    jr nz, not_in_mummy_room
+    
+    ld a, 1
+    ld (mummy_angry), a    
+
+not_in_mummy_room
+    ld a, b
+
+not_collected_red
     push de
     
     SELECT_BANK room_bank_config
@@ -153,7 +169,7 @@ pockets_done
     ld h, 0
     add hl, hl
     add hl, hl
-    add hl, hl        
+    add hl, hl        ; x 8
     ld de, collectable_items
     add hl, de
 
@@ -231,7 +247,7 @@ draw_full_pocket
     ld h, 0
     add hl, hl
     add hl, hl
-    add hl, hl        
+    add hl, hl              ; x8
     ld de, collectable_items
     add hl, de
 
@@ -365,7 +381,7 @@ collect_this_collectable        ; compare centers and a tolerance
 
 not_neg_x
     cp 4
-    jr nc, cant_collect
+    ret nc
 
     ld a, (player_y)
     add average_player_height / 2    
@@ -383,8 +399,6 @@ not_neg_y
     ret nc
 
     ld d, 1
-
-cant_collect
     ret
 
 do_pockets
