@@ -1,5 +1,5 @@
 init_endgame
-    ld a, 150               ; wait 1 second on this screen before accepting any key press to continue.
+    ld a, 100               ; wait 2 seconds on this screen before accepting any key press to continue (and for end tune to play)
     ld (end_key_delay), a
 
     SELECT_BANK room_bank_config
@@ -113,9 +113,4 @@ wait_for_keypress
     jp switch_game_state
 
 end_key_delay
-    defb 0x00
-
-visited_count
-    defb 0x00
-visited_bcd
     defb 0x00
