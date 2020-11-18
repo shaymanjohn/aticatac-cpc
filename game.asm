@@ -1,4 +1,8 @@
 game_tasks
+    ld a, (game_paused)
+    and a
+    jp nz, game_is_paused
+
     SELECT_BANK item_bank_config
     
     ld a, (room_changed)
@@ -123,6 +127,14 @@ ignore_doors
     and a
     jr nz, all_over
 
+    ld a, (keyboard_state + 5)
+    bit 4, a
+    jr nz, check_menu_key
+
+    ld a, 1
+    ld (game_paused), a
+
+check_menu_key
     ld a, (keyboard_state + 4)          ; m for menu
     bit 6, a
     ret nz
@@ -196,5 +208,38 @@ transition_complete
 
 continue_game
     SELECT_BANK room_bank_config    
-    jp skip_some_others    
+    jp skip_some_others
+
+game_is_paused
+    SELECT_BANK sprite_bank_config
+    call erase_player
+    call draw_player
+
+    call erase_weapon
+    call draw_weapon
+
+    SELECT_BANK baddie_bank_config
     
+    ld ix, boss
+    call erase_sprite
+    call draw_sprite
+
+    ld ix, sprite1
+    call erase_sprite
+    call draw_sprite
+
+    ld ix, sprite2
+    call erase_sprite
+    call draw_sprite
+
+    ld ix, sprite3
+    call erase_sprite
+    call draw_sprite
+
+    ld a, (keys_pressed)
+    and a
+    ret z
+
+    xor a    
+    ld (game_paused), a
+    ret

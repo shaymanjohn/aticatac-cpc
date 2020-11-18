@@ -118,6 +118,10 @@ interrupt_keyboard
 	jp read_keys
 
 interrupt_clock
+	ld a, (game_paused)
+	and a
+	ret nz
+
 	ld a, (heartbeat)
 	cp 45
 	jp z, update_clock

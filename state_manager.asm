@@ -82,6 +82,7 @@ select_game
     ld (heartbeat), a
     ld (frank_dead), a
     ld (mummy_angry), a
+    ld (game_paused), a
 
     inc a
     ld (room_changed), a
@@ -162,3 +163,6 @@ dont_clear_screens
 
 do_ending
     jp init_endgame
+
+game_paused
+    defb 0x00
