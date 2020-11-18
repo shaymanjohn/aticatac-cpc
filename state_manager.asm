@@ -85,9 +85,7 @@ select_game
 
     inc a
     ld (room_changed), a
-
-    ; ld a, room_dracula
-    ; ld (room_number), a
+    ld (saved_room_number), a
 
     call init_player
     call init_health
@@ -95,7 +93,6 @@ select_game
     call init_doors
     call init_collectables
     call init_score
-    call reset_sprites
 
     call draw_panel
 

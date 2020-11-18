@@ -505,6 +505,19 @@ reset_sprites
 
     ret
 
+partial_reset_sprites
+    ld hl, 0
+
+    ld (sprite1 + spr_scrc0), hl
+    ld (sprite1 + spr_scr80), hl
+
+    ld (sprite2 + spr_scrc0), hl
+    ld (sprite2 + spr_scr80), hl
+
+    ld (sprite3 + spr_scrc0), hl
+    ld (sprite3 + spr_scr80), hl
+    ret    
+
 ; sprite struct
 ;
 spr_x       equ 0   ; x
@@ -794,6 +807,8 @@ spr_witch_alt
     defw witch_2_0, witch_3_0    
 
 old_room_sprites
+    defs sprite_end - sprite1
+temp_sprite_data
     defs sprite_end - sprite1
 
 sprite_direction_table
