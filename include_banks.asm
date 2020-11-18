@@ -45,10 +45,22 @@ BANK
 org 0x4000
 sound_bank_start
 include "sound/Music_Empty.asm"
-include "sound/atic_title.asm"
+include "sound/atic_tunes.asm"
 
 PLY_AKG_HARDWARE_CPC = 1
 PLY_AKG_MANAGE_SOUND_EFFECTS = 1
+
+PLY_CFG_ConfigurationIsPresent = 1
+PLY_CFG_UseSpeedTracks = 1
+PLY_CFG_UseEffects = 1
+PLY_CFG_UseInstrumentLoopTo = 1
+PLY_CFG_NoSoftNoHard = 1
+PLY_CFG_SoftOnly = 1
+PLY_CFG_SoftOnly_SoftwareArpeggio = 1
+PLY_CFG_SoftOnly_SoftwarePitch = 1
+PLY_CFG_UseEffect_Legato = 1
+PLY_CFG_UseEffect_Arpeggio3Notes = 1
+PLY_CFG_UseEffect_ArpeggioTable = 1
 
 SoundEffects
 include "sound/SoundEffects.asm"

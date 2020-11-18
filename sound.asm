@@ -1,7 +1,7 @@
 init_sound_system                   ; hl = music to play
     SELECT_BANK sound_bank_config
 
-    xor a
+    ld a, d
     call PLY_AKG_Init
 
     ld hl, SoundEffects

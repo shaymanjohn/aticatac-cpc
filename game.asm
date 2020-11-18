@@ -212,6 +212,7 @@ continue_game
 
 game_is_paused
     SELECT_BANK sprite_bank_config
+    
     call erase_player
     call draw_player
 

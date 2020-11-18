@@ -21,9 +21,6 @@ select_menu
     ld hl, menu_tasks
     ld (current_game_state + 1), hl
 
-    ld hl, atic_title_Start
-    call init_sound_system
-
     ld hl, menu_interrupts
     ld (current_interrupts), hl
 

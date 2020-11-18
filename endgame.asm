@@ -1,5 +1,5 @@
 init_endgame
-    ld a, 50               ; wait 1 second on this screen before accepting any key press to continue.
+    ld a, 150               ; wait 1 second on this screen before accepting any key press to continue.
     ld (end_key_delay), a
 
     SELECT_BANK room_bank_config
@@ -62,13 +62,21 @@ show_rest_of_end
 
     ld ix, game_over_escaped_text
     call show_text
+
+    ld d, 4                                 ; tune number for completed
     jr no_game_over_message                 ; but not game over message
 
 not_completed_end
     ld ix, game_over_text
     call show_text
+    ld d, 2                                 ; tune number for end of game
 
 no_game_over_message                        ; always show these stats though...
+    ld hl, atic_Start
+    call init_sound_system
+
+    SELECT_BANK room_bank_config    
+
     ld hl, game_time
     ld de, game_over_time_text + 11
     ld bc, 6

@@ -1,4 +1,8 @@
 menu_tasks
+    ld a, (menu_state)
+    and a
+    jr nz, game_starting
+
 	call clear_heroes
 
     SELECT_BANK sprite_bank_config
@@ -17,7 +21,21 @@ menu_tasks
     ret z
 
 start_the_game
-    ld hl, NoMusic_Start                ; can't stop music and keep sound playing, so play empty music track
+    ld a, 175                           ; wait 3.5 seconds for game start tune to play
+    ld (menu_state), a
+
+    ld hl, atic_Start
+    ld d, 1
+    jp init_sound_system
+
+game_starting
+    ld a, (menu_state)
+    dec a
+    ld (menu_state), a
+    ret nz
+
+    ld hl, NoMusic_Start                ; Play empty music track
+    ld d, 0
     call init_sound_system
 
     call wait_vsync
@@ -27,6 +45,13 @@ start_the_game
     jp switch_game_state
 
 init_menu
+    xor a
+    ld (menu_state), a
+
+    ld hl, atic_Start
+    ld d, a
+    call init_sound_system
+
     SELECT_BANK room_bank_config
     
     ld hl, font_data_mode1
@@ -327,6 +352,9 @@ update_heroes
 	ld (player_select_x), a
 
     ret
+
+menu_state
+    defb 0x00
 
 characters_moving
     defb 0x00
