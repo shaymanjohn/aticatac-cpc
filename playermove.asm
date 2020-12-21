@@ -55,7 +55,12 @@ inc_frame
     inc a
     and 0x0f
     ld (player_frame), a
-    ret
+
+    cp player_step_frame
+    ret nz
+
+    ld e, sound_steps
+    jp play_sfx
 
 move_up
     ld a, player_is_going_up

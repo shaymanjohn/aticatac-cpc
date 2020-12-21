@@ -443,9 +443,17 @@ kill_sprite
     ld iy, sprite_death
     call init_sprite
 
-    ld e, sound_explosion
-    call play_sfx    
+    ld a, (enemy_kill_sfx)
+    inc a
+    cp sound_clock
+    jr nz, kill_sprite2
+    ld a, sound_thunder_1
 
+kill_sprite2    
+    ld (enemy_kill_sfx), a
+    ld e, a
+    call play_sfx
+    
     ld bc, 0x155
     jp add_to_score
 
@@ -819,5 +827,8 @@ sprite_direction_table
     defb  0,  1
     defb -1,  1
     defb -1,  0
-    defb -1, -1    
+    defb -1, -1
+
+enemy_kill_sfx
+    defb sound_thunder_1    
 

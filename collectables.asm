@@ -84,7 +84,7 @@ collectable_loop
     jr collectable_loop
 
 pickup_tapped
-    ld e, sound_collect
+    ld e, sound_c_food
     call play_sfx
 
     ld a, (room_number)

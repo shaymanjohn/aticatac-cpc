@@ -77,7 +77,7 @@ health_going_down
 
 	ld a, (game_over)
 	and a
-	call z, make_player_disappear
+	call z, make_player_disappear	
 	ret
 	
 not_dead_yet

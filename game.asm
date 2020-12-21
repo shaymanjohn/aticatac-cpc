@@ -161,7 +161,7 @@ continue_player_transition
     ld a, (heartbeat)
     and 0x03
     cp 0x03
-    jr nz, continue_game    
+    jr nz, continue_game
 
     ld a, (current_player_height)
     ld b, a
@@ -191,7 +191,7 @@ still_shrinking
     ld a, (heartbeat)
     and 0x03
     cp 0x03
-    jr nz, continue_game
+    jr nz, continue_game  
 
     ld a, (current_player_height)
     dec a

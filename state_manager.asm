@@ -59,7 +59,7 @@ select_falling
     ld a, -1
     ld (fall_index), a
 
-    ld e, sound_menu
+    ld e, sound_p_fall
     jp play_sfx    
 
 select_game

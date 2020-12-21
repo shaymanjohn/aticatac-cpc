@@ -49,6 +49,8 @@ player_is_going_left    equ num_player_frames * 4
 player_is_going_right   equ num_player_frames * 6
 default_frame           equ 5
 
+player_step_frame       equ 0x06
+
 ; player move bits based on joystick / keys pressed
 player_left_bit     equ 0
 player_right_bit    equ 1
@@ -105,9 +107,18 @@ type_tombstone      equ 0x59
 interrupt_notReady		equ -2
 interrupt_firstValue	equ -1
 
-sound_collect       equ 1
-sound_explosion     equ 2
-sound_menu          equ 5
+sound_p_appear      equ 1       ;;
+sound_p_death       equ 2       ;;
+sound_c_food        equ 3       ;
+sound_thunder_1     equ 4       ;
+sound_thunder_2     equ 5       ;
+sound_thunder_3     equ 6       ;
+sound_clock         equ 7       ;?
+sound_steps         equ 8       ;
+sound_p_fall        equ 9       ;;
+sound_door          equ 10      ;
+sound_spell_bounce  equ 11      ;
+sound_spell         equ 12      ;
 
 ; sprite states
 state_dead      equ 0

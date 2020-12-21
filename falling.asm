@@ -310,7 +310,7 @@ falling_sequence            ; each bit set represents a tunnel
     defb %00000100
     defb %00001001
 
-repeat 10
+repeat 6
     defb %00010010
     defb %00100100
     defb %01001001

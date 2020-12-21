@@ -61,9 +61,12 @@ PLY_CFG_SoftOnly_SoftwarePitch = 1
 PLY_CFG_UseEffect_Legato = 1
 PLY_CFG_UseEffect_Arpeggio3Notes = 1
 PLY_CFG_UseEffect_ArpeggioTable = 1
+PLY_CFG_SFX_ConfigurationIsPresent = 1
+PLY_CFG_SFX_SoftOnly = 1
+PLY_CFG_SFX_SoftOnly_Noise = 1
 
 SoundEffects
-include "sound/SoundEffects.asm"
+include "sound/Atic-Atac-CPC-SFX.asm"
 include "sound/PlayerAkg.asm"
 sound_bank_end
 save "sounds.bin", 0x4000, sound_bank_end-sound_bank_start, DSK, "aticatac.dsk"

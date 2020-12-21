@@ -219,6 +219,11 @@ collide1
     ld a, 1
     ld (room_changed), a
 
+    push hl
+    ld e, sound_door    
+    call play_sfx
+    pop hl
+
     ld a, transition_time
     ld (screen_transition_in_progress), a
 

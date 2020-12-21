@@ -123,7 +123,7 @@ fire_weapon
     ret
 
 can_fire
-    ld e, sound_menu
+    ld e, sound_spell
     call play_sfx
 
     ld a, fire_decay
@@ -258,11 +258,13 @@ now_move_weapon
     ld b, a                     ; b has updated weapon_x
 
     ld a, (weapon_y_inc)
+    and a
+
     ld c, a
     ld a, (weapon_y)
     add c
     ld (weapon_y), a
-    ld c, a                     ; c has updated weapon_y    
+    ld c, a                     ; c has updated weapon_y
 
     ld a, (min_x)
     ld d, a
@@ -278,9 +280,20 @@ bounce_weapon_x
     ld a, (weapon_x_inc)
     neg
     ld (weapon_x_inc), a
+    ld e, a
 
     ld a, d
     ld (weapon_x), a
+
+    ld a, e
+    and a
+    jr z, check_weapon_y
+
+zzz
+    push bc
+    ld e, sound_spell_bounce
+    call play_sfx
+    pop bc
     
 check_weapon_y
     ld a, (min_y)
@@ -301,7 +314,9 @@ bounce_weapon_y
     ld a, d
     ld (weapon_y), a
 
-    ret
+play_bounce_sfx
+    ld e, sound_spell_bounce
+    jp play_sfx
 
 weapon2
     ld a, (de)

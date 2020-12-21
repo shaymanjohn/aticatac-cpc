@@ -156,6 +156,9 @@ character_moving_right
 	and 0x0f
 	ld (player_frame), a
 
+    cp player_step_frame
+    call z, play_step_sound
+
     ld a, c
     cp b
     ret nz
@@ -291,8 +294,15 @@ point_right
     ret
 
 play_menu_sound
-    ld e, sound_menu                         ; sfx number
+    ld e, sound_steps
     jp play_sfx
+
+play_step_sound
+    push bc
+    ld e, sound_steps
+    call play_sfx
+    pop bc
+    ret
 
 clear_heroes
 	ld a, (player_select_x)

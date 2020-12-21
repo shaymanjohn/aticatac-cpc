@@ -113,6 +113,10 @@ food_not_neg_y
     cp type_mushroom
     jr nz, remove_food
 
+    ld e, sound_thunder_2
+    call play_sfx
+
+hdecay
     call health_decay
     jr cant_find_food
 
@@ -124,7 +128,7 @@ remove_food
     ld (ix + 2), a
     ld (erase_food_with_index), ix
 
-    ld e, sound_collect
+    ld e, sound_c_food
     call play_sfx
 
     call health_up
