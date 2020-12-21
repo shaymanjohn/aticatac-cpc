@@ -11,7 +11,7 @@ service_sound_system
     ld a, (sound_guard)
     and a
     jr z, sss1
-    
+
     dec a
     ld (sound_guard), a
 
@@ -38,7 +38,7 @@ play_sfx                            ; e = sound effect number
     SELECT_BANK a
     ret
 
-play_step_sfx
+play_lowpriority_sfx
     ld a, (sound_guard)
     and a
     ret nz
@@ -48,7 +48,7 @@ play_step_sfx
 
     SELECT_BANK sound_bank_config
 
-    ld a, sound_steps
+    ld a, e
     ld bc, 0x0001                   ; full volume, both channels
     call PLY_AKG_PlaySoundEffect
 

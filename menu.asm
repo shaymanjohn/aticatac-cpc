@@ -269,9 +269,7 @@ point_left
 
     ld a, 1
     ld (characters_moving), a 
-
-    call play_menu_sound
-    ret
+    jp play_step_sound
 
 menu_keyboard_right
     bit player_right_bit, a
@@ -295,17 +293,12 @@ point_right
     ld (player_orientation), a
 
     ld a, 1
-    ld (characters_moving), a 
-
-    call play_menu_sound
-    ret
-
-play_menu_sound
-    jp play_step_sfx
+    ld (characters_moving), a
 
 play_step_sound
     push bc
-    call play_step_sfx
+    ld e, sound_steps
+    call play_lowpriority_sfx
     pop bc
     ret
 

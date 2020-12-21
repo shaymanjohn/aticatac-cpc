@@ -63,7 +63,8 @@ inc_frame
     ret nz
 
 step_sound
-    jp play_step_sfx
+    ld e, sound_steps
+    jp play_lowpriority_sfx
 
 move_up
     ld a, player_is_going_up
