@@ -56,11 +56,14 @@ inc_frame
     and 0x0f
     ld (player_frame), a
 
-    cp player_step_frame
+    cp player_step_frame1
+    jr z, step_sound
+
+    cp player_step_frame2
     ret nz
 
-    ld e, sound_steps
-    jp play_sfx
+step_sound
+    jp play_step_sfx
 
 move_up
     ld a, player_is_going_up

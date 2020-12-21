@@ -156,9 +156,16 @@ character_moving_right
 	and 0x0f
 	ld (player_frame), a
 
-    cp player_step_frame
-    call z, play_step_sound
+    cp player_step_frame1
+    jr z, step_sound_menu
 
+    cp player_step_frame2
+    jr nz, no_step_sound_menu
+
+step_sound_menu
+    call play_step_sound
+
+no_step_sound_menu
     ld a, c
     cp b
     ret nz
@@ -294,13 +301,11 @@ point_right
     ret
 
 play_menu_sound
-    ld e, sound_steps
-    jp play_sfx
+    jp play_step_sfx
 
 play_step_sound
     push bc
-    ld e, sound_steps
-    call play_sfx
+    call play_step_sfx
     pop bc
     ret
 

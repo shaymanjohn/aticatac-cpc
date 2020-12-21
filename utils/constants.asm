@@ -49,7 +49,8 @@ player_is_going_left    equ num_player_frames * 4
 player_is_going_right   equ num_player_frames * 6
 default_frame           equ 5
 
-player_step_frame       equ 0x06
+player_step_frame1      equ 0x06
+player_step_frame2      equ 0x0d
 
 ; player move bits based on joystick / keys pressed
 player_left_bit     equ 0
@@ -119,6 +120,8 @@ sound_p_fall        equ 9       ;;
 sound_door          equ 10      ;
 sound_spell_bounce  equ 11      ;
 sound_spell         equ 12      ;
+
+sound_persist_time  equ 12      ; protect sound effect for this many frames so walking sound doesnt kill them.
 
 ; sprite states
 state_dead      equ 0
