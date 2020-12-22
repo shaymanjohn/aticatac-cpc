@@ -113,7 +113,7 @@ food_not_neg_y
     cp type_mushroom
     jr nz, remove_food
 
-    ld e, sound_thunder_2
+    ld e, sound_clock
     call play_sfx
 
 hdecay

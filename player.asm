@@ -595,7 +595,7 @@ not_frank
     ret z
 
 not_drac
-    ld e, sound_thunder_2
+    ld e, sound_clock
     call play_sfx
     
     jp health_decay
