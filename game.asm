@@ -172,6 +172,14 @@ continue_player_transition
     ld a, b
     inc a
     ld (current_player_height), a
+
+    cp 4
+    jr nz, no_sfx
+
+    ld e, sound_p_appear
+    call play_sfx    
+
+no_sfx
     ld hl, (current_height_gfx_offset)
     ld bc, -5
     add hl, bc
@@ -196,6 +204,14 @@ still_shrinking
     ld a, (current_player_height)
     dec a
     ld (current_player_height), a
+
+    cp 16
+    jr nz, no_sfx_shrink
+
+    ld e, sound_p_death
+    call play_sfx    
+
+no_sfx_shrink
     ld hl, (current_height_gfx_offset)
     ld bc, 5
     add hl, bc

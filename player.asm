@@ -24,9 +24,6 @@ make_player_appear
     ld a, player_appearing
     ld (player_growing), a
 
-    ld e, sound_p_appear
-    call play_sfx
-
     ld a, 1
     ld (current_player_height), a
 
@@ -74,12 +71,8 @@ kill_3
     ld ix, sprite3
     ld a, (ix + spr_state)
     cp state_dead
-    jr z, kill_4
-    call kill_sprite
-
-kill_4
-    ld e, sound_p_death
-    jp play_sfx
+    ret z
+    jp kill_sprite
 
 draw_player
     ld a, (player_y)    
