@@ -9,14 +9,22 @@ init_boss
     jr z, init_mummy
 
     cp room_hunchback
-    jr z, init_hunchback
+    jp z, init_hunchback
 
     cp room_devil
-    jr z, init_devil
+    jp z, init_devil
 
     ld hl, dracula_room
     cp (hl)
-    jr z, init_dracula    
+    jr z, init_dracula     
+
+; Turn boss off if not in a boss room.
+    xor a
+    ld ix, boss
+    ld (ix + spr_state), state_dead
+    ld de, 0
+    ld (ix + spr_scr80), de
+    ld (ix + spr_scrc0), de
 
     ret
 
