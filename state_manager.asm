@@ -85,6 +85,9 @@ select_game
     ld (room_changed), a
     ld (saved_room_number), a
 
+    ; ld a, 0x57
+    ; ld (room_number), a
+
     call init_player
     call init_health
     call init_food

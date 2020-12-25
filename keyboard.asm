@@ -92,8 +92,8 @@ check_fire_keyboard
     set player_fire1_bit, b
 
 check_fire2_keyboard
-    ld a, (keyboard_state + 6)
-    bit 4, a
+    ld a, (keyboard_state + 8)
+    bit 7, a
     jr nz, save_input_state
     set player_fire2_bit, b    
 

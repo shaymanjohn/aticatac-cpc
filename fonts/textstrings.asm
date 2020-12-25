@@ -13,7 +13,7 @@ play_game_text
 select_player_text 
     defb 0x01, 0x0b * 8
     defb %00001111
-    defb "USE LEFT + RIGHT TO SELECT HERO"
+    defb "USE LEFT & RIGHT TO SELECT HERO"
     defb 0x00               ; x, y, colour, message, terminator
 
 select_marker

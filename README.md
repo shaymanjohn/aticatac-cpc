@@ -9,7 +9,9 @@ Joystick button 1 or Space to start
 
 Joystick or cursor keys to move
 
-Joystick button 2 or G to pick up items
+Joystick button 2 or Z to pick up items
+
+H to pause game
 
 M return to menu
 
