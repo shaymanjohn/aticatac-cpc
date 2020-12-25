@@ -289,7 +289,6 @@ bounce_weapon_x
     and a
     jr z, check_weapon_y
 
-zzz
     push bc
     ld e, sound_spell_bounce
     call play_sfx
