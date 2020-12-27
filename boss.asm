@@ -16,7 +16,7 @@ init_boss
 
     ld hl, dracula_room
     cp (hl)
-    jr z, init_dracula     
+    jr z, init_dracula
 
 ; Turn boss off if not in a boss room.
     xor a

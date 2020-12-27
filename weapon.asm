@@ -411,35 +411,22 @@ check_weapon_hit
     ld d, (ix + 0)
     ld e, (ix + 1)                      ; d weapon width, e = weapon height
 
-    srl d
-    ld a, h
-    add d
-    ld h, a
-
-    srl e
-    ld a, l
-    add e
-    ld l, a
-
     ld ix, sprite1
-    ld a, (ix + spr_state)
-    cp state_active
-    call z, check_weapon_hitting_sprite
+    call check_weapon_hitting_sprite
 
     ld ix, sprite2
-    ld a, (ix + spr_state)
-    cp state_active
-    call z, check_weapon_hitting_sprite
+    call check_weapon_hitting_sprite
 
     ld ix, sprite3
-    ld a, (ix + spr_state)
-    cp state_active
-    ret nz
 
 check_weapon_hitting_sprite     ; h = weapon x, l = weapon y, d = weapon width, e = weapon height, ix = sprite
     ld a, (weapon_active)
     and a
     ret z
+
+    ld a, (ix + spr_state)
+    cp state_active
+    ret nz
 
     push hl
     push de
@@ -458,7 +445,9 @@ check_weapon_hitting_sprite     ; h = weapon x, l = weapon y, d = weapon width, 
     neg
 
 not_neg_x_weapon
-    cp 4
+    sla b
+    dec b
+    cp b
     jr nc, end_weapon_hit_check
 
     ld a, l
@@ -475,7 +464,9 @@ not_neg_x_weapon
     neg
 
 not_neg_y_weapon
-    cp 8
+    sla b
+    dec b
+    cp b
     jr nc, end_weapon_hit_check
 
     call kill_sprite
@@ -546,7 +537,7 @@ axe_data
     defw axe_frame1, axe_frame0
 
 sword_frame0
-    defb 0x02, 0x10                     ; x, y
+    defb 0x02, 0x10                     ; width, height
     defb 0x01, 0x00                     ; offset x, offset y
     defw weapon_sword_0                 ; graphics data
     defw weapon2                        ; draw routine
