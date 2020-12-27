@@ -11,10 +11,16 @@ health_decay
 	and a
 	ret z
 	dec a
+if GOD_MODE
+	ret
+endif	
 	ld (health), a
 	ret
 
 health_down
+if GOD_MODE
+	ret
+endif
 	ld a, (health)
 	and a
 	ret z

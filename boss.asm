@@ -92,11 +92,7 @@ init_hunchback
     ld (boss_mover), hl
 
     ld iy, boss_hunchback
-    ld ix, boss
-
-    ld a, state_active
-    ld (ix + spr_state), a    
-    jp init_sprite
+    jp common_boss_init
 
 init_devil
     ld hl, move_devil_and_frank
@@ -343,10 +339,17 @@ update_hunchy
     ld a, (ix + spr_x)
     add d
     ld (ix + spr_x), a
+    ld b, a    
 
     ld a, (ix + spr_y)
     add e
     ld (ix + spr_y), a
+    
+    push iy
+    ld iy, boss_hunchback
+    ld (iy + 14), b
+    ld (iy + 15), a
+    pop iy
 
     ld a, d
     or e
@@ -359,7 +362,7 @@ update_hunchy
     push ix
     push iy
 
-    ; remove leaf and move to another room
+    ; remove item 
     SELECT_BANK room_bank_config
     pop ix
 

@@ -20,6 +20,7 @@ draw_room
     call update_collision_grid_for_items
 
     call try_teleport_dracula
+    call replen_food
 
 ; Reset data for new room.
     xor a

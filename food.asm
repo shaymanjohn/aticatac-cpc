@@ -16,6 +16,26 @@ food_init_loop
     ld (ix + 17), 0xff
     ret
 
+replen_food
+    SELECT_BANK sprite_bank_config
+
+    ld ix, food_items
+    ld b, (food_items_end - food_items) / 8
+    ld de, 8
+
+food_replen_loop
+    ld a, (ix + 2)
+    and a
+    jr z, no_replen
+
+    dec a
+    ld (ix + 2), a
+
+no_replen    
+    add ix, de
+    djnz food_replen_loop
+    ret    
+
 add_tombstone
     ld ix, tombstones
     ld a, (num_lives)
@@ -124,7 +144,7 @@ remove_food
     call draw_food_item2
 
     SELECT_BANK sprite_bank_config
-    ld a, 1
+    ld a, food_respawn
     ld (ix + 2), a
     ld (erase_food_with_index), ix
 

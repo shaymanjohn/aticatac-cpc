@@ -7,6 +7,8 @@ max_doors           equ 16          ; per room
 max_food            equ 5           ; per room (includes mushrooms)
 player_width        equ 5           ; bytes
 
+food_respawn        equ 20          ; replen food after visiting this many rooms after pickup
+
 knight_height       equ 20
 wizard_height       equ 21
 serf_height         equ 19

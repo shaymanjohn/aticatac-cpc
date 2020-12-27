@@ -604,6 +604,10 @@ found_door_locked                   ; if any pocket contains value in c, remove 
     cp c
     jr z, got_the_right_key
 
+if GOD_MODE
+    jr got_the_right_key
+endif    
+
     set 7, e                        ; not carrying the right key - collision close
 
 got_the_right_key

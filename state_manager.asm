@@ -85,7 +85,7 @@ select_game
     ld (room_changed), a
     ld (saved_room_number), a
 
-    ; ld a, 0x57
+    ; ld a, 0x64
     ; ld (room_number), a
 
     call init_player
@@ -131,13 +131,9 @@ reset_room_count_loop
     ldir
 
 ; hunchback should be moved back to doorway
-    ld ix, boss
     ld iy, boss_hunchback
-    ld a, (iy + 14)
-    ld (ix + spr_x), a
-
-    ld a, (iy + 15)
-    ld (ix + spr_y), a
+    ld (iy + 14), 44
+    ld (iy + 15), 32
     ret
 
 select_end

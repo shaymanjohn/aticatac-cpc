@@ -1,3 +1,5 @@
+GOD_MODE=0
+
 macro SET_MODE screenmode
     ld bc, 0x7f00 + 128 + 8 + 4 + {screenmode}
 	out (c), c
