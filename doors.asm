@@ -416,8 +416,16 @@ set_twin
     add hl, de
     ld (hl), c
 
+    ld a, (ix + 0)
+    cp active_door_trapdoor
+    jr nz, not_a_trapdoor
+    res 7, a
+    jr ucgfd
+
+not_a_trapdoor
     ld a, c
 
+ucgfd
     call update_collision_grid_for_door
 
     ld e, (ix + 3)
