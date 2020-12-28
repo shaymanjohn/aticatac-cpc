@@ -595,6 +595,7 @@ check_acg_open
     res 7, e
 
 not_got_acg
+    ld a, e
     call update_collision_grid_for_door
     call correction_for_acg
     jr next_door_loop2
