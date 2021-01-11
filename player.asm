@@ -15,7 +15,7 @@ make_player_appear
     ld a, 0x2c
     ld (player_x), a
 
-    ld a, 0x57
+    ld a, 0x53
     ld (player_y), a
 
     ld a, player_is_going_right

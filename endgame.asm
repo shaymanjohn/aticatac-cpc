@@ -23,7 +23,7 @@ not_visited
     ld ix, game_over_percentage_text
 
     cp end_room
-    jr nz, not_got_em_all
+    jr c, not_got_em_all
 
     ld (ix + 11), "1"
     ld (ix + 12), "0"

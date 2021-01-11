@@ -309,6 +309,13 @@ list_food_loop
     ld hl, this_rooms_food_count
     inc (hl)
 
+    ld a, (hl)
+    cp max_food
+    jr c, skip_food_item
+
+    pop bc
+    ret
+
 skip_food_item
     pop bc
 

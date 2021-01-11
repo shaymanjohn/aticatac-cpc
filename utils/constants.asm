@@ -4,7 +4,7 @@ rotation_right      equ 0x60        ; landscape %01100000
 rotation_left       equ 0xe0        ; landscape %11100000
 
 max_doors           equ 16          ; per room
-max_food            equ 5           ; per room (includes mushrooms)
+max_food            equ 6           ; per room (includes mushrooms)
 player_width        equ 5           ; bytes
 
 food_respawn        equ 30          ; replen food after visiting this many rooms after pickup
