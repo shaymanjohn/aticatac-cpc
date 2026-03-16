@@ -524,7 +524,7 @@ PLY_AKG_Channel1_SoundEffectSpeed:
         db 0                                            ;Speed (>=0).
         ds 3,0                                          ;Padding.
 dkbe
-PLY_AKG_Channel_SoundEffectDataSize: equ $ - PLY_AKG_Channel1_SoundEffectData
+PLY_AKG_Channel_SoundEffectDataSize = $ - PLY_AKG_Channel1_SoundEffectData
     
 dkbs
 PLY_AKG_Channel2_SoundEffectData:
@@ -540,6 +540,6 @@ dkbe
         ENDIF ;PLY_AKG_Rom
 
 ;Offset from the beginning of the data, to reach the inverted volume.
-PLY_AKG_SoundEffectData_OffsetInvertedVolume: equ PLY_AKG_Channel1_SoundEffectInvertedVolume - PLY_AKG_Channel1_SoundEffectData
-PLY_AKG_SoundEffectData_OffsetCurrentStep: equ PLY_AKG_Channel1_SoundEffectCurrentStep - PLY_AKG_Channel1_SoundEffectData
-PLY_AKG_SoundEffectData_OffsetSpeed: equ PLY_AKG_Channel1_SoundEffectSpeed - PLY_AKG_Channel1_SoundEffectData
+PLY_AKG_SoundEffectData_OffsetInvertedVolume = PLY_AKG_Channel1_SoundEffectInvertedVolume - PLY_AKG_Channel1_SoundEffectData
+PLY_AKG_SoundEffectData_OffsetCurrentStep = PLY_AKG_Channel1_SoundEffectCurrentStep - PLY_AKG_Channel1_SoundEffectData
+PLY_AKG_SoundEffectData_OffsetSpeed = PLY_AKG_Channel1_SoundEffectSpeed - PLY_AKG_Channel1_SoundEffectData

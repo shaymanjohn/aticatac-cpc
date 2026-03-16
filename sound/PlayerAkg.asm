@@ -79,9 +79,9 @@ PLY_AKG_HardwareCounter = 0
         ENDIF
         
 
-PLY_AKG_USE_HOOKS: equ 1                            ;Use hooks for external calls? 0 if the Init/Play/Stop methods are directly called. Will save a few bytes.
-PLY_AKG_STOP_SOUNDS: equ 1                          ;1 to have the "stop sounds" code. Set it to 0 if you never plan on stopping your music.
-PLY_AKG_FULL_INIT_CODE: equ 1                       ;0 to skip some init code/values, saving memory. Possible if you don't plan on restarting your song.
+PLY_AKG_USE_HOOKS = 1                            ;Use hooks for external calls? 0 if the Init/Play/Stop methods are directly called. Will save a few bytes.
+PLY_AKG_STOP_SOUNDS = 1                          ;1 to have the "stop sounds" code. Set it to 0 if you never plan on stopping your music.
+PLY_AKG_FULL_INIT_CODE = 1                       ;0 to skip some init code/values, saving memory. Possible if you don't plan on restarting your song.
 
 
         ;Is there a loaded Player Configuration source? If no, use a default configuration.
@@ -322,31 +322,31 @@ PLY_AKG_FULL_INIT_CODE: equ 1                       ;0 to skip some init code/va
 
 ;A nice trick to manage the offset using the same instructions, according to the player (ROM or not).
         IFDEF PLY_AKG_Rom
-PLY_AKG_Offset1b: equ 0
-PLY_AKG_Offset2b: equ 0         ;Used for instructions such as ld iyh,xx
+PLY_AKG_Offset1b = 0
+PLY_AKG_Offset2b = 0         ;Used for instructions such as ld iyh,xx
         ELSE
-PLY_AKG_Offset1b: equ 1
-PLY_AKG_Offset2b: equ 2
+PLY_AKG_Offset1b = 1
+PLY_AKG_Offset2b = 2
         ENDIF
 
         IFNDEF PLY_AKG_Rom
-PLY_AKG_OPCODE_OR_A: equ #b7                        ;Opcode for "or a".
-PLY_AKG_OPCODE_SCF: equ #37                         ;Opcode for "scf".
+PLY_AKG_OPCODE_OR_A = #b7                        ;Opcode for "or a".
+PLY_AKG_OPCODE_SCF = #37                         ;Opcode for "scf".
         ELSE
         ;Another trick for the ROM player. The original opcodes are converted to number, which will be multiplied by 2, provoking a carry or not.
-PLY_AKG_OPCODE_OR_A: equ 0                          ;0 * 2 = 0, no carry.
-PLY_AKG_OPCODE_SCF: equ #ff                         ;255 * 2 = carry.
-PLY_AKG_OPCODE_JP: equ #c3
+PLY_AKG_OPCODE_OR_A = 0                          ;0 * 2 = 0, no carry.
+PLY_AKG_OPCODE_SCF = #ff                         ;255 * 2 = carry.
+PLY_AKG_OPCODE_JP = #c3
         ENDIF
 
-PLY_AKG_OPCODE_ADD_HL_BC_LSB: equ #09               ;Opcode for "add hl,bc", LSB.
-PLY_AKG_OPCODE_ADD_HL_BC_MSB: equ #00               ;Opcode for "add hl,bc", MSB (fake, it is only 8 bits).
-PLY_AKG_OPCODE_SBC_HL_BC_LSB: equ #42               ;Opcode for "sbc hl,bc", LSB.
-PLY_AKG_OPCODE_SBC_HL_BC_MSB: equ #ed               ;Opcode for "sbc hl,bc", MSB.
-PLY_AKG_OPCODE_INC_HL: equ #23                      ;Opcode for "inc hl".
-PLY_AKG_OPCODE_DEC_HL: equ #2b                      ;Opcode for "dec hl".
-PLY_AKG_OPCODE_ADD_A_IMMEDIATE: equ #c6             ;Opcode for "add a,x".
-PLY_AKG_OPCODE_SUB_IMMEDIATE: equ #d6               ;Opcode for "sub x".
+PLY_AKG_OPCODE_ADD_HL_BC_LSB = #09               ;Opcode for "add hl,bc", LSB.
+PLY_AKG_OPCODE_ADD_HL_BC_MSB = #00               ;Opcode for "add hl,bc", MSB (fake, it is only 8 bits).
+PLY_AKG_OPCODE_SBC_HL_BC_LSB = #42               ;Opcode for "sbc hl,bc", LSB.
+PLY_AKG_OPCODE_SBC_HL_BC_MSB = #ed               ;Opcode for "sbc hl,bc", MSB.
+PLY_AKG_OPCODE_INC_HL = #23                      ;Opcode for "inc hl".
+PLY_AKG_OPCODE_DEC_HL = #2b                      ;Opcode for "dec hl".
+PLY_AKG_OPCODE_ADD_A_IMMEDIATE = #c6             ;Opcode for "add a,x".
+PLY_AKG_OPCODE_SUB_IMMEDIATE = #d6               ;Opcode for "sub x".
 
 
         ;Disark macro: Word region Start.
@@ -1124,7 +1124,7 @@ PLY_AKG_Channel{channelNumber}_InvertedVolumeIntegerAndDecimal: ld hl,0
         ELSE
         ld hl,(PLY_AKG_Channel{channelNumber}_InvertedVolumeIntegerAndDecimal)
         ENDIF
-PLY_AKG_Channel{channelNumber}_InvertedVolumeInteger: equ PLY_AKG_Channel{channelNumber}_InvertedVolumeIntegerAndDecimal + PLY_AKG_Offset1b + 1
+PLY_AKG_Channel{channelNumber}_InvertedVolumeInteger = PLY_AKG_Channel{channelNumber}_InvertedVolumeIntegerAndDecimal + PLY_AKG_Offset1b + 1
                         IFDEF PLY_AKG_UseEffect_VolumeSlide             ;CONFIG SPECIFIC
         IFNDEF PLY_AKG_Rom
 PLY_AKG_Channel{channelNumber}_IsVolumeSlide: or a                   ;Is there a Volume Slide ? Automodified. SCF if yes, OR A if not.
@@ -1332,7 +1332,7 @@ PLY_AKG_Channel{channelNumber}_PitchTrackAddOrSbc_16bitsReturn:
         IFNDEF PLY_AKG_Rom
 PLY_AKG_Channel{channelNumber}_PitchTrackDecimalCounter: ld a,0
 PLY_AKG_Channel{channelNumber}_PitchTrackDecimalInstr: add a,0              ;Value from the user. WILL BE AUTOMODIFIED to add or sub.
-PLY_AKG_Channel{channelNumber}_PitchTrackDecimalValue: equ PLY_AKG_Channel{channelNumber}_PitchTrackDecimalInstr + 1
+PLY_AKG_Channel{channelNumber}_PitchTrackDecimalValue = PLY_AKG_Channel{channelNumber}_PitchTrackDecimalInstr + 1
         ELSE
         ld a,(PLY_AKG_Channel{channelNumber}_PitchTrackDecimalValue)
         ld b,a
@@ -1747,8 +1747,8 @@ PLY_AKG_PSGReg45_Instr: ld hl,0
         IFNDEF PLY_AKG_Rom
 dknr3:
 PLY_AKG_PSGReg6_8_Instr: ld hl,0          ;L is R6, H is R8. Faster to set a 16 bits register than 2 8-bit.
-PLY_AKG_PSGReg6: equ PLY_AKG_PSGReg6_8_Instr + 1
-PLY_AKG_PSGReg8: equ PLY_AKG_PSGReg6_8_Instr + 2
+PLY_AKG_PSGReg6 = PLY_AKG_PSGReg6_8_Instr + 1
+PLY_AKG_PSGReg8 = PLY_AKG_PSGReg6_8_Instr + 2
         ELSE
         ld hl,(PLY_AKG_PSGReg6_8_Instr)
         ENDIF
@@ -1766,7 +1766,7 @@ PLY_AKG_PSGReg8: equ PLY_AKG_PSGReg6_8_Instr + 2
                 ;No noise. But R8 must still be set.
         IFNDEF PLY_AKG_Rom
 PLY_AKG_PSGReg8_Instr: ld h,0
-PLY_AKG_PSGReg8: equ PLY_AKG_PSGReg8_Instr + 1
+PLY_AKG_PSGReg8 = PLY_AKG_PSGReg8_Instr + 1
         ELSE
         ld hl,(PLY_AKG_PSGReg6_8_Instr) ;L was not useful, but A must not be modified yet.
         ENDIF
@@ -1800,8 +1800,8 @@ PLY_AKG_PSGReg8: equ PLY_AKG_PSGReg8_Instr + 1
         IFNDEF PLY_AKG_Rom
 dknr3:
 PLY_AKG_PSGReg9_10_Instr: ld hl,0          ;L is R9, H is R10. Faster to set a 16 bits register than 2 8-bit.
-PLY_AKG_PSGReg9: equ PLY_AKG_PSGReg9_10_Instr + 1
-PLY_AKG_PSGReg10: equ PLY_AKG_PSGReg9_10_Instr + 2
+PLY_AKG_PSGReg9 = PLY_AKG_PSGReg9_10_Instr + 1
+PLY_AKG_PSGReg10 = PLY_AKG_PSGReg9_10_Instr + 2
         ELSE
         ld hl,(PLY_AKG_PSGReg9_10_Instr)
         ENDIF
@@ -1928,8 +1928,8 @@ PLY_AKG_PSGReg45_Instr: ld hl,0
         IFNDEF PLY_AKG_Rom
 dknr3:
 PLY_AKG_PSGReg6_8_Instr: ld hl,0          ;L is R6, H is R8. Faster to set a 16 bits register than 2 8-bit.
-PLY_AKG_PSGReg6: equ PLY_AKG_PSGReg6_8_Instr + 1
-PLY_AKG_PSGReg8: equ PLY_AKG_PSGReg6_8_Instr + 2
+PLY_AKG_PSGReg6 = PLY_AKG_PSGReg6_8_Instr + 1
+PLY_AKG_PSGReg8 = PLY_AKG_PSGReg6_8_Instr + 2
         ELSE
         ld hl,(PLY_AKG_PSGReg6_8_Instr)
         ENDIF
@@ -1942,7 +1942,7 @@ PLY_AKG_PSGReg8: equ PLY_AKG_PSGReg6_8_Instr + 2
                 ;No noise. But R8 must still be set.
         IFNDEF PLY_AKG_Rom
 PLY_AKG_PSGReg8_Instr: ld h,0
-PLY_AKG_PSGReg8: equ PLY_AKG_PSGReg8_Instr + 1
+PLY_AKG_PSGReg8 = PLY_AKG_PSGReg8_Instr + 1
         ELSE
         ld hl,(PLY_AKG_PSGReg6_8_Instr)         ;L not useful, but A needs to be not modified.
         ENDIF
@@ -1969,8 +1969,8 @@ PLY_AKG_PSGReg8: equ PLY_AKG_PSGReg8_Instr + 1
         IFNDEF PLY_AKG_Rom
 dknr3:
 PLY_AKG_PSGReg9_10_Instr: ld hl,0
-PLY_AKG_PSGReg9: equ PLY_AKG_PSGReg9_10_Instr + 1
-PLY_AKG_PSGReg10: equ PLY_AKG_PSGReg9_10_Instr + 2
+PLY_AKG_PSGReg9 = PLY_AKG_PSGReg9_10_Instr + 1
+PLY_AKG_PSGReg10 = PLY_AKG_PSGReg9_10_Instr + 2
         ELSE
         ld hl,(PLY_AKG_PSGReg9_10_Instr)
         ENDIF
@@ -2069,8 +2069,8 @@ PLY_AKG_PSGReg45_Instr: ld hl,0
         IFNDEF PLY_AKG_Rom
 dknr3:
 PLY_AKG_PSGReg6_8_Instr: ld hl,0          ;L is R6, H is R8. Faster to set a 16 bits register than 2 8-bit.
-PLY_AKG_PSGReg6: equ PLY_AKG_PSGReg6_8_Instr + 1
-PLY_AKG_PSGReg8: equ PLY_AKG_PSGReg6_8_Instr + 2
+PLY_AKG_PSGReg6 = PLY_AKG_PSGReg6_8_Instr + 1
+PLY_AKG_PSGReg8 = PLY_AKG_PSGReg6_8_Instr + 2
         ELSE
         ld hl,(PLY_AKG_PSGReg6_8_Instr)
         ENDIF
@@ -2089,7 +2089,7 @@ PLY_AKG_PSGReg8: equ PLY_AKG_PSGReg6_8_Instr + 2
                 out (#a0),a     ;Register.
         IFNDEF PLY_AKG_Rom
 PLY_AKG_PSGReg8_Instr: ld a,0
-PLY_AKG_PSGReg8: equ PLY_AKG_PSGReg8_Instr + 1
+PLY_AKG_PSGReg8 = PLY_AKG_PSGReg8_Instr + 1
         ELSE
         ld a,(PLY_AKG_PSGReg8)
         ENDIF
@@ -2100,8 +2100,8 @@ PLY_AKG_PSGReg8: equ PLY_AKG_PSGReg8_Instr + 1
         IFNDEF PLY_AKG_Rom
 dknr3:
 PLY_AKG_PSGReg9_10_Instr: ld hl,0
-PLY_AKG_PSGReg9: equ PLY_AKG_PSGReg9_10_Instr + 1
-PLY_AKG_PSGReg10: equ PLY_AKG_PSGReg9_10_Instr + 2
+PLY_AKG_PSGReg9 = PLY_AKG_PSGReg9_10_Instr + 1
+PLY_AKG_PSGReg10 = PLY_AKG_PSGReg9_10_Instr + 2
         ELSE
         ld hl,(PLY_AKG_PSGReg9_10_Instr)
         ENDIF
@@ -2384,8 +2384,8 @@ PLY_AKG_Channel_ReadEffects_EffectBlocks2: ld de,0
 ;       HL' = software period. If not relevant, do not set it.
 ;       DE' = output period.
 
-PLY_AKG_BitForSound: equ 2
-PLY_AKG_BitForNoise: equ 5
+PLY_AKG_BitForSound = 2
+PLY_AKG_BitForNoise = 5
 
 
 PLY_AKG_ReadInstrumentCell:
@@ -3503,162 +3503,162 @@ PLY_AKG_PeriodTable_End:
 
 ;Generic data.
         IFDEF PLY_CFG_UseRetrig
-PLY_AKG_Event:                                                  equ PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 1
+PLY_AKG_Event =                                                 PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 1
         ENDIF
-PLY_AKG_CurrentSpeed:                                           equ PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 1
-PLY_AKG_BaseNoteIndex:                                          equ PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 1
-PLY_AKG_PatternDecreasingHeight:                                equ PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 1
-PLY_AKG_TickDecreasingCounter:                                  equ PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 1
+PLY_AKG_CurrentSpeed =                                            PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 1
+PLY_AKG_BaseNoteIndex =                                           PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 1
+PLY_AKG_PatternDecreasingHeight =                                PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 1
+PLY_AKG_TickDecreasingCounter =                                  PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 1
         IFDEF PLY_CFG_UseSpeedTracks
-PLY_AKG_SpeedTrack_WaitCounter:                                  equ PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 1
+PLY_AKG_SpeedTrack_WaitCounter                                   = PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 1
         ENDIF
         IFDEF PLY_CFG_UseEventTracks
-PLY_AKG_EventTrack_WaitCounter:                                  equ PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 1
+PLY_AKG_EventTrack_WaitCounter                                   = PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 1
         ENDIF
         IFDEF PLY_CFG_UseHardwareSounds
-PLY_AKG_PSGReg13_OldValue:                                      equ PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 1
-PLY_AKG_PSGReg13_Instr:                                      equ PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 1
+PLY_AKG_PSGReg13_OldValue                                       = PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 1
+PLY_AKG_PSGReg13_Instr                                       = PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 1
                 IFDEF PLY_CFG_UseRetrig
-PLY_AKG_Retrig:                                      equ PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 1
+PLY_AKG_Retrig                                       = PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 1
                 ENDIF
         ENDIF
-PLY_AKG_Channel_RE_ReadNextEffectInBlock:                                      equ PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 1
+PLY_AKG_Channel_RE_ReadNextEffectInBlock                                       = PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 1
         ;Words
-PLY_AKG_ReadLinker_PtLinker:                                  equ PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 2
+PLY_AKG_ReadLinker_PtLinker                                   = PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 2
         IFDEF PLY_CFG_UseSpeedTracks
-PLY_AKG_SpeedTrack_PtTrack:                                  equ PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 2
+PLY_AKG_SpeedTrack_PtTrack                                   = PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 2
         ENDIF
         IFDEF PLY_CFG_UseEventTracks
-PLY_AKG_EventTrack_PtTrack:                                  equ PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 2
+PLY_AKG_EventTrack_PtTrack                                   = PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 2
         ENDIF
         IFDEF PLY_AKS_UseEffect_Arpeggio
-PLY_AKG_ArpeggiosTable:                                  equ PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 2
+PLY_AKG_ArpeggiosTable                                   = PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 2
         ENDIF
         IFDEF PLY_CFG_UseEffect_PitchTable
-PLY_AKG_PitchesTable:                                  equ PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 2
+PLY_AKG_PitchesTable                                   = PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 2
         ENDIF
-PLY_AKG_InstrumentsTable:                                  equ PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 2
+PLY_AKG_InstrumentsTable                                   = PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 2
         IFDEF PLY_CFG_UseEffects
         ;For ROM, only one is used, the second is the same, but it makes it faster on non-ROM as it avoid reading the memory.
-PLY_AKG_Channel_ReadEffects_EffectBlocks1:                                  equ PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 2
+PLY_AKG_Channel_ReadEffects_EffectBlocks1                                   = PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 2
         ENDIF
-PLY_AKG_EmptyInstrumentDataPt:                                  equ PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 2
-PLY_AKG_SaveSp:                                  equ PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 2
-PLY_AKG_PSGReg01_Instr:                                  equ PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 2
-PLY_AKG_PSGReg23_Instr:                                  equ PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 2
-PLY_AKG_PSGReg45_Instr:                                  equ PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 2
-PLY_AKG_PSGReg6_8_Instr:                                  equ PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 2
-PLY_AKG_PSGReg6:                                        equ PLY_AKG_PSGReg6_8_Instr + 0
-PLY_AKG_PSGReg8:                                        equ PLY_AKG_PSGReg6_8_Instr + 1
-PLY_AKG_PSGReg9_10_Instr:                                  equ PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 2
-PLY_AKG_PSGReg9:                                        equ PLY_AKG_PSGReg9_10_Instr + 0
-PLY_AKG_PSGReg10:                                       equ PLY_AKG_PSGReg9_10_Instr + 1
+PLY_AKG_EmptyInstrumentDataPt                                   = PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 2
+PLY_AKG_SaveSp                                   = PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 2
+PLY_AKG_PSGReg01_Instr                                   = PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 2
+PLY_AKG_PSGReg23_Instr                                   = PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 2
+PLY_AKG_PSGReg45_Instr                                   = PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 2
+PLY_AKG_PSGReg6_8_Instr                                   = PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 2
+PLY_AKG_PSGReg6                                         = PLY_AKG_PSGReg6_8_Instr + 0
+PLY_AKG_PSGReg8                                         = PLY_AKG_PSGReg6_8_Instr + 1
+PLY_AKG_PSGReg9_10_Instr                                   = PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 2
+PLY_AKG_PSGReg9                                         = PLY_AKG_PSGReg9_10_Instr + 0
+PLY_AKG_PSGReg10                                        = PLY_AKG_PSGReg9_10_Instr + 1
         IFDEF PLY_CFG_UseHardwareSounds
-PLY_AKG_PSGHardwarePeriod_Instr:                                  equ PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 2
+PLY_AKG_PSGHardwarePeriod_Instr                                   = PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 2
         ENDIF
-PLY_AKG_Channel_ReadEffects_EndJumpInstrAndAddress:                                  equ PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 3      ;3 bytes. JP xxxx
+PLY_AKG_Channel_ReadEffects_EndJumpInstrAndAddress                                   = PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 3      ;3 bytes. JP xxxx
         IFDEF PLY_CFG_UseEffect_PitchGlide
-PLY_AKG_Effect_GlideWithNoteSaveDE:                     equ PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 2
+PLY_AKG_Effect_GlideWithNoteSaveDE                      = PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 2
         ENDIF
-PLY_AKG_TempPlayInstrumentJumpInstrAndAddress:                    equ PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 3      ;3 bytes. JP xxxx
+PLY_AKG_TempPlayInstrumentJumpInstrAndAddress                     = PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 3      ;3 bytes. JP xxxx
 
         ;Section specific to each channel.
         REPEAT 3, channelNumber
-PLY_AKG_Channel{channelNumber}_SoundStream_RelativeModifierAddress:             equ PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset
-PLY_AKG_Channel{channelNumber}_PlayInstrument_RelativeModifierAddress:          equ PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset
+PLY_AKG_Channel{channelNumber}_SoundStream_RelativeModifierAddress              = PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset
+PLY_AKG_Channel{channelNumber}_PlayInstrument_RelativeModifierAddress           = PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset
 
         ;Bytes
         IFDEF PLY_CFG_UseTranspositions
-PLY_AKG_Channel{channelNumber}_Transposition:                   equ PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 1
+PLY_AKG_Channel{channelNumber}_Transposition                    = PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 1
         ENDIF
-PLY_AKG_Channel{channelNumber}_WaitCounter:                     equ PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 1
+PLY_AKG_Channel{channelNumber}_WaitCounter                      = PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 1
         IFDEF PLY_AKG_UseEffect_VolumeSlide
-PLY_AKG_Channel{channelNumber}_IsVolumeSlide:                     equ PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 1
+PLY_AKG_Channel{channelNumber}_IsVolumeSlide                      = PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 1
         ENDIF
         IFDEF PLY_AKS_UseEffect_Arpeggio
-PLY_AKG_Channel{channelNumber}_IsArpeggioTable:                     equ PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 1
+PLY_AKG_Channel{channelNumber}_IsArpeggioTable                      = PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 1
         ENDIF
         IFDEF PLY_CFG_UseEffect_PitchTable
-PLY_AKG_Channel{channelNumber}_IsPitchTable:                     equ PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 1
+PLY_AKG_Channel{channelNumber}_IsPitchTable                      = PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 1
         ENDIF
         IFDEF PLY_AKS_UseEffect_PitchUpOrDownOrGlide
-PLY_AKG_Channel{channelNumber}_IsPitch:                     equ PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 1
+PLY_AKG_Channel{channelNumber}_IsPitch                      = PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 1
         ENDIF
         IFDEF PLY_CFG_UseEffect_ForceInstrumentSpeed
-PLY_AKG_Channel{channelNumber}_InstrumentOriginalSpeed:                     equ PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 1
+PLY_AKG_Channel{channelNumber}_InstrumentOriginalSpeed                      = PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 1
         ENDIF
-PLY_AKG_Channel{channelNumber}_InstrumentSpeed:                     equ PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 1
-PLY_AKG_Channel{channelNumber}_InstrumentStep:                     equ PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 1
+PLY_AKG_Channel{channelNumber}_InstrumentSpeed                      = PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 1
+PLY_AKG_Channel{channelNumber}_InstrumentStep                      = PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 1
         IFDEF PLY_AKS_UseEffect_Arpeggio
-PLY_AKG_Channel{channelNumber}_ArpeggioTableCurrentStep:                     equ PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 1
-PLY_AKG_Channel{channelNumber}_GeneratedCurrentArpNote:                     equ PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 1
-PLY_AKG_Channel{channelNumber}_ArpeggioBaseSpeed:                     equ PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 1
-PLY_AKG_Channel{channelNumber}_ArpeggioTableSpeed:                     equ PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 1
+PLY_AKG_Channel{channelNumber}_ArpeggioTableCurrentStep                      = PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 1
+PLY_AKG_Channel{channelNumber}_GeneratedCurrentArpNote                      = PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 1
+PLY_AKG_Channel{channelNumber}_ArpeggioBaseSpeed                      = PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 1
+PLY_AKG_Channel{channelNumber}_ArpeggioTableSpeed                      = PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 1
         ENDIF
         IFDEF PLY_CFG_UseEffect_PitchTable
-PLY_AKG_Channel{channelNumber}_PitchTableCurrentStep:                     equ PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 1
-PLY_AKG_Channel{channelNumber}_PitchBaseSpeed:                     equ PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 1
-PLY_AKG_Channel{channelNumber}_PitchTableSpeed:                     equ PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 1
+PLY_AKG_Channel{channelNumber}_PitchTableCurrentStep                      = PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 1
+PLY_AKG_Channel{channelNumber}_PitchBaseSpeed                      = PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 1
+PLY_AKG_Channel{channelNumber}_PitchTableSpeed                      = PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 1
         ENDIF
         IFDEF PLY_AKS_UseEffect_PitchUpOrDownOrGlide
-PLY_AKG_Channel{channelNumber}_PitchTrackDecimal:                     equ PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 1
-PLY_AKG_Channel{channelNumber}_PitchTrackDecimalCounter:                     equ PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 1
+PLY_AKG_Channel{channelNumber}_PitchTrackDecimal                      = PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 1
+PLY_AKG_Channel{channelNumber}_PitchTrackDecimalCounter                      = PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 1
         ENDIF
-PLY_AKG_Channel{channelNumber}_TrackNote:                     equ PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 1
+PLY_AKG_Channel{channelNumber}_TrackNote                      = PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 1
         IFDEF PLY_CFG_UseEffect_PitchGlide
-PLY_AKG_Channel{channelNumber}_GlideDirection:                     equ PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 1
+PLY_AKG_Channel{channelNumber}_GlideDirection                      = PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 1
         ENDIF
-PLY_AKG_Channel{channelNumber}_GeneratedCurrentInvertedVolume:                     equ PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 1
+PLY_AKG_Channel{channelNumber}_GeneratedCurrentInvertedVolume                      = PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 1
         ;Words
-PLY_AKG_Channel{channelNumber}_PtTrack:                     equ PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 2
+PLY_AKG_Channel{channelNumber}_PtTrack                      = PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 2
         IFDEF PLY_AKS_UseEffect_Arpeggio
-PLY_AKG_Channel{channelNumber}_ArpeggioTable:                     equ PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 2
-PLY_AKG_Channel{channelNumber}_ArpeggioTableBase:                     equ PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 2
+PLY_AKG_Channel{channelNumber}_ArpeggioTable                      = PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 2
+PLY_AKG_Channel{channelNumber}_ArpeggioTableBase                      = PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 2
         ENDIF
         IFDEF PLY_AKS_UseEffect_PitchUpOrDownOrGlide
-PLY_AKG_Channel{channelNumber}_PitchTrack:                     equ PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 2
+PLY_AKG_Channel{channelNumber}_PitchTrack                      = PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 2
         ENDIF
         IFDEF PLY_CFG_UseEffect_PitchTable
-PLY_AKG_Channel{channelNumber}_PitchTable:                     equ PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 2
-PLY_AKG_Channel{channelNumber}_PitchTableBase:                     equ PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 2
+PLY_AKG_Channel{channelNumber}_PitchTable                      = PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 2
+PLY_AKG_Channel{channelNumber}_PitchTableBase                      = PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 2
         ENDIF
-PLY_AKG_Channel{channelNumber}_EffectBlocks1:                     equ PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 2
-PLY_AKG_Channel{channelNumber}_EffectBlocks2:                     equ PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 2
-PLY_AKG_Channel{channelNumber}_InvertedVolumeIntegerAndDecimal:                     equ PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 2
-PLY_AKG_Channel{channelNumber}_Pitch:                     equ PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 2
-PLY_AKG_Channel{channelNumber}_PtInstrument:                     equ PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 2
-PLY_AKG_Channel{channelNumber}_PtBaseInstrument:                     equ PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 2
-PLY_AKG_Channel{channelNumber}_VolumeSlideValue:                     equ PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 2
+PLY_AKG_Channel{channelNumber}_EffectBlocks1                      = PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 2
+PLY_AKG_Channel{channelNumber}_EffectBlocks2                      = PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 2
+PLY_AKG_Channel{channelNumber}_InvertedVolumeIntegerAndDecimal                      = PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 2
+PLY_AKG_Channel{channelNumber}_Pitch                      = PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 2
+PLY_AKG_Channel{channelNumber}_PtInstrument                      = PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 2
+PLY_AKG_Channel{channelNumber}_PtBaseInstrument                      = PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 2
+PLY_AKG_Channel{channelNumber}_VolumeSlideValue                      = PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 2
         IFDEF PLY_CFG_UseEffect_PitchGlide
-PLY_AKG_Channel{channelNumber}_GlideToReach:                     equ PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 2
-PLY_AKG_Channel{channelNumber}_Glide_SaveHL:                     equ PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 2
+PLY_AKG_Channel{channelNumber}_GlideToReach                      = PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 2
+PLY_AKG_Channel{channelNumber}_Glide_SaveHL                      = PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 2
         ENDIF
         IFDEF PLY_AKS_UseEffect_PitchUpOrDownOrGlide
-PLY_AKG_Channel{channelNumber}_PitchTrackDecimalInstrAndValue:   equ PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 2     ;Add/sub b, xx.
-PLY_AKG_Channel{channelNumber}_PitchTrackDecimalInstr:          equ PLY_AKG_Channel{channelNumber}_PitchTrackDecimalInstrAndValue + 0
-PLY_AKG_Channel{channelNumber}_PitchTrackDecimalValue:          equ PLY_AKG_Channel{channelNumber}_PitchTrackDecimalInstrAndValue + 1
+PLY_AKG_Channel{channelNumber}_PitchTrackDecimalInstrAndValue    = PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 2     ;Add/sub b, xx.
+PLY_AKG_Channel{channelNumber}_PitchTrackDecimalInstr           = PLY_AKG_Channel{channelNumber}_PitchTrackDecimalInstrAndValue + 0
+PLY_AKG_Channel{channelNumber}_PitchTrackDecimalValue           = PLY_AKG_Channel{channelNumber}_PitchTrackDecimalInstrAndValue + 1
         ;The add/sub must be followed by the return JP.
-PLY_AKG_Channel{channelNumber}_PitchTrackDecimalInstrAndValueReturnJp:   equ PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 3  ;JP xxxx.
+PLY_AKG_Channel{channelNumber}_PitchTrackDecimalInstrAndValueReturnJp    = PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 3  ;JP xxxx.
         ENDIF
         
-PLY_AKG_Channel{channelNumber}_GeneratedCurrentPitch:                     equ PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 2
+PLY_AKG_Channel{channelNumber}_GeneratedCurrentPitch                      = PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 2
         IFDEF PLY_AKS_UseEffect_PitchUpOrDownOrGlide
-PLY_AKG_Channel{channelNumber}_PitchTrackAddOrSbc_16bits:         equ PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 2
+PLY_AKG_Channel{channelNumber}_PitchTrackAddOrSbc_16bits          = PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 2
         ;3 bytes.
-PLY_AKG_Channel{channelNumber}_PitchTrackAfterAddOrSbcJumpInstrAndAddress:            equ PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 3     ;3 bytes. JP xxxx.
-PLY_AKG_Channel{channelNumber}_PitchTrackIntegerAddOrSub:                     equ PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 1
-PLY_AKG_Channel{channelNumber}_PitchTrackIntegerAfterAddOrSubJumpInstrAndAddress:                     equ PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 3     ;3 bytes. JP xxxx.
+PLY_AKG_Channel{channelNumber}_PitchTrackAfterAddOrSbcJumpInstrAndAddress             = PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 3     ;3 bytes. JP xxxx.
+PLY_AKG_Channel{channelNumber}_PitchTrackIntegerAddOrSub                      = PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 1
+PLY_AKG_Channel{channelNumber}_PitchTrackIntegerAfterAddOrSubJumpInstrAndAddress                      = PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 3     ;3 bytes. JP xxxx.
         ENDIF
         REND
 
         ;The buffers for sound effects (if any), for each channel. They are treated apart, because they must be consecutive.
         IFDEF PLY_AKG_MANAGE_SOUND_EFFECTS
-PLY_AKG_PtSoundEffectTable:                                     equ PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 2
+PLY_AKG_PtSoundEffectTable                                      = PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 2
                 REPEAT 3, channelNumber
-PLY_AKG_Channel{channelNumber}_SoundEffectData:                 equ PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 2
-PLY_AKG_Channel{channelNumber}_SoundEffectInvertedVolume:       equ PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 1
-PLY_AKG_Channel{channelNumber}_SoundEffectCurrentStep:          equ PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 1
-PLY_AKG_Channel{channelNumber}_SoundEffectSpeed:                equ PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 1
+PLY_AKG_Channel{channelNumber}_SoundEffectData                  = PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 2
+PLY_AKG_Channel{channelNumber}_SoundEffectInvertedVolume        = PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 1
+PLY_AKG_Channel{channelNumber}_SoundEffectCurrentStep           = PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 1
+PLY_AKG_Channel{channelNumber}_SoundEffectSpeed                 = PLY_AKG_ROM_Buffer + PLY_AKG_BufferOffset : PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 1
         if channelNumber != 3
                PLY_AKG_BufferOffset = PLY_AKG_BufferOffset + 3 ;Padding of 3, but only necessary for channel 1 and 2.
         endif
