@@ -19,7 +19,7 @@ set_crtc_vals
 
 crtc_vals
     defb 0x3f               ; R0 - Horizontal Total
-    defb 32                 ; R1 - Horizontal Displayed  (32 chars wide)
+    defb 32                 ; R1 - Horizontal Displayed (32 chars wide)
     defb 42                 ; R2 - Horizontal Sync Position (centralises screen)
     defb 0x86               ; R3 - Horizontal and Vertical Sync Widths
     defb 38                 ; R4 - Vertical Total
@@ -33,3 +33,20 @@ crtc_vals
     defb 0x30               ; R12 - Screen start (start at &c000)
     defb 0x00               ; R13 - Screen start
 end_crtc_vals
+
+crtc_vals_default
+    defb 0x3f               ; R0 - Horizontal Total
+    defb 0x28                 ; R1 - Horizontal Displayed (32 chars wide)
+    defb 0x2e                 ; R2 - Horizontal Sync Position (centralises screen)
+    defb 0x8e               ; R3 - Horizontal and Vertical Sync Widths
+    defb 0x26                 ; R4 - Vertical Total
+    defb 0x00                  ; R5 - Vertical Adjust
+    defb 0x19       ; R6 - Vertical Displayed
+    defb 0x1e                 ; R7 - Vertical Sync Position (centralises screen) (was 31)
+    defb 0x00                  ; R8 - Interlace
+    defb 0x07                  ; R9 - Max Raster
+    defb 0x00                  ; R10 - Cursor (not used)
+    defb 0x00                  ; R11 - Cursor (not used)
+    defb 0x30               ; R12 - Screen start (start at &c000)
+    defb 0x00               ; R13 - Screen start
+end_crtc_vals_default

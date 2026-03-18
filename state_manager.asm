@@ -95,7 +95,19 @@ select_game
     call init_collectables
     call init_score
 
+    ld hl, (scr_addr_table)
+    push hl
+
+    ld hl, scr_addr_table_c0
+    ld (scr_addr_table), hl
     call draw_panel
+
+    ld hl, scr_addr_table_80
+    ld (scr_addr_table), hl
+    call draw_panel
+
+    pop hl
+    ld (scr_addr_table), hl
 
     ld hl, font_0 - 256
     ld (font_type), hl
@@ -120,15 +132,6 @@ reset_room_count_loop
 
     ld bc, 0
     call add_to_score
-
-    ld a, (hidden_screen_base_address)
-    ld h, a
-    ld l, 0
-    xor 0x40
-    ld d, a
-    ld e, 0
-    ld bc, 0x4000
-    ldir
 
 ; hunchback should be moved back to doorway
     ld iy, boss_hunchback

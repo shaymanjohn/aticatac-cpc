@@ -102,18 +102,36 @@ set_logo_pens2
     ret
 
 clear_screens
-    ld hl, 0xc000
-    ld de, 0xc001
-    ld bc, 0x3fff
+    ld hl, scr_addr_table_c0
+    call clear_screen
+    ld hl, scr_addr_table_80
+    call clear_screen
+    ret    
+
+clear_screen
+    ld b, 192
+
+clear_screen_loop
+    push bc
+    push hl
+
+    ld e, (hl)
+    inc hl
+    ld d, (hl)
+    ld h, d
+    ld l, e
+    inc de
+    ld bc, 0x3f    
     ld (hl), 0
     ldir
 
-    ld hl, 0x8000
-    ld de, 0x8001
-    ld bc, 0x3fff
-    ld (hl), 0
-    ldir
-    ret    
+    pop hl
+    inc hl
+    inc hl
+    pop bc
+    djnz clear_screen_loop
+
+    ret
 
 set_pens_off
     ld hl, pens
